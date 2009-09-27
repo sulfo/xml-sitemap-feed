@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravan
 Tags: xml sitemap, sitemap, google sitemap, yahoo sitemap, msn sitemap, ask sitemap, search engine, feed
 Requires at least: 2.5
 Tested up to: 2.8
-Stable tag: 2.0
+Stable tag: 1.0
 
 Creates a feed that complies to the XML Sitemap protocol ready be submitted to Google, Yahoo, MSN, Ask.com and others.
 
@@ -40,12 +40,6 @@ The plugin also works from the /mu-plugins/ folder where it works quietly in the
 
 == Frequently Asked Questions ==
 
-= How are the values for priority and changefreq calculated? =
-
-The front page has a priority of 1.0, pages are always 0.6 and posts will have a priority between 0.8 and 0.3 depending on comments and its age. the cangefreq of the frontpage is set to daily, monthly for pages and either monthly or weekly for posts depending on comments. 
-
-Dynamic pages like category pages, tag pages and archive pages are not listed in this version yet.
-
 = Can I change the sitemap name/URL? =
 
 No. The sitemap url that you manually submit too Google (if you are impatient) should be http://yourblogurl.tld/sitemap.xml but is also available via http://yourblogurl.tld/feed/sitemap
@@ -63,10 +57,6 @@ You may edit the XML output in template.php but be carefull not to break Sitemap
 No. Your sitemap url will be automatically added to your dynamic robots.txt when plugin actived. Unless you have a static file robots.txt in your root. In that case you might want to open it in a text editor and add a line like `Sitemap: http://yourblogurl.tld/sitemap.xml` to it.
 
 == Changelog ==
-
-= 2.0 =
-* priority calculation based on comments and age
-* changefreq based on comments 
 
 = 1.0 =
 * changed feed template location to avoid the need to relocate files outside the plugins folder
