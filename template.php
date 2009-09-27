@@ -1,6 +1,6 @@
 <?php
 /**
- * XML Sitemap Feed Template 2.0
+ * XML Sitemap Feed Template 2.1
  **/
 
 if (!empty($_SERVER['SCRIPT_FILENAME']) && 'feed-sitemap.php' == basename($_SERVER['SCRIPT_FILENAME']))
@@ -19,13 +19,13 @@ $frontpage_priority = 1.0;
 
 ?>
 <?php echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?'.'>'; ?>
-<!-- generator="XML Sitemap Feed WordPress plugin/1.0" -->
+<!-- generator="XML Sitemap Feed WordPress plugin/2.1" -->
 <urlset	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"
 	xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 	<url>
 		<loc><?php bloginfo_rss('url') ?></loc>
-		<lastmod><?php echo mysql2date('Y-m-d\TH:i:s +0000', $lastpostmodified, false); ?></lastmod>
+		<lastmod><?php echo mysql2date('Y-m-d\TH:i:s+00:00', $lastpostmodified, false); ?></lastmod>
 		<changefreq>daily</changefreq>
 		<priority>1.0</priority>
 	</url>
@@ -51,7 +51,7 @@ if ($post_ids) {
 ?>
 	<url>
 		<loc><?php the_permalink_rss() ?></loc>
-		<lastmod><?php echo mysql2date('Y-m-d\TH:i:s +0000', $post_modified_time, false) ?></lastmod>
+		<lastmod><?php echo mysql2date('Y-m-d\TH:i:s+00:00', $post_modified_time, false) ?></lastmod>
 <?php if($post->post_type == "page") { ?>
 		<changefreq>monthly</changefreq>
 		<priority>0.5</priority>

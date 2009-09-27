@@ -4,17 +4,20 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravan
 Tags: xml sitemap, sitemap, google sitemap, yahoo sitemap, msn sitemap, ask sitemap, search engine, feed
 Requires at least: 2.5
 Tested up to: 2.8
-Stable tag: 2.0
+Stable tag: 2.1
 
 Creates a feed that complies to the XML Sitemap protocol ready to be submitted to Google, Yahoo, MSN, Ask.com and others.
 
 == Description ==
 
-This plugin dynamically creates an XML feed that complies to the XML Sitemap protocol. There are no options to be set and the feed becomes instantly available after activation on yourblogurl.tld/sitemap.xml and yourblogurl.tld/feed/sitemap ready to be submitted to search engines like Google, Yahoo, MSN, Ask.com and others. An entry `Sitemap: http:// yourblogurl.tld/sitemap.xml` is added to the (by WordPress dynamically created) robots.txt on yourblogurl.tld/robots.txt to tell search engines where to find your XML Sitemap. 
+This plugin dynamically creates an XML feed that complies to the XML Sitemap protocol. There are no options to be set and the feed becomes instantly available after activation on yourblogurl.tld/sitemap.xml and yourblogurl.tld/feed/sitemap ready to be submitted to search engines like Google, Yahoo, MSN, Ask.com and others. 
 
-The main advantages of this approach are **simplicity** (no need to change file or folder permissions or move files) and the fact that this method works out-of-the-box on **shared codebase / multi-blog setups** like [WordPress MU](http://mu.wordpress.org/), [WP_OneInstall](http://wordpress.org/extend/plugins/wp-oneinstall/), [WP Hive](http://wordpress.org/extend/plugins/wp-hive/) and others. 
+An entry `Sitemap: http://yourblogurl.tld/sitemap.xml` is added to the (by WordPress dynamically created) robots.txt on yourblogurl.tld/robots.txt to tell search engines where to find your XML Sitemap. 
 
-It was based on the plugin Standard XML Sitemap Generator by Patrick Chia but requires no modifications to file locations. Some other small improvements and a bugfix were done in the first version.
+= Advantages =
+
+* The main advantage of this plugin over other XML Sitemap plugins is **simplicity**. No need to change file or folder permissions or move files. In fact, no options at all!
+* Works out-of-the-box on **shared codebase / multi-blog setups** like [WordPress MU](http://mu.wordpress.org/), [WP_OneInstall](http://wordpress.org/extend/plugins/wp-oneinstall/), [WP Hive](http://wordpress.org/extend/plugins/wp-hive/) and others. 
 
 = Limitations =
 
@@ -25,6 +28,10 @@ It was based on the plugin Standard XML Sitemap Generator by Patrick Chia but re
 = Translations =
 
 There is nothing to translate. The sitemap protocol is international, there is no options page nor any front-end output. Nothing to see here, please move along ;)  
+
+= Credits =
+XML Sitemap Feed is based on the plugin Standard XML Sitemap Generator (discontinued?) by Patrick Chia. Many thanks!
+
 
 == Installation ==
 
@@ -81,7 +88,23 @@ You may edit the XML output in xml-sitemap-feed/template.php but be carefull not
 
 No. Your sitemap url will be automatically added to your dynamic robots.txt when plugin actived. Unless you use a static robots.txt file in your website root. In that case you areadvised to open it in a text editor and add a line like `Sitemap: http:// yourblogurl.tld/sitemap.xml` (adapt to your site url).
 
+= I get a 404 page instead of robots.txt! =
+
+The plugin Event Calendar (at least v.3.2.beta2) is known to break the WordPress internal robots.txt generation. Other plugins might also cuase this. Deactivate them all and see if you get a basic robots.txt file showing: 
+`User-agent: *
+Disallow:`
+Reactivate your plugins one by one to find out which one is causing the problem. Then report the bug to the plugin developer.
+- OR -
+Manually upload your own robots.txt file to your website root containing at least: 
+`Sitemap: http://beauxdupeyron.fr/sitemap.xml
+
+User-agent: *
+Disallow:`
+
 == Changelog ==
+
+= 2.1 =
+* bugfix: lastmod timezone offset displayed wrong (extra space and missing double-colon)
 
 = 2.0 =
 * priority calculation based on comments and age
