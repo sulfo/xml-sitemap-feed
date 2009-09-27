@@ -38,7 +38,7 @@ XML Sitemap Feed is based on the plugin Standard XML Sitemap Generator (disconti
 = Wordpress =
 
 Just use that slick installation and auto update feature on your Pugins page
-- OR - 
+... OR ... 
 follow these simple steps:
 
 1. Download archive and unpack.
@@ -91,15 +91,19 @@ No. Your sitemap url will be automatically added to your dynamic robots.txt when
 = I get a 404 page instead of robots.txt! =
 
 The plugin Event Calendar (at least v.3.2.beta2) is known to break the WordPress internal robots.txt generation. Other plugins might also cuase this. Deactivate them all and see if you get a basic robots.txt file showing: 
-`User-agent: *
-Disallow:`
+`
+User-agent: *
+Disallow:
+`
 Reactivate your plugins one by one to find out which one is causing the problem. Then report the bug to the plugin developer.
-- OR -
+... OR ...
 Manually upload your own robots.txt file to your website root containing at least: 
-`Sitemap: http://beauxdupeyron.fr/sitemap.xml
+`
+Sitemap: http://beauxdupeyron.fr/sitemap.xml
 
 User-agent: *
-Disallow:`
+Disallow:
+`
 
 == Changelog ==
 
