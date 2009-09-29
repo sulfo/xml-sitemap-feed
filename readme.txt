@@ -6,11 +6,11 @@ Requires at least: 2.5
 Tested up to: 2.8
 Stable tag: 3.1
 
-Creates a feed that complies to the XML Sitemap protocol ready to be submitted to Google, Yahoo, MSN, Ask.com and others.
+Creates a feed that complies with the XML Sitemap protocol ready to be submitted to Google, Yahoo, MSN, Ask.com and others.
 
 == Description ==
 
-This plugin dynamically creates an XML feed that complies to the XML Sitemap protocol. There are no options to be set and the feed becomes instantly available after activation on yourblogurl.tld/sitemap.xml and yourblogurl.tld/feed/sitemap ready to be submitted to search engines like Google, Yahoo, MSN, Ask.com and others. 
+This plugin dynamically creates an XML feed that complies with the XML Sitemap protocol. There are no options to be set and the feed becomes instantly available after activation on yourblogurl.tld/sitemap.xml and yourblogurl.tld/feed/sitemap ready to be submitted to search engines like Google, Yahoo, MSN, Ask.com and others. 
 
 An entry `Sitemap: http://yourblogurl.tld/sitemap.xml` is added to the (by WordPress dynamically created) robots.txt on yourblogurl.tld/robots.txt to tell search engines where to find your XML Sitemap. 
 
@@ -38,7 +38,7 @@ XML Sitemap Feed is based on the plugin Standard XML Sitemap Generator (disconti
 = Wordpress =
 
 Just use that slick installation and auto update feature on your Pugins page
-... OR ... 
+    ... OR ... 
 follow these simple steps:
 
 1. Download archive and unpack.
@@ -61,7 +61,7 @@ Yes and No. Since this plugin has no options page there is no way (yet) to manua
 
 This feature can be used to your advantage: by resaving older posts from time to time, keeping the lastmod date fairly recent, you can ensure a priority of 70% (0.7) for those urls. And if you have comments on on those pages, the priority can even go up to 90% (0.9).
 
-If you cannot live with these rules, edit the values $post_priority, $minpost_priority, $maxpost_priority, $page_priority, $frontpage_priority in xml-sitemap-feed/template-xml.php
+If you cannot live with these rules, edit the values `$post_priority`, `$minpost_priority`, `$maxpost_priority`, `$page_priority`, `$frontpage_priority` in xml-sitemap-feed/template-xml.php
 
 = How are the values for priority and changefreq calculated? =
 
@@ -94,20 +94,20 @@ You may edit the XML output in xml-sitemap-feed/template.php but be carefull not
 
 = Do I need to change my robots.txt? =
 
-No. Your sitemap url will be automatically added to your dynamic robots.txt when plugin actived. Unless you use a static robots.txt file in your website root. In that case you areadvised to open it in a text editor and add a line like `Sitemap: http:// yourblogurl.tld/sitemap.xml` (adapt to your site url).
+No. Your sitemap url will be automatically added to your dynamic robots.txt when plugin actived. Unless you use a static robots.txt file in your website root. In that case you areadvised to open it in a text editor and add a line like `Sitemap: http://yourblogurl.tld/sitemap.xml` (adapt to your site url).
 
 = I get a 404 page instead of robots.txt! =
 
-The plugin Event Calendar (at least v.3.2.beta2) is known to break the WordPress internal robots.txt generation. Other plugins might also cuase this. Deactivate them all and see if you get a basic robots.txt file showing: 
+The plugin Event Calendar (at least v.3.2.beta2) is known to break the WordPress internal robots.txt generation. Other plugins might also cause this. Deactivate them all and see if you get a basic robots.txt file showing: 
 `
 User-agent: *
 Disallow:
 `
 Reactivate your plugins one by one to find out which one is causing the problem. Then report the bug to the plugin developer.
-... OR ...
+    ... OR ...
 Manually upload your own robots.txt file to your website root containing at least: 
 `
-Sitemap: http://beauxdupeyron.fr/sitemap.xml
+Sitemap: http://yourblogurl.tld/sitemap.xml
 
 User-agent: *
 Disallow:
