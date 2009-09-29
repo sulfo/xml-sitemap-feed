@@ -1,24 +1,25 @@
 <?php
-/**
- * XML Sitemap Feed Template
- **/
+/* ---------------------------
+    XML Sitemap Feed Template
+   --------------------------- */
 
 if (!empty($_SERVER['SCRIPT_FILENAME']) && 'template-xml.php' == basename($_SERVER['SCRIPT_FILENAME']))
 	die ('Please do not load this page directly. Thanks!');
 
-header('Content-Type: text/xml; charset=' . get_option('blog_charset'), true);
-$more = 1;
 
-$lastpostmodified = get_lastpostmodified('GMT');
-
+// priority presets
 $post_priority = 0.7;
 $minpost_priority = 0.3;
 $maxpost_priority = 0.9;
 $page_priority = 0.6;
 $frontpage_priority = 1.0;
 
-?>
-<?php echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?'.'>
+$lastpostmodified = get_lastpostmodified('GMT');
+
+// start the xml output
+header('Content-Type: text/xml; charset=' . get_option('blog_charset'), true);
+
+echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?'.'>
 <?xml-stylesheet type="text/xsl" href="'.get_option('siteurl').'/sitemap.xsl"?>
 <!-- generated-on="'.date('Y-m-d\TH:i:s+00:00').'" -->
 <!-- generator="XML Sitemap Feed plugin for WordPress" -->
@@ -35,9 +36,20 @@ $frontpage_priority = 1.0;
 		<priority>1.0</priority>
 	</url>
 <?php
+// first check if there is a static page set as frontpage and exclude it to avoid double url
+$has_page_as_front = $wpdb->get_results("SELECT option_value FROM $wpdb->options WHERE option_name = 'show_on_front'");
+if ($has_page_as_front[0]->option_value == "page") {
+	$frontpage = $wpdb->get_results("SELECT option_value FROM $wpdb->options WHERE option_name = 'page_on_front'");
+	$frontpage_id = $frontpage[0]->option_value;
+} else {
+	$frontpage_id = -1;
 
-$post_ids = $wpdb->get_col("SELECT ID FROM $wpdb->posts WHERE post_status = 'publish' ORDER BY post_date_gmt DESC LIMIT 1000");
+}
 
+// get all posts and pages
+$post_ids = $wpdb->get_col("SELECT ID FROM $wpdb->posts WHERE post_status = 'publish' AND ID != $frontpage_id ORDER BY post_date_gmt DESC LIMIT 1000");
+
+// and loop away!
 if ($post_ids) {
 	global $wp_query;
 	$wp_query->in_the_loop = true;
@@ -67,7 +79,6 @@ if ($post_ids) {
 		<changefreq>monthly</changefreq>
 <?php		} ?>
 		<priority><?php echo $priority ?></priority>
-		<?php //echo "<test>" . $post_priority . " - " . $priority_down . " + " . $priority_up . "</test>" ?>
 <?php } ?>
 	</url>
 <?php 		} 
