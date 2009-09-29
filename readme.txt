@@ -22,7 +22,7 @@ An entry `Sitemap: http://yourblogurl.tld/sitemap.xml` is added to the (by WordP
 = Limitations =
 
 * The feed contains the front page and all posts and pages but (still) excludes category, tag and other dynamic archive pages.
-* There is no way (yet) to manually change the priority of posts/pages in the sitemap but since version 2.0 there is some basic automatic priority calculation (based on post age and comment activity) doing the work for you. 
+* There is no way (yet) to manually set the priority of posts/pages in the sitemap but since version 2.0 there is some basic automatic priority calculation (based on post age and comment activity) doing the work for you. However, by resaving older posts/pages from time to time, keeping the lastmod date fairly recent, you can ensure high priority for those urls.
 * The number of posts listed in the sitemap is limited to 1000. This should satisfy most blogs while limiting the sitemap size on bigger blogs by stripping of the oldest posts. Please let me know if you need more than your most recent 1000 posts listed in your sitemap.xml :)
 
 = Translations =
@@ -55,9 +55,17 @@ The plugin also works from the /mu-plugins/ folder where it runs quietly in the 
 
 == Frequently Asked Questions ==
 
+= Can I manipulate values for priority and changefreq? =
+
+Yes and No. Since this plugin has no options page there is no way (yet) to manually set the priority of urls in the sitemap. Since version 2.0 there is some basic automatic priority calculation (based on post age and comment activity) doing the work for you. 
+
+This feature can be used to your advantage: by resaving older posts from time to time, keeping the lastmod date fairly recent, you can ensure a priority of 70% (0.7) for those urls. And if you have comments on on those pages, the priority can even go up to 90% (0.9).
+
+If you cannot live with these rules, edit the values $post_priority, $minpost_priority, $maxpost_priority, $page_priority, $frontpage_priority in xml-sitemap-feed/template-xml.php
+
 = How are the values for priority and changefreq calculated? =
 
-The front page has a priority of 1.0, pages are always 0.6 and posts will have a priority between 0.8 and 0.3 depending on comments and its age. the cangefreq of the frontpage is set to daily, monthly for pages and either monthly or weekly for posts depending on comments. 
+The front page has a fixed priority of 100% (1.0), pages are always 60% (0.6) and posts have a default priority of 70% (0.7) but can vary between 30% (0.3) and 90% (0.9) depending on comments and post age. the cangefreq of the frontpage is set to daily, monthly for pages and either monthly or weekly for posts depending on comments. 
 
 Dynamic pages like category pages, tag pages and archive pages are not listed in this version yet.
 
@@ -107,6 +115,9 @@ Disallow:
 
 == Changelog ==
 
+= 3.0 =
+* added styling to the xml feed to make it human readable
+
 = 2.1 =
 * bugfix: lastmod timezone offset displayed wrong (extra space and missing double-colon)
 
@@ -116,7 +127,7 @@ Disallow:
 
 = 1.0 =
 * changed feed template location to avoid the need to relocate files outside the plugins folder
-* bugfix: get_post_modified_time instead of get_post_time
+* bugfix: `get_post_modified_time` instead of `get_post_time`
 * bugfix: rewrite rules causing unlimited amount of sitemap feeds on any url ending with sitemap.xml instead of just one in the root
 
 = 0.1 =

@@ -26,6 +26,8 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravan
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+define('XMLSFVERSION','3.0');
+
 function xml_sitemap_flush_rules() {
 	global $wp_rewrite;
 	$wp_rewrite->flush_rules();
@@ -35,7 +37,8 @@ add_action('init', 'xml_sitemap_flush_rules');
 function xml_sitemap_feed_rewrite($wp_rewrite) {
 	$feed_rules = array(
 		'^sitemap.xml$' => 'index.php?feed=sitemap',
-		'^feed/sitemap$' => 'index.php?feed=sitemap'
+		'^feed/sitemap$' => 'index.php?feed=sitemap',
+		'^sitemap.xsl$' => 'index.php?feed=sitemapxsl'
 	);
 	$wp_rewrite->rules = $feed_rules + $wp_rewrite->rules;
 }
@@ -43,15 +46,24 @@ add_filter('generate_rewrite_rules', 'xml_sitemap_feed_rewrite');
 
 function xml_sitemap_do_feed() {
 	$dir = dirname(__FILE__);
-	if (file_exists($dir.'/xml-sitemap-feed')) // chech if xml-sitemap.php was moved one dir up (for mu-plugins in wpmu)
-		load_template( $dir . '/xml-sitemap-feed/template.php' );
+	if (file_exists($dir.'/xml-sitemap-feed')) // check if xml-sitemap.php was moved one dir up (wpmu)
+		load_template( $dir . '/xml-sitemap-feed/template-xml.php' );
 	else
-		load_template( $dir . '/template.php' );
+		load_template( $dir . '/template-xml.php' );
 }
 add_action('do_feed_sitemap', 'xml_sitemap_do_feed', 10, 1);
 
+function xml_sitemap_xsl_do_feed() {
+	$dir = dirname(__FILE__);
+	if (file_exists($dir.'/xml-sitemap-feed')) // check if xml-sitemap.php was moved one dir up (wpmu)
+		load_template( $dir . '/xml-sitemap-feed/template-xsl.php' );
+	else
+		load_template( $dir . '/template-xsl.php' );
+}
+add_action('do_feed_sitemapxsl', 'xml_sitemap_xsl_do_feed', 10, 1);
+
 function xml_sitemap_robots() {
-	echo "\nSitemap: ".get_option('siteurl')."/sitemap.xml\n\n";
+	echo "\nSitemap: ".get_option('siteurl')."/sitemap.xml\n";
 }
 add_action('do_robotstxt', 'xml_sitemap_robots');
 ?>

@@ -1,9 +1,9 @@
 <?php
 /**
- * XML Sitemap Feed Template 2.1
+ * XML Sitemap Feed Template
  **/
 
-if (!empty($_SERVER['SCRIPT_FILENAME']) && 'feed-sitemap.php' == basename($_SERVER['SCRIPT_FILENAME']))
+if (!empty($_SERVER['SCRIPT_FILENAME']) && 'template-xml.php' == basename($_SERVER['SCRIPT_FILENAME']))
 	die ('Please do not load this page directly. Thanks!');
 
 header('Content-Type: text/xml; charset=' . get_option('blog_charset'), true);
@@ -18,13 +18,18 @@ $page_priority = 0.6;
 $frontpage_priority = 1.0;
 
 ?>
-<?php echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?'.'>'; ?>
-<!-- generator="XML Sitemap Feed WordPress plugin/2.1" -->
+<?php echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?'.'>
+<?xml-stylesheet type="text/xsl" href="'.get_option('siteurl').'/sitemap.xsl"?>
+<!-- generated-on="'.date('Y-m-d\TH:i:s+00:00').'" -->
+<!-- generator="XML Sitemap Feed plugin for WordPress" -->
+<!-- generator-url="http://4visions.nl/en/index.php?section=57" -->
+<!-- generator-version="'.XMLSFVERSION.'" -->
+'; ?>
 <urlset	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"
 	xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 	<url>
-		<loc><?php bloginfo_rss('url') ?></loc>
+		<loc><?php bloginfo_rss('url') ?>/</loc>
 		<lastmod><?php echo mysql2date('Y-m-d\TH:i:s+00:00', $lastpostmodified, false); ?></lastmod>
 		<changefreq>daily</changefreq>
 		<priority>1.0</priority>
