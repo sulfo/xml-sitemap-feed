@@ -59,10 +59,11 @@ echo '<?xml version="1.0" encoding="UTF-8"?>'; ?>
 				<div id="content">
 					<table cellpadding="5">
 						<tr style="border-bottom:1px black solid;">
+							<th>#</th>
 							<th>URL</th>
 							<th>Priority</th>
 							<th>Change Frequency</th>
-							<th>LastChange</th>
+							<th>Last Changed</th>
 						</tr>
 						<xsl:variable name="lower" select="'abcdefghijklmnopqrstuvwxyz'"/>
 						<xsl:variable name="upper" select="'ABCDEFGHIJKLMNOPQRSTUVWXYZ'"/>
@@ -71,6 +72,9 @@ echo '<?xml version="1.0" encoding="UTF-8"?>'; ?>
 								<xsl:if test="position() mod 2 != 1">
 									<xsl:attribute  name="class">high</xsl:attribute>
 								</xsl:if>
+								<td>
+									<xsl:value-of select="position()"/>
+								</td>
 								<td>
 									<xsl:variable name="itemURL">
 										<xsl:value-of select="sitemap:loc"/>
