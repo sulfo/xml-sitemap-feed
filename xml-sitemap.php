@@ -3,7 +3,7 @@
 Plugin Name: XML Sitemap Feed
 Plugin URI: http://4visions.nl/en/index.php?section=57
 Description: Creates a dynamic XML feed that complies to the XML Sitemap protocol ready be submitted to Google, Yahoo, MSN, Ask.com and others. Based on the Standard XML Sitemap Generator by Patrick Chia.
-Version: 2.1
+Version: 3.0
 Author: RavanH
 Author URI: http://4visions.nl/
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravanhagen%40gmail%2ecom&item_name=XML%20Sitemap%20Feed&item_number=2%2e6%2e2%2e9&no_shipping=0&tax=0&bn=PP%2dDonationsBF&charset=UTF%2d8

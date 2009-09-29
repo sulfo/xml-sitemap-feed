@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravan
 Tags: xml sitemap, sitemap, google sitemap, yahoo sitemap, msn sitemap, ask sitemap, search engine, feed
 Requires at least: 2.5
 Tested up to: 2.8
-Stable tag: 2.1
+Stable tag: 3.0
 
 Creates a feed that complies to the XML Sitemap protocol ready to be submitted to Google, Yahoo, MSN, Ask.com and others.
 
