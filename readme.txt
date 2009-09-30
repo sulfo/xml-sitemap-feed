@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravan
 Tags: xml sitemap, sitemap, google sitemap, yahoo sitemap, msn sitemap, ask sitemap, search engine, feed
 Requires at least: 2.5
 Tested up to: 2.8
-Stable tag: 3.1
+Stable tag: 3.0
 
 Creates a feed that complies with the XML Sitemap protocol ready to be submitted to Google, Yahoo, MSN, Ask.com and others.
 
@@ -38,7 +38,9 @@ XML Sitemap Feed is based on the plugin Standard XML Sitemap Generator (disconti
 = Wordpress =
 
 Just use that slick installation and auto update feature on your Pugins page
-      ... OR ... 
+
+&hellipOR&hellip
+
 follow these simple steps:
 
 1. Download archive and unpack.
@@ -55,18 +57,14 @@ The plugin also works from the /mu-plugins/ folder where it runs quietly in the 
 
 == Frequently Asked Questions ==
 
-= Do I _need_ to have use of the fancy Permalink structures? =
+=  =
 
-No. While I would advise you to use any one of the nicer Permalink structures, you might not be able to (or don't want to) do that. If so, you can still use this plugin: 
+**Q: My WordPress powered blog is installed in a subdirectory. Does that change anything?**
 
-Check to see if the URL yourblogurl.tld/?feed=sitemap.xml (notice the different URL!) does produce a feed. Now manually upload your own robots.txt file to your website root containing: 
+That depends on where the index.php of your installation resides. If it is in the root, meaning WP is installed in a subdir but the blog is accessible from your domain root, you do not have to do anything. It should work out of the box. However, if the index.php is (e.g. still with your wp-config.php and all other WP files) in a subdir, meaning your blog is only accessible via that subdir, you need to manage your own robots.txt file in your domain root. It _has_ to be in the root (!) and needs a line starting with `Sitemap:` followed by the full URL to the sitemap feed provided by XML Sitemap Feed plugin. Like:
 `
-Sitemap: http://yourblogurl.tld/?feed=sitemap.xml
-
-User-agent: *
-Disallow:
-`
-You can also choose to notify major search engines of your new XML sitemap manually.
+Sitemap: http://yourblogurl.tld/subdir/sitemap.xml
+` 
 
 = Can I manipulate values for priority and changefreq? =
 
@@ -91,6 +89,19 @@ No. In normal circumstances, your site will be indexed by the major search engin
 No. While other XML Sitemap plugins provide pinging to some search engines upon each post edit or publication, this plugin does not. For the average website, in my experience, pinging Google or others after each little change does not benefit anything except a theoretical smaller delay in re-indexation of your website. This is only theoretical because if your site is popular and active, major search engines will likely be crawling your site on a very regular basis anyway. And if, on the other hand, your site is not high in the agenda with the major search engines, they will likely give no priority to your pings at all. 
 
 If you _really_ feel the need to try and get your latest post indexed ASAP, you can let major search engines know about updates manually. For most search engines you need to have some account for that. Like a [Google Webmaster Tools account](https://www.google.com/webmasters/tools/) which will tell you many interesting things about your website and your readers. Try it!
+
+= Do I need to make use of a fancy Permalink structure? =
+
+No. While I would advise you to use any one of the nicer Permalink structures, you might not be able to (or don't want to) do that. If so, you can still use this plugin: 
+
+Check to see if the URL yourblogurl.tld/?feed=sitemap.xml (notice the **?feed=**!) does produce a feed. Now manually upload your own robots.txt file to your website root containing: 
+`
+Sitemap: http://yourblogurl.tld/?feed=sitemap.xml
+
+User-agent: *
+Disallow:
+`
+You can also choose to notify major search engines of your new XML sitemap manually.
 
 = Can I change the sitemap name/URL? =
 
@@ -117,9 +128,9 @@ Disallow:
 `
 Reactivate your plugins one by one to find out which one is causing the problem. Then report the bug to the plugin developer. 
 
-      ... OR ...
+&hellipOR&hellip
 
-Follow the instructions at question **Do I _need_ to have use of the fancy Permalink structures?** at the top.
+Follow the instructions at question **Do I need to make use of a fancy Permalink structure?** at the top.
 
 == Changelog ==
 
