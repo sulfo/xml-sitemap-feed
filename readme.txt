@@ -10,9 +10,9 @@ Creates a feed that complies with the XML Sitemap protocol ready to be submitted
 
 == Description ==
 
-This plugin dynamically creates an XML feed that complies with the XML Sitemap protocol. There are no options to be set and the feed becomes instantly available after activation on yourblogurl.tld/sitemap.xml and yourblogurl.tld/feed/sitemap ready to be submitted to search engines like Google, Yahoo, MSN, Ask.com and others. 
+This plugin dynamically creates an XML feed that complies with the XML Sitemap protocol. There are no options to be set and the feed becomes instantly available after activation on yourblogurl.tld/sitemap.xml (or yourblogurl.tld/index.php?feed=sitemap.xml if you do not use a fancy permalink structure) ready to be submitted to search engines like Google, Yahoo, MSN, Ask.com and others. 
 
-An entry `Sitemap: http://yourblogurl.tld/sitemap.xml` is added to the (by WordPress dynamically created) robots.txt on yourblogurl.tld/robots.txt to tell search engines where to find your XML Sitemap. 
+An entry `Sitemap: http://yourblogurl.tld/sitemap.xml` is added to the (by WordPress dynamically created) robots.txt on yourblogurl.tld/robots.txt to tell search engines where to find your XML Sitemap. If you do not use fancy URL's in WordPress, you will have to create your own robots.txt file. See FAQ's.
 
 = Advantages =
 
@@ -38,7 +38,7 @@ XML Sitemap Feed is based on the plugin Standard XML Sitemap Generator (disconti
 = Wordpress =
 
 Just use that slick installation and auto update feature on your Pugins page
-    ... OR ... 
+      ... OR ... 
 follow these simple steps:
 
 1. Download archive and unpack.
@@ -54,6 +54,19 @@ Done! Check your sparkling new XML Sitemap by adapting the url yourblogurl.tld/s
 The plugin also works from the /mu-plugins/ folder where it runs quietly in the background without bothering any blog owner with new options or the need for extra knowledge of XML Sitemap submission. Just upload the complete package content and move the file xml-sitemap.php from /mu-plugins/xml-sitemap-feed/ to /mu-plugins/.
 
 == Frequently Asked Questions ==
+
+= Do I _need_ to have use of the fancy Permalink structures? =
+
+No. While I would advise you to use any one of the nicer Permalink structures, you might not be able to (or don't want to) do that. If so, you can still use this plugin: 
+
+Check to see if the URL yourblogurl.tld/?feed=sitemap.xml (notice the different URL!) does produce a feed. Now manually upload your own robots.txt file to your website root containing: 
+`
+Sitemap: http://yourblogurl.tld/?feed=sitemap.xml
+
+User-agent: *
+Disallow:
+`
+You can also choose to notify major search engines of your new XML sitemap manually.
 
 = Can I manipulate values for priority and changefreq? =
 
@@ -75,14 +88,13 @@ No. In normal circumstances, your site will be indexed by the major search engin
 
 = Does this plugin ping search engines? =
 
-No. While other XML Sitemap plugins provide pinging to some search engines upon each post edit or publication, this plugin does not. For the average website, in my experience, pinging Google or others after each little change does not benefit anything except a theoretical smaller delay in re-indexation of your website. This is only theoretical because if your site is popular and active, major search engines will likely be crawling your site on a very regular basis anyway. And if, on the other hand, your site is not high in the agenda with the major search engines, they will likely give no priority to your pings anyway. 
+No. While other XML Sitemap plugins provide pinging to some search engines upon each post edit or publication, this plugin does not. For the average website, in my experience, pinging Google or others after each little change does not benefit anything except a theoretical smaller delay in re-indexation of your website. This is only theoretical because if your site is popular and active, major search engines will likely be crawling your site on a very regular basis anyway. And if, on the other hand, your site is not high in the agenda with the major search engines, they will likely give no priority to your pings at all. 
 
-If you **really** feel the need to get your latest post indexed ASAP, you can let major search engines know about updates manually. For most search engines you need to have some account for that. Like a [Google Webmaster Tools account](https://www.google.com/webmasters/tools/) which will tell you much interesting things about your website and your readers. Try it!
+If you _really_ feel the need to try and get your latest post indexed ASAP, you can let major search engines know about updates manually. For most search engines you need to have some account for that. Like a [Google Webmaster Tools account](https://www.google.com/webmasters/tools/) which will tell you many interesting things about your website and your readers. Try it!
 
 = Can I change the sitemap name/URL? =
 
-No. The sitemap url that you manually submit to Google (if you are impatient) should be yourblogurl.tld/sitemap.xml 
-The feed is also available via yourblogurl.tld/feed/sitemap
+No. If you have fancy URL's turned ON in WordPress (Permalinks), the sitemap url that you manually submit to Google (if you are impatient) should be yourblogurl.tld/sitemap.xml but if you have the Default option set the feed is only available via yourblogurl.tld/?feed=sitemap.xml (notice the `?feed=`)
 
 = I see no sitemap.xml file in my server space! =
 
@@ -94,28 +106,25 @@ You may edit the XML output in xml-sitemap-feed/template.php but be carefull not
 
 = Do I need to change my robots.txt? =
 
-No. Your sitemap url will be automatically added to your dynamic robots.txt when plugin actived. Unless you use a static robots.txt file in your website root. In that case you areadvised to open it in a text editor and add a line like `Sitemap: http://yourblogurl.tld/sitemap.xml` (adapt to your site url).
+No. Your sitemap url will be automatically added to your dynamic robots.txt when plugin actived. Unless you use a static robots.txt file in your website root. In that case you are advised to open it in a text editor and add a line like `Sitemap: http://yourblogurl.tld/sitemap.xml` (adapt to your site url).
 
-= I get a 404 page instead of robots.txt! =
+= I get a 404 page instead of sitemap.xml and robots.txt! =
 
-The plugin Event Calendar (at least v.3.2.beta2) is known to break the WordPress internal robots.txt generation. Other plugins might also cause this. Deactivate them all and see if you get a basic robots.txt file showing: 
+There are plugins like Event Calendar (at least v.3.2.beta2) known to mess with rewrite rules, causing problems with WordPress internal feeds and robots.txt generation and thus conflict with the XML Sitemap Feed plugin. Deactivate all plugins and see if you get a basic robots.txt file showing: 
 `
 User-agent: *
 Disallow:
 `
-Reactivate your plugins one by one to find out which one is causing the problem. Then report the bug to the plugin developer.
-    ... OR ...
-Manually upload your own robots.txt file to your website root containing at least: 
-`
-Sitemap: http://yourblogurl.tld/sitemap.xml
+Reactivate your plugins one by one to find out which one is causing the problem. Then report the bug to the plugin developer. 
 
-User-agent: *
-Disallow:
-`
+      ... OR ...
+
+Follow the instructions at question **Do I _need_ to have use of the fancy Permalink structures?** at the top.
 
 == Changelog ==
 
 = 3.1 =
+* rewrite and add_feed calls improvements
 * bugfix: double entry when static page is frontpage
 
 = 3.0 =

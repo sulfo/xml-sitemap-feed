@@ -3,10 +3,10 @@
     XML Sitemap Feed Styleheet Template
    ------------------------------------- */
 
-if (!empty($_SERVER['SCRIPT_FILENAME']) && 'template-xsl.php' == basename($_SERVER['SCRIPT_FILENAME']))
+if (!empty($_SERVER['SCRIPT_FILENAME']) && 'feed-xsl.php' == basename($_SERVER['SCRIPT_FILENAME']))
 	die ('Please do not load this page directly. Thanks!');
 
-header('Content-Type: text/xsl; charset=' . get_option('blog_charset'), true);
+@header('Content-Type: text/xsl; charset=' . get_option('blog_charset'), true);
 
 echo '<?xml version="1.0" encoding="UTF-8"?>'; ?>
 <xsl:stylesheet version="2.0" 

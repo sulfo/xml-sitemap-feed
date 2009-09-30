@@ -3,7 +3,7 @@
     XML Sitemap Feed Template
    --------------------------- */
 
-if (!empty($_SERVER['SCRIPT_FILENAME']) && 'template-xml.php' == basename($_SERVER['SCRIPT_FILENAME']))
+if (!empty($_SERVER['SCRIPT_FILENAME']) && 'feed-xml.php' == basename($_SERVER['SCRIPT_FILENAME']))
 	die ('Please do not load this page directly. Thanks!');
 
 
@@ -17,10 +17,10 @@ $frontpage_priority = 1.0;
 $lastpostmodified = get_lastpostmodified('GMT');
 
 // start the xml output
-header('Content-Type: text/xml; charset=' . get_option('blog_charset'), true);
+@header('Content-Type: text/xml; charset=' . get_option('blog_charset'));
 
-echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?'.'>
-<?xml-stylesheet type="text/xsl" href="'.get_option('siteurl').'/sitemap.xsl"?>
+echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?>
+<?xml-stylesheet type="text/xsl" href="'.get_option('siteurl').'/?feed=sitemap.xsl"?>
 <!-- generated-on="'.date('Y-m-d\TH:i:s+00:00').'" -->
 <!-- generator="XML Sitemap Feed plugin for WordPress" -->
 <!-- generator-url="http://4visions.nl/en/index.php?section=57" -->
@@ -63,15 +63,15 @@ if ($post_ids) {
 			$priority_down = (($lastpostmodified - $post_modified_time) > 0) ? ($lastpostmodified - $post_modified_time)/10 : 0;
 			$priority_up = ($post->comment_count > 0) ? $post->comment_count/10 : 0;
 			$priority = $post_priority - $priority_down + $priority_up;
- 			$priority = ( $priority > $maxpost_priority ) ? $maxpost_priority : $priority;
- 			$priority = ( $priority < $minpost_priority ) ? $minpost_priority : $priority;
+ 			$priority = ($priority > $maxpost_priority) ? $maxpost_priority : $priority;
+ 			$priority = ($priority < $minpost_priority) ? $minpost_priority : $priority;
 ?>
 	<url>
 		<loc><?php the_permalink_rss() ?></loc>
 		<lastmod><?php echo mysql2date('Y-m-d\TH:i:s+00:00', $post_modified_time, false) ?></lastmod>
 <?php if($post->post_type == "page") { ?>
 		<changefreq>monthly</changefreq>
-		<priority>0.5</priority>
+		<priority><?php echo $page_priority ?></priority>
 <?php } else {
 		if($post->comment_count > 0) { ?>
 		<changefreq>weekly</changefreq>
