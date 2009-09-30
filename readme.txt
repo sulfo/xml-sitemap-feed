@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravan
 Tags: xml sitemap, sitemap, google sitemap, yahoo sitemap, msn sitemap, ask sitemap, search engine, feed
 Requires at least: 2.5
 Tested up to: 2.8
-Stable tag: 3.0
+Stable tag: 3.2
 
 Creates a feed that complies with the XML Sitemap protocol ready to be submitted to Google, Yahoo, MSN, Ask.com and others.
 
@@ -57,9 +57,7 @@ The plugin also works from the /mu-plugins/ folder where it runs quietly in the 
 
 == Frequently Asked Questions ==
 
-=  =
-
-**Q: My WordPress powered blog is installed in a subdirectory. Does that change anything?**
+= My WordPress powered blog is installed in a subdirectory. Does that change anything? =
 
 That depends on where the index.php of your installation resides. If it is in the root, meaning WP is installed in a subdir but the blog is accessible from your domain root, you do not have to do anything. It should work out of the box. However, if the index.php is (e.g. still with your wp-config.php and all other WP files) in a subdir, meaning your blog is only accessible via that subdir, you need to manage your own robots.txt file in your domain root. It _has_ to be in the root (!) and needs a line starting with `Sitemap:` followed by the full URL to the sitemap feed provided by XML Sitemap Feed plugin. Like:
 `

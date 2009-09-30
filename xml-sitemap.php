@@ -3,7 +3,7 @@
 Plugin Name: XML Sitemap Feed
 Plugin URI: http://4visions.nl/en/index.php?section=57
 Description: Creates a dynamic XML feed that complies with the XML Sitemap protocol to aid Google, Yahoo, MSN, Ask.com indexing your blog. Based on the Standard XML Sitemap Generator by Patrick Chia.
-Version: 3.1
+Version: 3.2
 Author: RavanH
 Author URI: http://4visions.nl/
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravanhagen%40gmail%2ecom&item_name=XML%20Sitemap%20Feed&item_number=2%2e6%2e2%2e9&no_shipping=0&tax=0&bn=PP%2dDonationsBF&charset=UTF%2d8
@@ -31,7 +31,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravan
    -------------------- */
 
 // set version
-define('XMLSFVERSION','3.1');
+define('XMLSFVERSION','3.2');
 
 // check if xml-sitemap.php was moved one dir up to mu-plugins in wpmu
 $xmlsf_dir = dirname(__FILE__);
@@ -64,7 +64,10 @@ function xml_sitemap_xsl_do_feed() {
 // add the rewrite rules
 function xml_sitemap_feed_rewrite($wp_rewrite) {
 	$feed_rules = array(
-		'(.+)' => 'index.php?feed='.$wp_rewrite->preg_index(1),
+		//'feed/(.+)' => 'index.php?feed='.$wp_rewrite->preg_index(1),
+		//'^feed/sitemap$' => 'index.php?feed=sitemap',
+		'^sitemap.xml$' => 'index.php?feed=sitemap.xml',
+		'^sitemap.xsl$' => 'index.php?feed=sitemap.xsl'
 	);
 	$wp_rewrite->rules = $feed_rules + $wp_rewrite->rules;
 }
