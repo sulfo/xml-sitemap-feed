@@ -132,7 +132,7 @@ Follow the instructions at question **Do I need to make use of a fancy Permalink
 
 == Changelog ==
 
-= 3.1 =
+= 3.2 =
 * rewrite and add_feed calls improvements
 * bugfix: double entry when static page is frontpage
 
