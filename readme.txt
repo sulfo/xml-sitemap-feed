@@ -1,7 +1,7 @@
 === XML Sitemap Feed ===
 Contributors: RavanH
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravanhagen%40gmail%2ecom&item_name=XML%20Sitemap&item_number=2%2e6%2e2%2e9&no_shipping=0&tax=0&bn=PP%2dDonationsBF&charset=UTF%2d8
-Tags: xml sitemap, sitemap, google sitemap, yahoo sitemap, msn sitemap, ask sitemap, search engine, feed
+Tags: xml sitemap, sitemap, google sitemap, yahoo sitemap, msn sitemap, ask sitemap, search engine, feed, wordpressmu, wpmu
 Requires at least: 2.5
 Tested up to: 2.8
 Stable tag: 3.2
@@ -39,7 +39,7 @@ XML Sitemap Feed is based on the plugin Standard XML Sitemap Generator (disconti
 
 Just use that slick installation and auto update feature on your Pugins page
 
-&hellipOR&hellip
+&hellip; OR &hellip;
 
 follow these simple steps:
 
@@ -54,6 +54,8 @@ Done! Check your sparkling new XML Sitemap by adapting the url yourblogurl.tld/s
 = Wordpress MU =
 
 The plugin also works from the /mu-plugins/ folder where it runs quietly in the background without bothering any blog owner with new options or the need for extra knowledge of XML Sitemap submission. Just upload the complete package content and move the file xml-sitemap.php from /mu-plugins/xml-sitemap-feed/ to /mu-plugins/.
+
+Installed in /mu-plugins/ alongside [WordPress MU Sitewide Tags Pages](http://wordpress.org/extend/plugins/wordpress-mu-sitewide-tags/), XML Sitemap Feed will not create a sitemap.xml nor change robots.txt for any tag blogs. They would be full of links outside the blogs own domain and subsequently ignored (or worse: penalized) by Google anyway.
 
 == Frequently Asked Questions ==
 
@@ -126,13 +128,16 @@ Disallow:
 `
 Reactivate your plugins one by one to find out which one is causing the problem. Then report the bug to the plugin developer. 
 
-&hellipOR&hellip
+&hellip; OR &hellip;
 
 Follow the instructions at question **Do I need to make use of a fancy Permalink structure?** at the top.
 
 == Changelog ==
 
-= 3.1 =
+= 3.3 =
+* automatic exclusion of tags blog in wpmu
+
+= 3.2 =
 * rewrite and add_feed calls improvements
 * bugfix: double entry when static page is frontpage
 

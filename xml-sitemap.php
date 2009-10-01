@@ -3,7 +3,7 @@
 Plugin Name: XML Sitemap Feed
 Plugin URI: http://4visions.nl/en/index.php?section=57
 Description: Creates a dynamic XML feed that complies with the XML Sitemap protocol to aid Google, Yahoo, MSN, Ask.com indexing your blog. Based on the Standard XML Sitemap Generator by Patrick Chia.
-Version: 3.2
+Version: 3.3
 Author: RavanH
 Author URI: http://4visions.nl/
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravanhagen%40gmail%2ecom&item_name=XML%20Sitemap%20Feed&item_number=2%2e6%2e2%2e9&no_shipping=0&tax=0&bn=PP%2dDonationsBF&charset=UTF%2d8
@@ -31,12 +31,27 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravan
    -------------------- */
 
 // set version
-define('XMLSFVERSION','3.2');
+define('XMLSFVERSION','3.3');
 
-// check if xml-sitemap.php was moved one dir up to mu-plugins in wpmu
+// dir
 $xmlsf_dir = dirname(__FILE__);
+
+// check if xml-sitemap.php is moved one dir up like in WPMU's /mu-plugins/
 if (file_exists($xmlsf_dir.'/xml-sitemap-feed'))
 	$xmlsf_dir = $xmlsf_dir . '/xml-sitemap-feed';
+
+/* see if there is a tags blog TODO
+if (function_exists('get_site_option'))
+	$xmlsf_tags_blog = get_site_option('tags_blog_id');
+// The following array can be used to exclude any blog you want.
+// The 'tags' blog created by WordPress MU Sitewide Tags Pages
+// (http://wordpress.org/extend/plugins/wordpress-mu-sitewide-tags/) 
+// is automatically excluded but you can append other blog ID's.
+
+$xmlsf_exclude_blogs = array(
+//	"38",
+	$xmlsf_tags_blog,
+); */
 
 /* --------------------
        FUNCTIONS
@@ -64,7 +79,6 @@ function xml_sitemap_xsl_do_feed() {
 // add the rewrite rules
 function xml_sitemap_feed_rewrite($wp_rewrite) {
 	$feed_rules = array(
-		//'feed/(.+)' => 'index.php?feed='.$wp_rewrite->preg_index(1),
 		//'^feed/sitemap$' => 'index.php?feed=sitemap',
 		'^sitemap.xml$' => 'index.php?feed=sitemap.xml',
 		'^sitemap.xsl$' => 'index.php?feed=sitemap.xsl'
@@ -79,12 +93,19 @@ function xml_sitemap_robots() {
 }
 
 /* --------------------
-       HOOKS
+       HOOKS 
    -------------------- */
 
-// FEEDS
-add_action('init', 'xml_sitemap_add_feeds');
+if ( $wpdb->blogid && function_exists('get_site_option') && get_site_option('tags_blog_id') == $wpdb->blogid ) {
+	// we are on wpmu and this is a tags blog!
+	// create NO sitemap since it will be full 
+	// of links outside the blogs own domain...
+	return;
+} else {
+	// FEEDS
+	add_action('init', 'xml_sitemap_add_feeds');
 
-// ROBOTSTXT
-add_action('do_robotstxt', 'xml_sitemap_robots');
+	// ROBOTSTXT
+	add_action('do_robotstxt', 'xml_sitemap_robots');
+}
 ?>
