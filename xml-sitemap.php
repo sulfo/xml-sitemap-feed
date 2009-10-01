@@ -40,19 +40,6 @@ $xmlsf_dir = dirname(__FILE__);
 if (file_exists($xmlsf_dir.'/xml-sitemap-feed'))
 	$xmlsf_dir = $xmlsf_dir . '/xml-sitemap-feed';
 
-/* see if there is a tags blog TODO
-if (function_exists('get_site_option'))
-	$xmlsf_tags_blog = get_site_option('tags_blog_id');
-// The following array can be used to exclude any blog you want.
-// The 'tags' blog created by WordPress MU Sitewide Tags Pages
-// (http://wordpress.org/extend/plugins/wordpress-mu-sitewide-tags/) 
-// is automatically excluded but you can append other blog ID's.
-
-$xmlsf_exclude_blogs = array(
-//	"38",
-	$xmlsf_tags_blog,
-); */
-
 /* --------------------
        FUNCTIONS
    -------------------- */
@@ -79,7 +66,6 @@ function xml_sitemap_xsl_do_feed() {
 // add the rewrite rules
 function xml_sitemap_feed_rewrite($wp_rewrite) {
 	$feed_rules = array(
-		//'^feed/sitemap$' => 'index.php?feed=sitemap',
 		'^sitemap.xml$' => 'index.php?feed=sitemap.xml',
 		'^sitemap.xsl$' => 'index.php?feed=sitemap.xsl'
 	);

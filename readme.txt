@@ -88,7 +88,13 @@ No. In normal circumstances, your site will be indexed by the major search engin
 
 No. While other XML Sitemap plugins provide pinging to some search engines upon each post edit or publication, this plugin does not. For the average website, in my experience, pinging Google or others after each little change does not benefit anything except a theoretical smaller delay in re-indexation of your website. This is only theoretical because if your site is popular and active, major search engines will likely be crawling your site on a very regular basis anyway. And if, on the other hand, your site is not high in the agenda with the major search engines, they will likely give no priority to your pings at all. 
 
-If you _really_ feel the need to try and get your latest post indexed ASAP, you can let major search engines know about updates manually. For most search engines you need to have some account for that. Like a [Google Webmaster Tools account](https://www.google.com/webmasters/tools/) which will tell you many interesting things about your website and your readers. Try it!
+Besides, WordPress has a built-in pinging feature. Go in your WP Admin section to Settings > Writing and make sure that the field under **Update services** contains at least 
+`
+http://rpc.pingomatic.com
+` 
+Read more on [Ping-O-Matic](http://pingomatic.com) about what excellent service you are actually getting for free with your WordPress installation!
+
+You can also take a [Google Webmaster Tools account](https://www.google.com/webmasters/tools/) which will tell you many interesting things about your website and your readers. Try it!
 
 = Do I need to make use of a fancy Permalink structure? =
 
@@ -101,11 +107,11 @@ Sitemap: http://yourblogurl.tld/?feed=sitemap.xml
 User-agent: *
 Disallow:
 `
-You can also choose to notify major search engines of your new XML sitemap manually.
+You can also choose to notify major search engines of your new XML sitemap manually. Start with getting a [Google Webmaster Tools account](https://www.google.com/webmasters/tools/).
 
 = Can I change the sitemap name/URL? =
 
-No. If you have fancy URL's turned ON in WordPress (Permalinks), the sitemap url that you manually submit to Google (if you are impatient) should be yourblogurl.tld/sitemap.xml but if you have the Default option set the feed is only available via yourblogurl.tld/?feed=sitemap.xml (notice the `?feed=`)
+No. If you have fancy URL's turned ON in WordPress (Permalinks), the sitemap url that you manually submit to Google (if you are impatient) should be `yourblogurl.tld/sitemap.xml` but if you have the Default option set the feed is only available via `yourblogurl.tld/?feed=sitemap.xml` (notice the *?feed=*).
 
 = I see no sitemap.xml file in my server space! =
 
@@ -113,7 +119,9 @@ The sitemap is dynamically generated just like a feed. There is no actual file c
 
 = Where can I customize the xml output? =
 
-You may edit the XML output in xml-sitemap-feed/template.php but be carefull not to break Sitemap protocol comliance. Read more on [Sitemaps XML format](http://www.sitemaps.org/protocol.php).
+You may edit the XML output in `xml-sitemap-feed/feed-xml.php` but be carefull not to break Sitemap protocol comliance.  Read more on [Sitemaps XML format](http://www.sitemaps.org/protocol.php).
+
+The stylesheet (to make the sitemap human readable) can be edited in `xml-sitemap-feed/feed-xsl.php`.
 
 = Do I need to change my robots.txt? =
 
@@ -127,10 +135,6 @@ User-agent: *
 Disallow:
 `
 Reactivate your plugins one by one to find out which one is causing the problem. Then report the bug to the plugin developer. 
-
-&hellip; OR &hellip;
-
-Follow the instructions at question **Do I need to make use of a fancy Permalink structure?** at the top.
 
 == Changelog ==
 
