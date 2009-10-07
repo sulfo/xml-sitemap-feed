@@ -6,7 +6,7 @@ Requires at least: 2.5
 Tested up to: 2.8
 Stable tag: 3.2
 
-Creates a feed that complies with the XML Sitemap protocol ready to be submitted to Google, Yahoo, MSN, Ask.com and others.
+Creates a feed that complies with the XML Sitemap protocol ready for indexing by Google, Yahoo, MSN, Ask.com and others.
 
 == Description ==
 
