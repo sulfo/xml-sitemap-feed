@@ -10,7 +10,7 @@ Creates a feed that complies with the XML Sitemap protocol ready for indexing by
 
 == Description ==
 
-This plugin dynamically creates an XML feed that complies with the XML Sitemap protocol. There are no options to be set and the feed becomes instantly available after activation on yourblogurl.tld/sitemap.xml (or yourblogurl.tld/index.php?feed=sitemap.xml if you do not use a fancy permalink structure) ready to be submitted to search engines like Google, Yahoo, MSN, Ask.com and others. 
+This plugin dynamically creates an XML feed that complies with the XML Sitemap protocol. There are no options to be set and the feed becomes instantly available after activation on yourblogurl.tld/sitemap.xml (or yourblogurl.tld/index.php?feed=sitemap.xml if you do not use a fancy permalink structure) ready for indexing by search engines like Google, Yahoo, MSN, Ask.com and others. 
 
 An entry `Sitemap: http://yourblogurl.tld/sitemap.xml` is added to the (by WordPress dynamically created) robots.txt on yourblogurl.tld/robots.txt to tell search engines where to find your XML Sitemap. If you do not use fancy URL's in WordPress, you will have to create your own robots.txt file. See FAQ's.
 
@@ -18,11 +18,12 @@ An entry `Sitemap: http://yourblogurl.tld/sitemap.xml` is added to the (by WordP
 
 * The main advantage of this plugin over other XML Sitemap plugins is **simplicity**. No need to change file or folder permissions or move files. In fact, no options at all!
 * Works out-of-the-box on **shared codebase / multi-blog setups** like [WordPress MU](http://mu.wordpress.org/), [WP_OneInstall](http://wordpress.org/extend/plugins/wp-oneinstall/), [WP Hive](http://wordpress.org/extend/plugins/wp-hive/) and others. 
+* Automatic priority calculation based on post age and comment/trackback activity.
 
 = Limitations =
 
 * The feed contains the front page and all posts and pages but (still) excludes category, tag and other dynamic archive pages.
-* There is no way (yet) to manually set the priority of posts/pages in the sitemap but since version 2.0 there is some basic automatic priority calculation (based on post age and comment activity) doing the work for you. However, by resaving older posts/pages from time to time, keeping the lastmod date fairly recent, you can ensure high priority for those urls.
+* There is no way (yet) to manually set the priority of posts/pages in the sitemap but by resaving older posts from time to time, keeping the lastmod date fairly recent, you can ensure high priority for those urls.
 * The number of posts listed in the sitemap is limited to 1000. This should satisfy most blogs while limiting the sitemap size on bigger blogs by stripping of the oldest posts. Please let me know if you need more than your most recent 1000 posts listed in your sitemap.xml :)
 
 = Translations =
@@ -43,19 +44,19 @@ Just use that slick installation and auto update feature on your Pugins page
 
 follow these simple steps:
 
-1. Download archive and unpack.
+1. Download archive.
 
-2. Upload the unpacked folder and its content to the /plugins/ folder. 
+2. Upload the zip file via the Plugins > Add New > Upload page &hellip; OR &hellip; unpack and upload with your favourite FTP client to the /plugins/ folder.
 
 3. Activate the plugin on the Plug-ins page.
 
-Done! Check your sparkling new XML Sitemap by adapting the url yourblogurl.tld/sitemap.xml to your blog and visiting it with a browser or online XML Sitemap validator. You might also want to see if the sitemap is listed in your yourblogurl.tld/robots.txt file.
+Done! Check your sparkling new XML Sitemap by visiting yourblogurl.tld/sitemap.xml (adapted to your domain name ofcourse) with a browser or any online XML Sitemap validator. You might also want to check if the sitemap is listed in your yourblogurl.tld/robots.txt file.
 
 = Wordpress MU =
 
-The plugin also works from the /mu-plugins/ folder where it runs quietly in the background without bothering any blog owner with new options or the need for extra knowledge of XML Sitemap submission. Just upload the complete package content and move the file xml-sitemap.php from /mu-plugins/xml-sitemap-feed/ to /mu-plugins/.
+The plugin also works from the /mu-plugins/ folder where it runs quietly in the background without bothering any blog owner with new options or the need for special knowledge of XML Sitemap submission. Just upload the complete package content to /mu-plugins/ and move the file xml-sitemap.php from the new /mu-plugins/xml-sitemap-feed/ to /mu-plugins/.
 
-Installed in /mu-plugins/ alongside [WordPress MU Sitewide Tags Pages](http://wordpress.org/extend/plugins/wordpress-mu-sitewide-tags/), XML Sitemap Feed will not create a sitemap.xml nor change robots.txt for any tag blogs. They would be full of links outside the blogs own domain and subsequently ignored (or worse: penalized) by Google anyway.
+Installed in /mu-plugins/ alongside [WordPress MU Sitewide Tags Pages](http://wordpress.org/extend/plugins/wordpress-mu-sitewide-tags/), XML Sitemap Feed will not create a sitemap.xml nor change robots.txt for any tag blogs. They would be full of links outside the tags blogs own domain and subsequently ignored (or worse: penalized) by Google anyway.
 
 == Frequently Asked Questions ==
 
