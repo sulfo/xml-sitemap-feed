@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravan
 Tags: xml sitemap, sitemap, google sitemap, yahoo sitemap, msn sitemap, ask sitemap, search engine, feed, wordpressmu, wpmu
 Requires at least: 2.5
 Tested up to: 2.8
-Stable tag: 3.2
+Stable tag: 3.3
 
 Creates a feed that complies with the XML Sitemap protocol ready for indexing by Google, Yahoo, MSN, Ask.com and others.
 
