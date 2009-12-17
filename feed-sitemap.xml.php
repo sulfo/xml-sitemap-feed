@@ -6,13 +6,12 @@
 if (!empty($_SERVER['SCRIPT_FILENAME']) && 'feed-xml.php' == basename($_SERVER['SCRIPT_FILENAME']))
 	die ('Please do not load this page directly. Thanks!');
 
-
 // priority presets
-$post_priority = 0.7;
-$minpost_priority = 0.3;
-$maxpost_priority = 0.9;
-$page_priority = 0.6;
 $frontpage_priority = 1.0;
+$post_priority = 0.7;
+$minpost_priority = 0.1;
+$maxpost_priority = 0.9;
+$page_priority = 0.5;
 
 $lastpostmodified = get_lastpostmodified('GMT');
 
@@ -20,7 +19,7 @@ $lastpostmodified = get_lastpostmodified('GMT');
 @header('Content-Type: text/xml; charset=' . get_option('blog_charset'));
 
 echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?>
-<?xml-stylesheet type="text/xsl" href="'.get_option('siteurl').'/?feed=sitemap.xsl"?>
+<?xml-stylesheet type="text/xsl" href="'.get_option('home').'/?feed=sitemap.xsl"?>
 <!-- generated-on="'.date('Y-m-d\TH:i:s+00:00').'" -->
 <!-- generator="XML Sitemap Feed plugin for WordPress" -->
 <!-- generator-url="http://4visions.nl/en/index.php?section=57" -->
