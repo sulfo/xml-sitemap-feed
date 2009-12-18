@@ -19,7 +19,7 @@ $lastpostmodified = get_lastpostmodified('GMT');
 @header('Content-Type: text/xml; charset=' . get_option('blog_charset'));
 
 echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?>
-<?xml-stylesheet type="text/xsl" href="'.get_option('home').'/?feed=sitemap.xsl"?>
+<?xml-stylesheet type="text/xsl" href="'.get_option('home').'/sitemap.xsl?v='.XMLSFVERSION.'"?>
 <!-- generated-on="'.date('Y-m-d\TH:i:s+00:00').'" -->
 <!-- generator="XML Sitemap Feed plugin for WordPress" -->
 <!-- generator-url="http://4visions.nl/en/index.php?section=57" -->
