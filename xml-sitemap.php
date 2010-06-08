@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: XML Sitemap Feed
-Plugin URI: http://4visions.nl/en/index.php?section=57
+Plugin URI: http://4visions.nl/portfolio/wordpress-plugins/xml-sitemap-feed/
 Description: Creates a feed that complies with the XML Sitemap protocol ready for indexing by Google, Yahoo, Bing, Ask and others.
 Version: 3.5
 Author: RavanH
