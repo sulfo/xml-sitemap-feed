@@ -54,6 +54,10 @@ follow these simple steps:
 
 Done! Check your sparkling new XML Sitemap by visiting yourblogurl.tld/sitemap.xml (adapted to your domain name ofcourse) with a browser or any online XML Sitemap validator. You might also want to check if the sitemap is listed in your yourblogurl.tld/robots.txt file.
 
+= WordPress 3+ in Multi Site mode =
+
+Same as above but do a **Network Activate** to make a XML sitemap available for each site on your network.
+
 = Wordpress MU =
 
 The plugin works best from the **/mu-plugins/** folder where it runs quietly in the background without bothering any blog owner with new options or the need for special knowledge of XML Sitemap submission. Just upload the complete package content to /mu-plugins/ and move the file xml-sitemap.php from the new /mu-plugins/xml-sitemap-feed/ to /mu-plugins/.
@@ -165,6 +169,10 @@ User-agent: *
 Allow: /
 `
 and upload it to your web root...
+
+**Q: Can I do a Network Activate with this plugin on WP3.0 MS / WPMU ?**
+
+Yes, no problem.
 
 == Changelog ==
 
