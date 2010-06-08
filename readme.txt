@@ -144,7 +144,7 @@ You can also choose to notify major search engines of your new XML sitemap manua
 
 The stylesheet (to make the sitemap human readable) can be edited in `xml-sitemap-feed/feed-xsl.php`.
 
-**Q: I get a 404 page instead of both sitemap.xml and robots.txt! **
+**Q: I get a 404 page instead of both sitemap.xml and robots.txt!**
 
 **A:** There are plugins like Event Calendar (at least v.3.2.beta2) known to mess with rewrite rules, causing problems with WordPress internal feeds and robots.txt generation and thus conflict with the XML Sitemap Feed plugin. Deactivate all plugins and see if you get a basic robots.txt file showing: 
 `
