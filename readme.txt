@@ -3,7 +3,7 @@ Contributors: RavanH
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravanhagen%40gmail%2ecom&item_name=XML%20Sitemap&item_number=2%2e6%2e2%2e9&no_shipping=0&tax=0&bn=PP%2dDonationsBF&charset=UTF%2d8
 Tags: sitemap, xml sitemap, google, yahoo, feed, wpmu
 Requires at least: 2.5
-Tested up to: 2.8
+Tested up to: 3.0
 Stable tag: 3.4
 
 Creates a feed that complies with the XML Sitemap protocol ready for indexing by Google, Yahoo, MSN, Ask.com and others.
@@ -17,13 +17,15 @@ An entry `Sitemap: http://yourblogurl.tld/sitemap.xml` is added to the (by WordP
 = Advantages =
 
 * The main advantage of this plugin over other XML Sitemap plugins is **simplicity**. No need to change file or folder permissions, move files or spend time on a difficult plugin options page. In fact, there are no options at all!
-* Works out-of-the-box on **shared codebase / multi-blog setups** like [WordPress MU](http://mu.wordpress.org/), [WP_OneInstall](http://wordpress.org/extend/plugins/wp-oneinstall/) and others. 
+* Works out-of-the-box on **multi-site / shared codebase / multi-blog setups** like [WordPress MU](http://mu.wordpress.org/), WP 3.0 in MS mode and others. 
 * Automatic post URL priority calculation based on post age and comment/trackback activity.
+* Works both when **Network Activated** or placed in **/mu-plugins/** on WP 3.0 in Mutli site mode and WPMU.
 
 = Limitations =
 
-* The feed contains the front page and all posts and pages but excludes category, tag and other dynamic archive pages. This should not be a problem and by some it is even advised. There are SEO plugins around that even make these archive pages non-indexable by search engines.
-* Except by resaving older _posts_ from time to time, keeping the lastmod date fairly recent to ensure automatic high priority calculation for those urls, there is no way (yet) to manually set the priority of individual posts/pages in the sitemap. See the Faq's for more.
+* The feed contains the front page and all posts and pages but _excludes_ category, tag and other dynamic archive pages. This should not be a problem and by some it is even advised. There are SEO plugins around that even make these archive pages non-indexable by search engines.
+* Except by _resaving_ older posts from time to time (keeping the lastmod date fairly recent to ensure automatic high priority calculation for those urls) there is no way to manually set the priority of individual posts/pages in the sitemap. See the Faq's for more.
+* This plugin does not ping any search engines. But then, WordPress does this by default already via the Ping-o-Matic service so why bother?
 * The number of posts listed in the sitemap is limited to 1000. This should satisfy most blogs while limiting the sitemap size on bigger blogs by stripping of the oldest posts. Please let me know if you need more than your most recent 1000 posts listed in your sitemap.xml :)
 
 = Translations =
@@ -31,7 +33,7 @@ An entry `Sitemap: http://yourblogurl.tld/sitemap.xml` is added to the (by WordP
 There is nothing to translate. The sitemap protocol is international, there is no options page nor any front-end / widget output. Nothing to see here, please move along ;)  
 
 = Credits =
-XML Sitemap Feed is based on the plugin Standard XML Sitemap Generator (discontinued?) by Patrick Chia. Many thanks!
+XML Sitemap Feed was originally based on the (discontinued?) plugin Standard XML Sitemap Generator by Patrick Chia. Many thanks!
 
 
 == Installation ==
