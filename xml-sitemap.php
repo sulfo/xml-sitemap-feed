@@ -92,12 +92,24 @@ function xml_sitemap_robots() {
 	echo "Sitemap: ".get_option('home')."/sitemap.xml\n\n";
 }
 
+// DE/ACTIVATION
+function xml_sitemap_activate() {
+	update_option('xml-sitemap-feed-version', XMLSF_VERSION);
+	xml_sitemap_flush_rewrite_rules();
+}
+function xml_sitemap_deactivate() {
+	remove_filter('query_vars', 'xml_sitemap_vars');
+	remove_filter('rewrite_rules_array', 'xml_sitemap_rewrite');
+	delete_option('xml-sitemap-feed-version');
+	xml_sitemap_flush_rewrite_rules();
+}
+
 /* --------------------
        HOOKS 
    -------------------- */
 
-// FLUSH RULES 
-//limited to first plugin run or after plugin upgrade
+// FLUSH RULES check
+// limited to after (site wide) plugin upgrade
 if (get_option('xml-sitemap-feed-version') != XMLSF_VERSION) {
 	add_action('init', 'xml_sitemap_flush_rewrite_rules' );
 	update_option('xml-sitemap-feed-version', XMLSF_VERSION);
@@ -121,4 +133,9 @@ if ( $wpdb->blogid && function_exists('get_site_option') && get_site_option('tag
 	// ROBOTSTXT
 	add_action('do_robotstxt', 'xml_sitemap_robots');
 }
+
+// DE/ACTIVATION
+register_activation_hook( __FILE__, 'xml_sitemap_activate' );
+register_deactivation_hook( __FILE__, 'xml_sitemap_deactivate' );
+
 ?>
