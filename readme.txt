@@ -1,6 +1,6 @@
 === XML Sitemap Feed ===
 Contributors: RavanH
-Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravanhagen%40gmail%2ecom&item_name=XML%20Sitemap&item_number=2%2e6%2e2%2e9&no_shipping=0&tax=0&bn=PP%2dDonationsBF&charset=UTF%2d8
+Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravanhagen%40gmail%2ecom&item_name=XML%20Sitemap&item_number=3%2e0&no_shipping=0&tax=0&bn=PP%2dDonationsBF&charset=UTF%2d8
 Tags: sitemap, xml sitemap, google, yahoo, bing, feed, wpmu
 Requires at least: 2.6
 Tested up to: 3.0
@@ -69,7 +69,7 @@ Installed in /mu-plugins/ alongside [WordPress MU Sitewide Tags Pages](http://wo
 
 The front page has a fixed priority of 100% (1.0). When your site has more posts that pages (you must be using WordPress for a blog), pages have a default priority of 40% (0.4) and posts  have a default priority of 70% (0.7). If your site has more pages than posts (you must be using WordPress as CMS), pages have a default priority of 70% (0.7) and posts  have a default priority of 40% (0.4).
 
-Page priotity can vary between 10% (0.1) and 90% (0.9) depending on the page level (decreasing 10% for each sub-level) and number of comments. Post priority can vary between 10% (0.1) and 90% (0.9) depending on comments and relative post age. 
+Page priotity can vary between 10% (0.1) and 90% (0.9) depending on the page level (decreasing 10% for each sub-level) and relative number of comments. Post priority can vary between 10% (0.1) and 90% (0.9) depending on relative number of comments and relative post age. 
 
 The cangefreq of the frontpage is fixed to daily and calculated for pages and post to either monthly, weekly or daily depending on comments. 
 
