@@ -19,6 +19,7 @@ $page_count = wp_count_posts('page');
 $totalcommentcount = wp_count_comments();
 $lastpostmodified = get_lastpostmodified('GMT');
 $firstpostmodified = get_firstpostmodified('GMT'); // function defined in xml-sitemap.php !
+$average_commentcount = $totalcommentcount/($post_count->publish + $page_count->publish);
 
 // calculated presets
 if ($totalcommentcount->approved > 0)
@@ -81,10 +82,10 @@ while ( have_posts() ) : the_post();
 		} else { 
 			$ancestors = $post->ancestors;
 		}
-		$offset = ($post->comment_count * $comment_weight) - (count($ancestors) * $level_weight);
+		$offset = (($post->comment_count - $average_commentcount) * $comment_weight) - (count($ancestors) * $level_weight);
 		$priority = $page_priority + round($offset,1);
 	} else {
-		$offset = ($post->comment_count * $comment_weight) - (($lastpostmodified - $post->post_modified_gmt) * $age_weight);
+		$offset = (($post->comment_count - $average_commentcount) * $comment_weight) - (($lastpostmodified - $post->post_modified_gmt) * $age_weight);
 		$priority = $post_priority + round($offset,1);
 	}
 	$priority = ($priority > $max_priority) ? $max_priority : $priority;
