@@ -4,13 +4,13 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravan
 Tags: sitemap, xml sitemap, google, yahoo, bing, feed, wpmu
 Requires at least: 2.6
 Tested up to: 3.0
-Stable tag: 3.5
+Stable tag: 3.6
 
 Creates a feed that complies with the XML Sitemap protocol ready for indexing by Google, Yahoo, Bing, Ask and others.
 
 == Description ==
 
-This plugin dynamically creates an XML feed that complies with the XML Sitemap protocol. There are no options to be set and the feed becomes instantly available after activation on yourblogurl.tld/sitemap.xml (or yourblogurl.tld/index.php?sitemap=1 if you do not use a fancy permalink structure) ready for indexing by search engines like Google, Yahoo, MSN, Ask.com and others. 
+This plugin dynamically creates an XML feed that complies with the XML Sitemap protocol. There are no options to be set and the feed becomes instantly available after activation on yourblogurl.tld/sitemap.xml (or yourblogurl.tld/index.php?feed=sitemap if you do not use a fancy permalink structure) ready for indexing by search engines like Google, Yahoo, MSN, Ask.com and others. 
 
 An entry `Sitemap: http://yourblogurl.tld/sitemap.xml` is added to the (by WordPress dynamically created) robots.txt on yourblogurl.tld/robots.txt to tell search engines where to find your XML Sitemap. If you do not use fancy URL's in WordPress, have WP installed in a subdirectory or if you use WP for pages only and do not have any posts, WordPress does not generate a robots.txt output. You will have to create your own robots.txt file and upload it to your site root. See FAQ's.
 
@@ -67,7 +67,11 @@ Installed in /mu-plugins/ alongside [WordPress MU Sitewide Tags Pages](http://wo
 
 = How are the values for priority and changefreq calculated? =
 
-The front page has a fixed priority of 100% (1.0), pages are always 40% (0.4) and new posts have a default priority of 70% (0.7) but can vary between 10% (0.1) and 90% (0.9) depending on comments and post age. The cangefreq of the frontpage is set to monthly for pages and either monthly, weekly or daily for posts depending on comments. 
+The front page has a fixed priority of 100% (1.0). When your site has more posts that pages (you must be using WordPress for a blog), pages have a default priority of 40% (0.4) and posts  have a default priority of 70% (0.7). If your site has more pages than posts (you must be using WordPress as CMS), pages have a default priority of 70% (0.7) and posts  have a default priority of 40% (0.4).
+
+Page priotity can vary between 10% (0.1) and 90% (0.9) depending on the page level (decreasing 10% for each sub-level) and number of comments. Post priority can vary between 10% (0.1) and 90% (0.9) depending on comments and relative post age. 
+
+The cangefreq of the frontpage is fixed to daily and calculated for pages and post to either monthly, weekly or daily depending on comments. 
 
 Dynamic pages like category pages, tag pages and archive pages are not listed in the XML Sitemap.
 
@@ -126,9 +130,9 @@ If you already have a robots.txt file with a line like that, you might want to r
 
 No. While I would advise you to use any one of the nicer Permalink structures, you might not be able to (or don't want to) do that. If so, you can still use this plugin: 
 
-Check to see if the URL yourblogurl.tld/index.php?sitemap=1 (notice the **?sitemap=** !) does produce a feed. Now manually upload your own robots.txt file to your website root containing: 
+Check to see if the URL yourblogurl.tld/index.php?feed=sitemap does produce a feed. Now manually upload your own robots.txt file to your website root containing: 
 `
-Sitemap: http://yourblogurl.tld/index.php?sitemap=1
+Sitemap: http://yourblogurl.tld/index.php?feed=sitemap
 
 User-agent: *
 Allow: /
@@ -137,7 +141,7 @@ You can also choose to notify major search engines of your new XML sitemap manua
 
 = Can I change the sitemap name/URL? =
 
-No. If you have fancy URL's turned ON in WordPress (Permalinks), the sitemap url that you manually submit to Google (if you are impatient) should be `yourblogurl.tld/sitemap.xml` but if you have the Default option set the feed is only available via `yourblogurl.tld/?sitemap=1`.
+No. If you have fancy URL's turned ON in WordPress (Permalinks), the sitemap url that you manually submit to Google (if you are impatient) should be `yourblogurl.tld/sitemap.xml` or `yourblogurl.tld/feed/sitemap/` but if you have the Permalinks' Default option set the feed is only available via `yourblogurl.tld/?feed=sitemap`.
 
 = Where can I customize the xml output? =
 
@@ -172,6 +176,9 @@ and upload it to your web root...
 Yes.
 
 == Changelog ==
+
+= 3.6 =
+* massive priority calculation improvement
 
 = 3.5 =
 * complete rewrite of plugin internals
