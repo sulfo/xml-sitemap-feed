@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravan
 Tags: sitemap, xml sitemap, google, yahoo, bing, feed, wpmu
 Requires at least: 2.6
 Tested up to: 3.0
-Stable tag: 3.6
+Stable tag: 3.6.1
 
 Creates a feed that complies with the XML Sitemap protocol ready for indexing by Google, Yahoo, Bing, Ask and others.
 
@@ -176,6 +176,9 @@ and upload it to your web root...
 Yes.
 
 == Changelog ==
+
+= 3.6.1 =
+* BUGFIX: wrong date calculation on blogs less than 1 year old
 
 = 3.6 =
 * massive priority calculation improvement

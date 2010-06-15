@@ -14,18 +14,20 @@ $age_weight = 0.1;
 $level_weight = 0.1;
 
 // site variables
-$post_count = wp_count_posts('post');
-$page_count = wp_count_posts('page');
-$totalcommentcount = wp_count_comments();
-$lastpostmodified = get_lastpostmodified('GMT');
-$firstpostmodified = get_firstpostmodified('GMT'); // function defined in xml-sitemap.php !
-$average_commentcount = $totalcommentcount/($post_count->publish + $page_count->publish);
+$_post_count = wp_count_posts('post');
+$_page_count = wp_count_posts('page');
+$_totalcommentcount = wp_count_comments();
+
+$lastpostmodified_GMT = get_lastpostmodified('GMT'); // last posts modified date
+$lastpostmodified = mysql2date('U',$lastpostmodified_GMT); // last posts modified date in Unix seconds
+$firstpostmodified = mysql2date('U',get_firstpostmodified('GMT')); // get_firstpostmodified() function defined in xml-sitemap.php !
+$average_commentcount = $_totalcommentcount->approved/($_post_count->publish + $_page_count->publish);
 
 // calculated presets
-if ($totalcommentcount->approved > 0)
-	$comment_weight =  ($max_priority - $min_priority) / $totalcommentcount->approved;
+if ($_totalcommentcount->approved > 0)
+	$comment_weight =  ($max_priority - $min_priority) / $_totalcommentcount->approved;
 
-if ($post_count->publish > $page_count->publish) { // site emphasis on posts
+if ($_post_count->publish > $_page_count->publish) { // site emphasis on posts
 	$post_priority = 0.7;
 	$page_priority = 0.4;
 } else { // site emphasis on pages
@@ -60,7 +62,7 @@ echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?>
 	xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 	<url>
 		<loc><?php bloginfo_rss('url') ?>/</loc>
-		<lastmod><?php echo mysql2date('Y-m-d\TH:i:s+00:00', $lastpostmodified, false); ?></lastmod>
+		<lastmod><?php echo mysql2date('Y-m-d\TH:i:s+00:00', $lastpostmodified_GMT, false); ?></lastmod>
 		<changefreq>daily</changefreq>
 		<priority>1.0</priority>
 	</url>
@@ -85,7 +87,7 @@ while ( have_posts() ) : the_post();
 		$offset = (($post->comment_count - $average_commentcount) * $comment_weight) - (count($ancestors) * $level_weight);
 		$priority = $page_priority + round($offset,1);
 	} else {
-		$offset = (($post->comment_count - $average_commentcount) * $comment_weight) - (($lastpostmodified - $post->post_modified_gmt) * $age_weight);
+		$offset = (($post->comment_count - $average_commentcount) * $comment_weight) - (($lastpostmodified - mysql2date('U',$post->post_modified_gmt)) * $age_weight);
 		$priority = $post_priority + round($offset,1);
 	}
 	$priority = ($priority > $max_priority) ? $max_priority : $priority;
@@ -94,7 +96,7 @@ while ( have_posts() ) : the_post();
 	<url>
 		<loc><?php the_permalink_rss() ?></loc>
 		<lastmod><?php echo mysql2date('Y-m-d\TH:i:s+00:00', $post->post_modified_gmt, false) ?></lastmod>
-<?php 	if($post->comment_count > ($totalcommentcount->approved / 2)) { ?>
+<?php 	if($post->comment_count > ($_totalcommentcount->approved / 2)) { ?>
 		<changefreq>daily</changefreq>
 <?php	} else if($post->comment_count > 0 ) { ?>
 		<changefreq>weekly</changefreq>
