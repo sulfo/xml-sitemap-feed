@@ -3,50 +3,62 @@
     XML Sitemap Feed Template
    --------------------------- */
 
-// presets
-$frontpage_priority = 1.0;
-$min_priority = 0.1;
-$max_priority = 0.9;
-$maxURLS = 9999; // 10,000 (including 1 for front page) of maximum 50,000 URLs allowed in a sitemap.xml
-                 // should be more than enough for any blog...
-$comment_weight = 0.1;
-$age_weight = 0.1;
-$level_weight = 0.1;
+// presets are changable; please read comments.
+$max_priority = 1.0;	// Maximum priority value for any URL in the sitemap; set to any other value between 0 and 1.
+$min_priority = 0;	// Minimum priority value for any URL in the sitemap; set to any other value between 0 and 1.
+			// NOTE: Changing these values will influence each URL's priority. Priority values are taken by 
+			// search engines to represent RELATIVE priority within the site domain. Forcing all URLs
+			// to a priority of above 0.5 or even fixing them all to 1.0 - for example - is useless.
+$frontpage_priority = 1.0;	// Your front page priority, usually the same as max priority but if you have any reason
+				// to change it, please be my guest; set to any other value between 0 and 1.
 
-// site variables
-$_post_count = wp_count_posts('post');
-$_page_count = wp_count_posts('page');
-$_totalcommentcount = wp_count_comments();
+$maxURLS = -1;	// When running into server memory problems, seeing a message like:
+		// "Fatal error: Allowed memory size of xxx bytes exhausted..."
+		// You might want to try setting the maxURLS value to 1000 and, if that works
+		// and if necessery, increment the value by 1000 until the sitemap lists all
+		// the posts.
+$level_weight = 0.1;	// Makes a sub-page loose 10% for each level; set to any other value between 0 and 1.
+$month_weight = 0.1;	// Fall-back value normally ignored by automatic priority calculation, which
+			// makes a post loose 10% of priority monthly; set to any other value between 0 and 1.
 
-$lastpostmodified_GMT = get_lastpostmodified('GMT'); // last posts modified date
-$lastpostmodified = mysql2date('U',$lastpostmodified_GMT); // last posts modified date in Unix seconds
-$firstpostmodified = mysql2date('U',get_firstpostmodified('GMT')); // get_firstpostmodified() function defined in xml-sitemap.php !
-$average_commentcount = $_totalcommentcount->approved/($_post_count->publish + $_page_count->publish);
+// editing below here is not advised!
 
-// calculated presets
-if ($_totalcommentcount->approved > 0)
-	$comment_weight =  ($max_priority - $min_priority) / $_totalcommentcount->approved;
-
-if ($_post_count->publish > $_page_count->publish) { // site emphasis on posts
-	$post_priority = 0.7;
-	$page_priority = 0.4;
-} else { // site emphasis on pages
-	$post_priority = 0.4;
-	$page_priority = 0.7;
-}
-
-if ( $lastpostmodified > $firstpostmodified )
-	$age_weight = ($max_priority - $min_priority) / ($lastpostmodified - $firstpostmodified);
-
-// reset the query
-global $post;
+// change the main query
 query_posts( array(
-	'posts_per_page' => $maxURLS, 
+	'posts_per_page' => $maxURLS,
 	'post_type' => 'any', 
 	'post_status' => 'publish', 
 	'caller_get_posts' => '1'
 	)
 ); 
+
+// setup site variables
+$_post_count = wp_count_posts('post');
+$_page_count = wp_count_posts('page');
+$_totalcommentcount = wp_count_comments();
+
+$lastpostmodified_gmt = get_lastpostmodified('GMT'); // last posts modified date
+$lastpostmodified = mysql2date('U',$lastpostmodified_gmt); // last posts modified date in Unix seconds
+$firstpostmodified = mysql2date('U',get_firstpostmodified('GMT')); // get_firstpostmodified() function defined in xml-sitemap.php !
+
+// calculated presets
+if ($_totalcommentcount->approved > 0)
+	$comment_weight =  ($max_priority - $min_priority) / $_totalcommentcount->approved;
+else
+	$comment_weight = 0;
+
+if ($_post_count->publish > $_page_count->publish) { // site emphasis on posts
+	$post_priority = 0.8;
+	$page_priority = 0.4;
+} else { // site emphasis on pages
+	$post_priority = 0.4;
+	$page_priority = 0.8;
+}
+
+if ( $lastpostmodified > $firstpostmodified ) // valid blog age found ?
+	$age_weight = ($post_priority - $min_priority) / ($lastpostmodified - $firstpostmodified); // calculate relative age weight
+else
+	$age_weight = $month_weight / 2629744 ; // else just do 10% per month (that's a month in seconds)
 
 // start the xml output
 header('Content-Type: text/xml; charset=' . get_option('blog_charset'), true);
@@ -62,19 +74,40 @@ echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?>
 	xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 	<url>
 		<loc><?php bloginfo_rss('url') ?>/</loc>
-		<lastmod><?php echo mysql2date('Y-m-d\TH:i:s+00:00', $lastpostmodified_GMT, false); ?></lastmod>
+		<lastmod><?php echo mysql2date('Y-m-d\TH:i:s+00:00', $lastpostmodified_gmt, false); ?></lastmod>
 		<changefreq>daily</changefreq>
 		<priority>1.0</priority>
 	</url>
 <?php
+// prepare counter to limit the number of URLs to the absolute max of 50.000
+$counter = 1;
+
 // and loop away!
-while ( have_posts() ) : the_post();
+if ( have_posts() ) : while ( have_posts() && $counter < 50000 ) : the_post();
+
+	$thispostmodified_gmt = $post->post_modified_gmt; // post GMT timestamp
+	$thispostmodified = mysql2date('U',$thispostmodified_gmt); // post Unix timestamp
+	$lastcomment = array();
+
+	if ($post->comment_count && $post->comment_count > 0) {
+		$lastcomment = get_comments( array(
+						'status' => 'approve',
+						'$number' => 1,
+						'post_id' => $post->ID,
+						) );
+		$lastcommentsdate = mysql2date('U',$lastcomment[0]->comment_date_gmt); // last comment timestamp
+		if ( $lastcommentsdate > $thispostmodified ) {
+			$thispostmodified = $lastcommentsdate; // replace post with comment Unix timestamp
+			$thispostmodified_gmt = $lastcomment[0]->comment_date_gmt; // and replace modified GMT timestamp
+		}
+	}
+	$lastactivityage = (gmdate('U') - $thispostmodified); // post age
 
 	if($post->post_type == "page") {
 		if ($post->ID == get_option('page_on_front')) // check if we are not doing the front page twice
 			continue;
 		
-		if (!is_array($post->ancestors)) { // $post->ancestors seems always empty. something to do with http://core.trac.wordpress.org/ticket/10381 ??
+		if (!is_array($post->ancestors)) { // $post->ancestors seems always empty (something to do with http://core.trac.wordpress.org/ticket/10381 ?) so we probably need to do it ourselves... 
 			$page_obj = $post;
 			$ancestors = array();
 			while($page_obj->post_parent!=0) {
@@ -85,25 +118,31 @@ while ( have_posts() ) : the_post();
 			$ancestors = $post->ancestors;
 		}
 		$offset = (($post->comment_count - $average_commentcount) * $comment_weight) - (count($ancestors) * $level_weight);
-		$priority = $page_priority + round($offset,1);
+		$priority = $page_priority + $offset;
 	} else {
-		$offset = (($post->comment_count - $average_commentcount) * $comment_weight) - (($lastpostmodified - mysql2date('U',$post->post_modified_gmt)) * $age_weight);
-		$priority = $post_priority + round($offset,1);
+		$offset = (($post->comment_count - $average_commentcount) * $comment_weight) - (($lastpostmodified - $thispostmodified) * $age_weight);
+		$priority = $post_priority + $offset;
 	}
+	// trim priority
 	$priority = ($priority > $max_priority) ? $max_priority : $priority;
 	$priority = ($priority < $min_priority) ? $min_priority : $priority;
 ?>
 	<url>
-		<loc><?php the_permalink_rss() ?></loc>
-		<lastmod><?php echo mysql2date('Y-m-d\TH:i:s+00:00', $post->post_modified_gmt, false) ?></lastmod>
-<?php 	if($post->comment_count > ($_totalcommentcount->approved / 2)) { ?>
+		<loc><?php the_permalink() ?></loc>
+		<lastmod><?php echo mysql2date('Y-m-d\TH:i:s+00:00', $thispostmodified_gmt, false) ?></lastmod>
+<?php 	if(($lastactivityage/86400) < 7) { // last activity less than 1 week old ?>
 		<changefreq>daily</changefreq>
-<?php	} else if($post->comment_count > 0 ) { ?>
+<?php	} else if(($lastactivityage/604800) < 12) { // last activity between 1 and 12 weeks old ?>
 		<changefreq>weekly</changefreq>
-<?php 	} else { ?>
+<?php	} else if(($lastactivityage/604800) < 52) { // last activity between 12 and 52 weeks old ?>
 		<changefreq>monthly</changefreq>
+<?php 	} else { ?>
+		<changefreq>yearly</changefreq>
 <?php	} ?>
-		<priority><?php echo $priority ?></priority>
+		<priority><?php echo round($priority,1) ?></priority>
 	</url>
-<?php endwhile; ?>
+<?php 
+	$counter++;
+
+endwhile; endif; ?>
 </urlset>

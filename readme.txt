@@ -1,39 +1,40 @@
 === XML Sitemap Feed ===
 Contributors: RavanH
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravanhagen%40gmail%2ecom&item_name=XML%20Sitemap&item_number=3%2e0&no_shipping=0&tax=0&bn=PP%2dDonationsBF&charset=UTF%2d8
-Tags: sitemap, xml sitemap, google, yahoo, bing, feed, wpmu
+Tags: sitemap, xml sitemap, sitemap.xml, google, yahoo, bing, wpmu, feed
 Requires at least: 2.6
 Tested up to: 3.0
-Stable tag: 3.6.1
+Stable tag: 3.7
 
 Creates a feed that complies with the XML Sitemap protocol ready for indexing by Google, Yahoo, Bing, Ask and others.
 
 == Description ==
 
-This plugin dynamically creates an XML feed that complies with the XML Sitemap protocol. There are no options to be set and the feed becomes instantly available after activation on yourblogurl.tld/sitemap.xml (or yourblogurl.tld/index.php?feed=sitemap if you do not use a fancy permalink structure) ready for indexing by search engines like Google, Yahoo, MSN, Ask.com and others. 
+This plugin dynamically creates an XML feed that complies with the XML Sitemap protocol. There are no options to be set and the feed becomes instantly available after activation on yourblogurl.tld/feed/sitemap/ and for backward compatibility on yourblogurl.tld/sitemap.xml or yourblogurl.tld/index.php?feed=sitemap if you do not use a fancy permalink structure, ready for indexing by search engines like Google, Yahoo, MSN, Ask.com and others. 
 
-An entry `Sitemap: http://yourblogurl.tld/sitemap.xml` is added to the (by WordPress dynamically created) robots.txt on yourblogurl.tld/robots.txt to tell search engines where to find your XML Sitemap. If you do not use fancy URL's in WordPress, have WP installed in a subdirectory or if you use WP for pages only and do not have any posts, WordPress does not generate a robots.txt output. You will have to create your own robots.txt file and upload it to your site root. See FAQ's.
+A reference to it is added to your (by WordPress dynamically created) robots.txt on yourblogurl.tld/robots.txt to tell search engines where to find your XML Sitemap. If you do not use fancy URL's in WordPress, if you have WP installed in a subdirectory or if you use WP for pages only and do not have any posts, WordPress does not generate a robots.txt output. You'll have to create your own and upload it to your site root. See FAQ's.
 
 = Advantages = 
 
 * The main advantage of this plugin over other XML Sitemap plugins is **simplicity**. No need to change file or folder permissions, move files or spend time on a difficult plugin options page. In fact, there are no options at all!
-* Works out-of-the-box on **multi-site / shared codebase / multi-blog setups** like [WordPress MU](http://mu.wordpress.org/), WP 3.0 in MS mode and others. 
-* Automatic post URL priority calculation based on post age and comment/trackback activity.
-* Works both when **Network Activated** or placed in **/mu-plugins/** on WP 3.0 in Mutli site mode and WPMU.
+* Completely automatic post URL **priority** and **change frequency** calculation based on post age and comment/trackback activity.
+* Works out-of-the-box, even on **multi-site / shared codebase / multi-blog setups** like [WordPress MU](http://mu.wordpress.org/), WP 3.0 in MS mode and others. 
+* Also works when **Network Activated** on WP 3.0 in Mutli site mode or placed in **/mu-plugins/** and WPMU and even takes care to exclude any tags blogs to avoid malus points for link spamming.
 
 = Limitations =
 
-* The feed contains the front page and all posts and pages but _excludes_ category, tag and other dynamic archive pages. This should not be a problem and by some it is even advised. There are SEO plugins around that even make these archive pages non-indexable by search engines.
+* The feed contains the front page and all posts and pages but _excludes_ category, tag and other dynamic archive pages. This should not be a problem and by some it is even advised. There even are SEO plugins around that actively make these archive pages non-indexable by search engines.
 * Except by _resaving_ older posts from time to time (keeping the lastmod date fairly recent to ensure automatic high priority calculation for those urls) there is no way to manually set the priority of individual posts/pages in the sitemap. See the Faq's for more.
 * This plugin does not ping any search engines. But then, WordPress does this by default already via the Ping-o-Matic service so why bother? See the Faq's for more.
+* Since the feed is dynamically created, on _very_ large sites the creation process might take a while. Search engines are said to have a short fuse about waiting for a sitemap, so if your siteis huge you may want to consider using a cache plugin that also (pre)caches feeds.
 
 = Translations =
 
-There is nothing to translate. The sitemap protocol is international, there is no options page nor any front-end / widget output. Nothing to see here, please move along ;)  
+There is nothing to translate. The sitemap protocol is international, there is no options page nor any front-end or widget output. Nothing to see here, please move along ;)  
 
 = Credits =
-XML Sitemap Feed was originally based on the (discontinued?) plugin Standard XML Sitemap Generator by Patrick Chia. Many thanks! Since then, it has been completely rewriten.
 
+XML Sitemap Feed was originally based on the (discontinued?) plugin Standard XML Sitemap Generator by Patrick Chia. Many thanks! Since then, it has been completely rewriten.
 
 == Installation ==
 
@@ -51,7 +52,9 @@ follow these simple steps:
 
 3. Activate the plugin on the Plug-ins page.
 
-Done! Check your sparkling new XML Sitemap by visiting yourblogurl.tld/sitemap.xml (adapted to your domain name ofcourse) with a browser or any online XML Sitemap validator. You might also want to check if the sitemap is listed in your yourblogurl.tld/robots.txt file.
+4. If you have been using another XML Sitemap plugin before, check your site root and remove any created sitemap.xml file that remained there.
+
+Done! Check your sparkling new XML Sitemap by visiting yourblogurl.tld/feed/sitemap/ (adapted to your domain name ofcourse) with a browser or any online XML Sitemap validator. You might also want to check if the sitemap is listed in your yourblogurl.tld/robots.txt file.
 
 = WordPress 3+ in Multi Site mode =
 
@@ -67,21 +70,21 @@ Installed in /mu-plugins/ alongside [WordPress MU Sitewide Tags Pages](http://wo
 
 = How are the values for priority and changefreq calculated? =
 
-The front page has a fixed priority of 100% (1.0). When your site has more posts that pages (you must be using WordPress for a blog), pages have a default priority of 40% (0.4) and posts  have a default priority of 70% (0.7). If your site has more pages than posts (you must be using WordPress as CMS), pages have a default priority of 70% (0.7) and posts  have a default priority of 40% (0.4).
+The front page has a fixed priority of 100% (1.0). When your site has more posts than pages (you must be using WordPress for a blog), pages have a default priority of 40% (0.4) and posts  have a default priority of 80% (0.8). If your site has more pages than posts (you must be using WordPress as CMS), pages have a default priority of 80% (0.8) and posts have a default priority of 40% (0.4).
 
-Page priotity can vary between 10% (0.1) and 90% (0.9) depending on the page level (decreasing 10% for each sub-level) and relative number of comments. Post priority can vary between 10% (0.1) and 90% (0.9) depending on relative number of comments and relative post age. 
+Page and post priotity can vary between 0% (0.0) and 100% (1.0). Page priority depends on the page level (decreasing 10% for each sub-level) and relative number of comments. Post priority depends on relative number of comments and relative last comment age or (when the post has no comments) last post modification age. 
 
-The cangefreq of the frontpage is fixed to daily and calculated for pages and post to either monthly, weekly or daily depending on comments. 
+The cangefreq of the frontpage is fixed to daily and calculated for pages and post to either daily, weekly, monthly or yearly depending on age and comment activity.
 
 Dynamic pages like category pages, tag pages and archive pages are not listed in the XML Sitemap.
 
 = Can I manipulate values for priority and changefreq? =
 
-Yes and No. This plugin has no options page so there is no way to manually set the priority of urls in the sitemap. But there is automatic post priority calculation based on _post modifaction date_ and comment activity, that can either make post priority go to 90% (0.9) for fairly recent posts with many comments or 10% (0.1) for very old posts with no comments. 
+Yes and No. This plugin has no options page so there is no way to manually set the priority of urls in the sitemap. But there is automatic post priority calculation based on _post modifaction date_ and _comment activity_, that can either make post priority go to 100% (1.0) for posts with many and recent comments or 0% (0) for the oldest posts with no comments. 
 
-This feature can be used to your advantage: by resaving your most important older posts from time to time, keeping the **lastmod date** fairly recent, you can ensure a priority of at least 70% (0.7) for those urls. And if you have comments on on those pages, the priority will even go up to 90% (0.9).
+This feature can be used to your advantage: by resaving your most important older posts from time to time, keeping the **lastmod date** fairly recent, you can ensure a priority of at least 80% (0.8) for those urls. And if you have comments on on those pages, the priority will even go up to 90% (0.9).
 
-If you cannot live with these rules, edit the values `$post_priority`, `$minpost_priority`, `$maxpost_priority`, `$page_priority`, `$frontpage_priority` in xml-sitemap-feed/sitemap.xml.php
+If you cannot live with these rules, edit the values `$min_priority`, `$max_priority` and `$frontpage_priority` in xml-sitemap-feed/feed-sitemap.php
 
 = Do I need to submit the sitemap to search engines? =
 
@@ -103,17 +106,13 @@ Read more on [Ping-O-Matic](http://pingomatic.com) about what excellent service 
 
 2. For the average website, in my experience, pinging Google or others after each little change does not benefit anything except a theoretical smaller delay in re-indexation of your website. This is only theoretical because if your site is popular and active, major search engines will likely be crawling your site on a very regular basis anyway. And if, on the other hand, your site is not high on the agenda of the major search engines, they will likely give no priority to your pings at all.
 
-You can always take a [Google Webmaster Tools account](https://www.google.com/webmasters/tools/) which will tell you many interesting things about your website, search terms and your visitors. Try it!
-
-= I see no sitemap.xml file in my server space! =
-
-The sitemap is dynamically generated just like a feed. There is no actual file created.
+You can always take a [Google Webmaster Tools account](https://www.google.com/webmasters/tools/) which will tell you many interesting things about your website, sitemap downloads, search terms and your visitors. Try it!
 
 = Do I need to change my robots.txt? =
 
 That depends. In normal circumstances, if you have no physical robots.txt file in your site root, the new sitemap url will be automatically added to the dynamic robots.txt that is generated by WordPress. But in some cases this might not be the case.
 
-If you use a static robots.txt file in your website root, you will need to open it in a text editor and add a line like `Sitemap: http://yourblogurl.tld/sitemap.xml` (adapt to your site url) to make search engines find your XML Sitemap.
+If you use a static robots.txt file in your website root, you will need to open it in a text editor. If there is already a line with `Sitemap: http://yourblogurl.tld/sitemap.xml` you can just leave it like it is. But if there is no sitemap referrence there, add a line like `Sitemap: http://yourblogurl.tld/feed/sitemap/` (adapt to your site url) to make search engines find your XML Sitemap. 
 
 Or if you have WP installed in a subdirectory, on a server without rewrite_rules or if you do not use fancy URLs in your Permalink structure settings. In these cases, WordPress will need a little help in getting ready for XML Sitemap indexing. Read on in the **WordPress** section for more.
 
@@ -121,10 +120,10 @@ Or if you have WP installed in a subdirectory, on a server without rewrite_rules
 
 That depends on where the index.php and .htaccess of your installation resides. If it is in the root, meaning WP is installed in a subdir but the blog is accessible from your domain root, you do not have to do anything. It should work out of the box. However, if the index.php is (e.g. still with your wp-config.php and all other WP files) in a subdir, meaning your blog is only accessible via that subdir, you need to manage your own robots.txt file in your domain root. It _has_ to be in the root (!) and needs a line starting with `Sitemap:` followed by the full URL to the sitemap feed provided by XML Sitemap Feed plugin. Like:
 `
-Sitemap: http://yourblogurl.tld/subdir/sitemap.xml
+Sitemap: http://yourblogurl.tld/subdir/feed/sitemap/
 ` 
 
-If you already have a robots.txt file with a line like that, you might want to read more about creating an XML Sitemap Index on [sitemaps.org](http://www.sitemaps.org/protocol.php#index).
+If you already have a robots.txt file with another Sitemap referrence like it, you might want to read more about creating an XML Sitemap Index on [sitemaps.org](http://www.sitemaps.org/protocol.php#index) to be able to referrence both sitemaps.
 
 = Do I need to use a fancy Permalink structure? =
 
@@ -137,17 +136,25 @@ Sitemap: http://yourblogurl.tld/index.php?feed=sitemap
 User-agent: *
 Allow: /
 `
-You can also choose to notify major search engines of your new XML sitemap manually. Start with getting a [Google Webmaster Tools account](https://www.google.com/webmasters/tools/) or head over to [XML-Sitemaps.com](http://www.xml-sitemaps.com/validate-xml-sitemap.html) and enter your sites sitemap URL.
+You can also choose to notify major search engines of your new XML sitemap manually. Start with getting a [Google Webmaster Tools account](https://www.google.com/webmasters/tools/) and submit your sitemap for the first time from there to enable tracking of sitemap downloads by Google! or head over to [XML-Sitemaps.com](http://www.xml-sitemaps.com/validate-xml-sitemap.html) and enter your sites sitemap URL.
 
 = Can I change the sitemap name/URL? =
 
-No. If you have fancy URL's turned ON in WordPress (Permalinks), the sitemap url that you manually submit to Google (if you are impatient) should be `yourblogurl.tld/sitemap.xml` or `yourblogurl.tld/feed/sitemap/` but if you have the Permalinks' Default option set the feed is only available via `yourblogurl.tld/?feed=sitemap`.
+No. If you have fancy URL's turned ON in WordPress (Permalinks), the sitemap url that you manually submit to Google (if you are impatient) should be `yourblogurl.tld/feed/sitemap/` but if you have the Permalinks' Default option set the feed is only available via `yourblogurl.tld/?feed=sitemap`.
 
 = Where can I customize the xml output? =
 
-You may edit the XML output in `xml-sitemap-feed/sitemap.xml.php` but be carefull not to break Sitemap protocol comliance.  Read more on [Sitemaps XML format](http://www.sitemaps.org/protocol.php).
+You may edit the XML output in `xml-sitemap-feed/feed-sitemap.php` but be carefull not to break Sitemap protocol comliance.  Read more on [Sitemaps XML format](http://www.sitemaps.org/protocol.php).
 
 The stylesheet (to make the sitemap human readable) can be edited in `xml-sitemap-feed/sitemap.xsl.php`.
+
+= I see no sitemap.xml file in my site root! =
+
+The sitemap is dynamically generated just like a feed. There is no actual file created.
+
+= I do see a sitemap.xml file in site root but it does not seem to get updated! =
+
+You are most likely looking at a sitemap.xml file that has been created by you or another XML Sitemap plugin before you started using this plugin. Just remove it and let the plugin dynamically generate it just like a feed. There is no actual file created.
 
 = I get a 404 page instead of both sitemap.xml and robots.txt! =
 
@@ -164,7 +171,7 @@ There is a know issue with WordPress (at least up to 2.8) not generating a robot
 
 To get around this, you might either at least write one post and give it _Private_ status or alternatively create your own robots.txt file containing:
 `
-Sitemap: http://yourblogurl.tld/sitemap.xml
+Sitemap: http://yourblogurl.tld/feed/sitemap/
 
 User-agent: *
 Allow: /
@@ -176,6 +183,10 @@ and upload it to your web root...
 Yes.
 
 == Changelog ==
+
+= 3.7 =
+* massive changefreq calculation improvement
+* further priority calulation improvement taking last comment date into account
 
 = 3.6.1 =
 * BUGFIX: wrong date calculation on blogs less than 1 year old
