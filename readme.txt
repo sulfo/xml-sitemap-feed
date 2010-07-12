@@ -17,16 +17,16 @@ A reference to it is added to your (by WordPress dynamically created) robots.txt
 = Advantages = 
 
 * The main advantage of this plugin over other XML Sitemap plugins is **simplicity**. No need to change file or folder permissions, move files or spend time on a difficult plugin options page. In fact, there are no options at all!
-* Completely automatic post URL **priority** and **change frequency** calculation based on post age and comment/trackback activity.
-* Works out-of-the-box, even on **multi-site / shared codebase / multi-blog setups** like [WordPress MU](http://mu.wordpress.org/), WP 3.0 in MS mode and others. 
-* Also works when **Network Activated** on WP 3.0 in Mutli site mode or placed in **/mu-plugins/** and WPMU and even takes care to exclude any tags blogs to avoid malus points for link spamming.
+* Completely **automatic** post URL _priority_ and _change frequency_ calculation based on post age and comment/trackback activity.
+* Works out-of-the-box, even on **multi-site / shared codebase / multi-blog setups** like [WordPress MU](http://mu.wordpress.org/), WP 3.0 in MultiSite mode and others. 
+* Also works when **Network Activated** or placed in **/mu-plugins/** on WP 3.0 in MS mode and WPMU and even takes care to exclude any tags blogs to avoid malus points for link spamming.
 
 = Limitations =
 
-* The feed contains the front page and all posts and pages but _excludes_ category, tag and other dynamic archive pages. This should not be a problem and by some it is even advised. There even are SEO plugins around that actively make these archive pages non-indexable by search engines.
-* Except by _resaving_ older posts from time to time (keeping the lastmod date fairly recent to ensure automatic high priority calculation for those urls) there is no way to manually set the priority of individual posts/pages in the sitemap. See the Faq's for more.
+* The feed contains the front page and all posts and pages but _excludes_ category, tag and other dynamic archive pages. This should not be a problem and by most it is even advised. There even are SEO plugins around that actively make these archive pages non-index-able by search engines.
+* Except by _re-saving_ older posts from time to time (keeping the lastmod date fairly recent to ensure automatic high priority calculation for those urls) there is no way to manually set the priority of individual posts/pages in the sitemap. See the Faq's for more.
 * This plugin does not ping any search engines. But then, WordPress does this by default already via the Ping-o-Matic service so why bother? See the Faq's for more.
-* Since the feed is dynamically created, on _very_ large sites the creation process might take a while. Search engines are said to have a short fuse about waiting for a sitemap, so if your siteis huge you may want to consider using a cache plugin that also (pre)caches feeds.
+* Since the feed is dynamically created, on _very_ large sites the creation process might take a while. Search engines are said to have a short fuse about waiting for a sitemap, so if your site is huge you may want to consider using a cache plugin that also (pre)caches feeds. If you are unfamiliar with caching and server setup start with a simple plugin such as Quick Cache but if you are looking for more options you might find solace in WP Super Cache of W3 Total Cache.
 
 = Translations =
 
@@ -64,7 +64,7 @@ Same as above but do a **Network Activate** to make a XML sitemap available for 
 
 The plugin works best from the **/mu-plugins/** folder where it runs quietly in the background without bothering any blog owner with new options or the need for special knowledge of XML Sitemap submission. Just upload the complete package content to /mu-plugins/ and move the file xml-sitemap.php from the new /mu-plugins/xml-sitemap-feed/ to /mu-plugins/.
 
-Installed in /mu-plugins/ alongside [WordPress MU Sitewide Tags Pages](http://wordpress.org/extend/plugins/wordpress-mu-sitewide-tags/), XML Sitemap Feed will **not** create a sitemap.xml nor change robots.txt for any tag blogs. They would be full of links outside the tags blogs own domain and subsequently ignored (or worse: penalized) by Google.
+Installed alongside [WordPress MU Sitewide Tags Pages](http://wordpress.org/extend/plugins/wordpress-mu-sitewide-tags/), XML Sitemap Feed will **not** create a sitemap.xml nor change robots.txt for any tag blogs. This is done deliberately because they would be full of links outside the tags blogs own domain and subsequently ignored (or worse: penalised) by Google.
 
 == Frequently Asked Questions ==
 
@@ -72,9 +72,9 @@ Installed in /mu-plugins/ alongside [WordPress MU Sitewide Tags Pages](http://wo
 
 The front page has a fixed priority of 100% (1.0). When your site has more posts than pages (you must be using WordPress for a blog), pages have a default priority of 40% (0.4) and posts  have a default priority of 80% (0.8). If your site has more pages than posts (you must be using WordPress as CMS), pages have a default priority of 80% (0.8) and posts have a default priority of 40% (0.4).
 
-Page and post priotity can vary between 0% (0.0) and 100% (1.0). Page priority depends on the page level (decreasing 10% for each sub-level) and relative number of comments. Post priority depends on relative number of comments and relative last comment age or (when the post has no comments) last post modification age. 
+Page and post priority can vary between 0% (0.0) and 100% (1.0). Page priority depends on the page level (decreasing 10% for each sub-level) and relative number of comments. Post priority depends on relative number of comments and relative last comment age or (when the post has no comments) last post modification age. 
 
-The cangefreq of the frontpage is fixed to daily and calculated for pages and post to either daily, weekly, monthly or yearly depending on age and comment activity.
+The changefreq of the front page is fixed to daily and calculated for pages and post to either daily, weekly, monthly or yearly depending on age and comment activity.
 
 Dynamic pages like category pages, tag pages and archive pages are not listed in the XML Sitemap.
 
@@ -82,7 +82,7 @@ Dynamic pages like category pages, tag pages and archive pages are not listed in
 
 Yes and No. This plugin has no options page so there is no way to manually set the priority of urls in the sitemap. But there is automatic post priority calculation based on _post modifaction date_ and _comment activity_, that can either make post priority go to 100% (1.0) for posts with many and recent comments or 0% (0) for the oldest posts with no comments. 
 
-This feature can be used to your advantage: by resaving your most important older posts from time to time, keeping the **lastmod date** fairly recent, you can ensure a priority of at least 80% (0.8) for those urls. And if you have comments on on those pages, the priority will even go up to 90% (0.9).
+This feature can be used to your advantage: by re-saving your most important older posts from time to time, keeping the **lastmod date** fairly recent, you can ensure a priority of at least 80% (0.8) for those URLs. And if you have comments on on those pages, the priority will even go up to 90% (0.9).
 
 If you cannot live with these rules, edit the values `$min_priority`, `$max_priority` and `$frontpage_priority` in xml-sitemap-feed/feed-sitemap.php
 
@@ -144,7 +144,7 @@ No. If you have fancy URL's turned ON in WordPress (Permalinks), the sitemap url
 
 = Where can I customize the xml output? =
 
-You may edit the XML output in `xml-sitemap-feed/feed-sitemap.php` but be carefull not to break Sitemap protocol comliance.  Read more on [Sitemaps XML format](http://www.sitemaps.org/protocol.php).
+You may edit the XML output in `xml-sitemap-feed/feed-sitemap.php` but be careful not to break Sitemap protocol compliance.  Read more on [Sitemaps XML format](http://www.sitemaps.org/protocol.php).
 
 The stylesheet (to make the sitemap human readable) can be edited in `xml-sitemap-feed/sitemap.xsl.php`.
 
@@ -178,7 +178,11 @@ Allow: /
 `
 and upload it to your web root...
 
-= Can I do a Network Activate with this plugin on WP3.0 MS / WPMU ? =
+= Can I do a Network Activate on WP3.0 MS / Site Wide Activate on WPMU with this plugin ? =
+
+Yes.
+
+= Can I run this plugin from /mu-plugins/ on WP3.0 MS / WPMU ? =
 
 Yes.
 
