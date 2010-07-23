@@ -12,11 +12,7 @@ $min_priority = 0;	// Minimum priority value for any URL in the sitemap; set to 
 $frontpage_priority = 1.0;	// Your front page priority, usually the same as max priority but if you have any reason
 				// to change it, please be my guest; set to any other value between 0 and 1.
 
-$maxURLS = -1;	// When running into server memory problems, seeing a message like:
-		// "Fatal error: Allowed memory size of xxx bytes exhausted..."
-		// You might want to try setting the maxURLS value to 1000 and, if that works
-		// and if necessery, increment the value by 1000 until the sitemap lists all
-		// the posts.
+$maxURLS = 50000;	// maximum number of URLs allowed in any sitemap.
 $level_weight = 0.1;	// Makes a sub-page loose 10% for each level; set to any other value between 0 and 1.
 $month_weight = 0.1;	// Fall-back value normally ignored by automatic priority calculation, which
 			// makes a post loose 10% of priority monthly; set to any other value between 0 and 1.
@@ -25,21 +21,25 @@ $month_weight = 0.1;	// Fall-back value normally ignored by automatic priority c
 
 // change the main query
 query_posts( array(
-	'posts_per_page' => $maxURLS,
+	'posts_per_page' => -1,
 	'post_type' => 'any', 
 	'post_status' => 'publish', 
 	'caller_get_posts' => '1'
 	)
 ); 
 
+// force is_feed condition to true to allow WP Super Cache to include the sitemap in its feeds cache
+global $wp_query;
+$wp_query->is_feed = true;
+
 // setup site variables
 $_post_count = wp_count_posts('post');
 $_page_count = wp_count_posts('page');
 $_totalcommentcount = wp_count_comments();
 
-$lastpostmodified_gmt = get_lastpostmodified('GMT'); // last posts modified date
-$lastpostmodified = mysql2date('U',$lastpostmodified_gmt); // last posts modified date in Unix seconds
-$firstpostmodified = mysql2date('U',get_firstpostmodified('GMT')); // get_firstpostmodified() function defined in xml-sitemap.php !
+$lastmodified_gmt = get_lastmodified('GMT'); // last posts or page modified date
+$lastmodified = mysql2date('U',$lastmodified_gmt); // last posts or page modified date in Unix seconds
+$firstmodified = mysql2date('U',get_firstmodified('GMT')); // uses new get_firstmodified() function defined in xml-sitemap.php !
 
 // calculated presets
 if ($_totalcommentcount->approved > 0)
@@ -55,8 +55,8 @@ if ($_post_count->publish > $_page_count->publish) { // site emphasis on posts
 	$page_priority = 0.8;
 }
 
-if ( $lastpostmodified > $firstpostmodified ) // valid blog age found ?
-	$age_weight = ($post_priority - $min_priority) / ($lastpostmodified - $firstpostmodified); // calculate relative age weight
+if ( $lastmodified > $firstmodified ) // valid blog age found ?
+	$age_weight = ($post_priority - $min_priority) / ($lastmodified - $firstmodified); // calculate relative age weight
 else
 	$age_weight = $month_weight / 2629744 ; // else just do 10% per month (that's a month in seconds)
 
@@ -74,7 +74,7 @@ echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?>
 	xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 	<url>
 		<loc><?php bloginfo_rss('url') ?>/</loc>
-		<lastmod><?php echo mysql2date('Y-m-d\TH:i:s+00:00', $lastpostmodified_gmt, false); ?></lastmod>
+		<lastmod><?php echo mysql2date('Y-m-d\TH:i:s+00:00', $lastmodified_gmt, false); ?></lastmod>
 		<changefreq>daily</changefreq>
 		<priority>1.0</priority>
 	</url>
@@ -83,7 +83,7 @@ echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?>
 $counter = 1;
 
 // and loop away!
-if ( have_posts() ) : while ( have_posts() && $counter < 50000 ) : the_post();
+if ( have_posts() ) : while ( have_posts() && $counter < $maxURLS ) : the_post();
 
 	$thispostmodified_gmt = $post->post_modified_gmt; // post GMT timestamp
 	$thispostmodified = mysql2date('U',$thispostmodified_gmt); // post Unix timestamp
@@ -120,7 +120,7 @@ if ( have_posts() ) : while ( have_posts() && $counter < 50000 ) : the_post();
 		$offset = (($post->comment_count - $average_commentcount) * $comment_weight) - (count($ancestors) * $level_weight);
 		$priority = $page_priority + $offset;
 	} else {
-		$offset = (($post->comment_count - $average_commentcount) * $comment_weight) - (($lastpostmodified - $thispostmodified) * $age_weight);
+		$offset = (($post->comment_count - $average_commentcount) * $comment_weight) - (($lastmodified - $thispostmodified) * $age_weight);
 		$priority = $post_priority + $offset;
 	}
 	// trim priority
@@ -144,5 +144,8 @@ if ( have_posts() ) : while ( have_posts() && $counter < 50000 ) : the_post();
 <?php 
 	$counter++;
 
-endwhile; endif; ?>
+endwhile; endif; 
+
+// wp_reset_query();
+?>
 </urlset>

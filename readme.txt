@@ -1,10 +1,10 @@
 === XML Sitemap Feed ===
 Contributors: RavanH
-Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravanhagen%40gmail%2ecom&item_name=XML%20Sitemap&item_number=3%2e0&no_shipping=0&tax=0&bn=PP%2dDonationsBF&charset=UTF%2d8
+Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravanhagen%40gmail%2ecom&item_name=XML%20Sitemap%20Feed&item_number=3%2e8&no_shipping=0&tax=0&bn=PP%2dDonationsBF&charset=UTF%2d8
 Tags: sitemap, xml sitemap, sitemap.xml, google, yahoo, bing, wpmu, feed
 Requires at least: 2.6
 Tested up to: 3.0
-Stable tag: 3.7
+Stable tag: 3.7.3
 
 Creates a feed that complies with the XML Sitemap protocol ready for indexing by Google, Yahoo, Bing, Ask and others.
 
@@ -26,7 +26,7 @@ A reference to it is added to your (by WordPress dynamically created) robots.txt
 * The feed contains the front page and all posts and pages but _excludes_ category, tag and other dynamic archive pages. This should not be a problem and by most it is even advised. There even are SEO plugins around that actively make these archive pages non-index-able by search engines.
 * Except by _re-saving_ older posts from time to time (keeping the lastmod date fairly recent to ensure automatic high priority calculation for those urls) there is no way to manually set the priority of individual posts/pages in the sitemap. See the Faq's for more.
 * This plugin does not ping any search engines. But then, WordPress does this by default already via the Ping-o-Matic service so why bother? See the Faq's for more.
-* Since the feed is dynamically created, on _very_ large sites the creation process might take a while. Search engines are said to have a short fuse about waiting for a sitemap, so if your site is huge you may want to consider using a cache plugin that also (pre)caches feeds. If you are unfamiliar with caching and server setup start with a simple plugin such as Quick Cache but if you are looking for more options you might find solace in WP Super Cache of W3 Total Cache.
+* Since the feed is dynamically created, on _very_ large sites the creation process might take a while. Search engines are said to have a short fuse about waiting for a sitemap, so if your site is huge you may want to consider using a cache plugin that also (pre)caches feeds. If you are unfamiliar with caching and server setup start with a simple plugin such as Quick Cache but if you are looking for more options you might find solace in WP Super Cache or W3 Total Cache.
 
 = Translations =
 
@@ -156,7 +156,11 @@ The sitemap is dynamically generated just like a feed. There is no actual file c
 
 You are most likely looking at a sitemap.xml file that has been created by you or another XML Sitemap plugin before you started using this plugin. Just remove it and let the plugin dynamically generate it just like a feed. There is no actual file created.
 
-= I get a 404 page instead of both sitemap.xml and robots.txt! =
+= I get a 404 page instead of my sitemap.xml! =
+
+Try to refresh the Permalink structure in WordPress. Go to Settings > Permalinks and re-save them. Then reload the XML Sitemap in your browser with a clean browser cache. Or use Ctrl+R to bypass the browser cache -- this works on most but not all browsers.
+
+= I still get a 404 page instead of both sitemap.xml and robots.txt! =
 
 There are plugins like Event Calendar (at least v.3.2.beta2) known to mess with rewrite rules, causing problems with WordPress internal feeds and robots.txt generation and thus conflict with the XML Sitemap Feed plugin. Deactivate all plugins and see if you get a basic robots.txt file showing: 
 `
@@ -186,7 +190,17 @@ Yes.
 
 Yes.
 
+== Upgrade Notice ==
+
+= 3.7.3 =
+Hook improvement & bugfix release. Now your XML Sitemap will be cached same (as other feeds) when you are using WP Super Cache + no more missing home URL lastmod when you have no posts but only pages on your site!
+
 == Changelog ==
+
+= 3.7.3 =
+* switch from `add_feed` ( on `init` ) to the `do_feed_$feed` hook
+* BUGFIX: is_feed() condition FALSE after custom query_posts
+* BUGFIX: no lastmod on home url when only pages on a site
 
 = 3.7 =
 * massive changefreq calculation improvement
