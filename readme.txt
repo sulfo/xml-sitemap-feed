@@ -18,7 +18,7 @@ A reference to it is added to your (by WordPress dynamically created) robots.txt
 
 * The main advantage of this plugin over other XML Sitemap plugins is **simplicity**. No need to change file or folder permissions, move files or spend time on a difficult plugin options page. In fact, there are no options at all!
 * Completely **automatic** post URL _priority_ and _change frequency_ calculation based on post age and comment/trackback activity.
-* Works out-of-the-box, even on **multi-site / shared codebase / multi-blog setups** like [WordPress MU](http://mu.wordpress.org/), WP 3.0 in MultiSite mode and others. 
+* Works out-of-the-box, even on **multi-site / shared codebase / multi-blog setups** like WordPress MU, WP 3.0 in MultiSite (WPMS) mode and others. 
 * Also works when **Network Activated** or placed in **/mu-plugins/** on WP 3.0 in MS mode and WPMU and even takes care to exclude any tags blogs to avoid malus points for link spamming.
 
 = Limitations =
@@ -190,10 +190,10 @@ Yes.
 
 Yes.
 
-== Upgrade Notice ==
+== Screenshots ==
 
-= 3.7.3 =
-Hook improvement & bugfix release. Now your XML Sitemap will be cached same (as other feeds) when you are using WP Super Cache + no more missing home URL lastmod when you have no posts but only pages on your site!
+1. XML Sitemap feed viewed in a normal browser. For human eyes only ;)
+2. XML Sitemap source as read by search engines.
 
 == Changelog ==
 
@@ -246,3 +246,10 @@ Hook improvement & bugfix release. Now your XML Sitemap will be cached same (as 
 * rework from Patrick Chia's [Standard XML Sitemaps](http://wordpress.org/extend/plugins/standard-xml-sitemap/)
 * increased post urls limit from 100 to 1000 (of max. 50,000 allowed by the Sitemap protocol)
 
+== Upgrade Notice ==
+
+= 3.7.3 =
+Hook improvement and bugfix release. Now your XML Sitemap will be cached same (as other feeds) when you are using WP Super Cache plus no more missing home URL lastmod when you have no posts but only pages on your site!
+
+= 3.7 =
+Massive changefreq calculation improvement and further priority calculation improvement taking last comment date into account.
