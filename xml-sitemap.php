@@ -2,7 +2,7 @@
 /*
 Plugin Name: XML Sitemap Feed
 Plugin URI: http://4visions.nl/wordpress-plugins/xml-sitemap-feed/
-Description: Creates a feed that complies with the XML Sitemap protocol ready for indexing by Google, Yahoo, Bing, Ask and others. <strong><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravanhagen%40gmail%2ecom&item_name=XML%20Sitemap%20Feed&item_number=3%2e8&no_shipping=0&tax=0&bn=PP%2dDonationsBF&charset=UTF%2d8">Tip Jar</a></strong>
+Description: Creates a feed that complies with the XML Sitemap protocol ready for indexing by Google, Yahoo, Bing, Ask and others. Happy with it? Please leave me a <strong><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravanhagen%40gmail%2ecom&item_name=XML%20Sitemap%20Feed&item_number=3%2e8&no_shipping=0&tax=0&bn=PP%2dDonationsBF&charset=UTF%2d8">Tip</a></strong> for development and support time. Thanks :)
 Version: 3.7.3
 Author: RavanH
 Author URI: http://4visions.nl/
@@ -47,9 +47,6 @@ if (file_exists($xmlsf_dir.'/xml-sitemap-feed'))
 	define('XMLSF_PLUGIN_DIR', $xmlsf_dir.'/xml-sitemap-feed');
 else
 	define('XMLSF_PLUGIN_DIR', $xmlsf_dir);
-
-// url
-define('XMLSF_PLUGIN_URL', WP_PLUGIN_URL.'/'.basename($xmlsf_dir));
 
 /* --------------------
        FUNCTIONS

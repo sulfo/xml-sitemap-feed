@@ -1,9 +1,24 @@
 <?php
-/* ---------------------------
-    XML Sitemap Feed Template
-   --------------------------- */
+/**
+ * XML Sitemap Feed Template for displaying an XML Sitemap feed.
+ *
+ * @package XML Sitemap Feed plugin for WordPress
+ */
 
-// presets are changable; please read comments.
+header('Content-Type: ' . feed_content_type('rss-http') . '; charset=' . get_option('blog_charset'), true);
+$more = 1;
+
+// NOTE 1: feed_content_type('rss-http') should output text/xml which we need for our XML Sitemap
+// NOTE 2: not using WP_PLUGIN_URL to avoid problems when installed in /mu-plugins/
+echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?>
+<?xml-stylesheet type="text/xsl" href="'.get_option('home').'/'.str_replace(ABSPATH,"", XMLSF_PLUGIN_DIR).'/sitemap.xsl.php?v='.XMLSF_VERSION.'&amp;url='.get_option('home').'/'.str_replace(ABSPATH,"", XMLSF_PLUGIN_DIR).'"?>
+<!-- generated-on="'.date('Y-m-d\TH:i:s+00:00').'" -->
+<!-- generator="XML Sitemap Feed plugin for WordPress" -->
+<!-- generator-url="http://4visions.nl/wordpress-plugins/xml-sitemap-feed/" -->
+<!-- generator-version="'.XMLSF_VERSION.'" -->
+';
+
+// presets are changable; please read comments:
 $max_priority = 1.0;	// Maximum priority value for any URL in the sitemap; set to any other value between 0 and 1.
 $min_priority = 0;	// Minimum priority value for any URL in the sitemap; set to any other value between 0 and 1.
 			// NOTE: Changing these values will influence each URL's priority. Priority values are taken by 
@@ -60,15 +75,11 @@ if ( $lastmodified > $firstmodified ) // valid blog age found ?
 else
 	$age_weight = $month_weight / 2629744 ; // else just do 10% per month (that's a month in seconds)
 
-// start the xml output
-header('Content-Type: text/xml; charset=' . get_option('blog_charset'), true);
-echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?>
-<?xml-stylesheet type="text/xsl" href="'.get_option('home').'/'.str_replace(ABSPATH,"", XMLSF_PLUGIN_DIR).'/sitemap.xsl.php?v='.XMLSF_VERSION.'&amp;url='.get_option('home').'/'.str_replace(ABSPATH,"", XMLSF_PLUGIN_DIR).'"?>
-<!-- generated-on="'.date('Y-m-d\TH:i:s+00:00').'" -->
-<!-- generator="XML Sitemap Feed plugin for WordPress" -->
-<!-- generator-url="http://4visions.nl/en/index.php?section=57" -->
-<!-- generator-version="'.XMLSF_VERSION.'" -->
-'; ?>
+// prepare counter to limit the number of URLs to the absolute max of 50.000
+$counter = 1;
+
+// start with the main URL
+?>
 <urlset	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"
 	xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -79,9 +90,6 @@ echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?>
 		<priority>1.0</priority>
 	</url>
 <?php
-// prepare counter to limit the number of URLs to the absolute max of 50.000
-$counter = 1;
-
 // and loop away!
 if ( have_posts() ) : while ( have_posts() && $counter < $maxURLS ) : the_post();
 
@@ -145,7 +153,5 @@ if ( have_posts() ) : while ( have_posts() && $counter < $maxURLS ) : the_post()
 	$counter++;
 
 endwhile; endif; 
-
-// wp_reset_query();
 ?>
 </urlset>
