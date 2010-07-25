@@ -5,11 +5,14 @@
  * @package XML Sitemap Feed plugin for WordPress
  */
 
+//header('HTTP/1.1 200 OK'); or header("Status: 200"); or status_header('200'); or add_filter( 'status_header', '...'); ??
+status_header('200');
 header('Content-Type: ' . feed_content_type('rss-http') . '; charset=' . get_option('blog_charset'), true);
 $more = 1;
 
 // NOTE 1: feed_content_type('rss-http') should output text/xml which we need for our XML Sitemap
 // NOTE 2: not using WP_PLUGIN_URL to avoid problems when installed in /mu-plugins/
+// alternative to explore: echo plugins_url('sitemap.xsl.php', __FILE__)
 echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?>
 <?xml-stylesheet type="text/xsl" href="'.get_option('home').'/'.str_replace(ABSPATH,"", XMLSF_PLUGIN_DIR).'/sitemap.xsl.php?v='.XMLSF_VERSION.'&amp;url='.get_option('home').'/'.str_replace(ABSPATH,"", XMLSF_PLUGIN_DIR).'"?>
 <!-- generated-on="'.date('Y-m-d\TH:i:s+00:00').'" -->
@@ -34,6 +37,7 @@ $month_weight = 0.1;	// Fall-back value normally ignored by automatic priority c
 
 // editing below here is not advised!
 
+global $wp_query;
 // change the main query
 query_posts( array(
 	'posts_per_page' => -1,
@@ -44,8 +48,11 @@ query_posts( array(
 ); 
 
 // force is_feed condition to true to allow WP Super Cache to include the sitemap in its feeds cache
-global $wp_query;
 $wp_query->is_feed = true;
+
+// force is_404 condition to fals to prevent WP treating the sitemap query as a 404 when the site
+// has no posts, only pages
+$wp_query->is_404 = false;
 
 // setup site variables
 $_post_count = wp_count_posts('post');

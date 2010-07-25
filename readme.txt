@@ -4,13 +4,13 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravan
 Tags: sitemap, xml sitemap, sitemap.xml, google, yahoo, bing, wpmu, feed
 Requires at least: 2.6
 Tested up to: 3.0
-Stable tag: 3.7.3
+Stable tag: 3.7.4
 
 Creates a feed that complies with the XML Sitemap protocol ready for indexing by Google, Yahoo, Bing, Ask and others.
 
 == Description ==
 
-This plugin dynamically creates an XML feed that complies with the XML Sitemap protocol. There are no options to be set and the feed becomes instantly available after activation on yourblogurl.tld/feed/sitemap/ and for backward compatibility on yourblogurl.tld/sitemap.xml or yourblogurl.tld/index.php?feed=sitemap if you do not use a fancy permalink structure, ready for indexing by search engines like Google, Yahoo, MSN, Ask.com and others. 
+This plugin dynamically creates an XML feed that complies with the XML Sitemap protocol. There are no options to be set and the feed becomes instantly available after activation on yourblogurl.tld/feed/sitemap/ and for backward compatibility on yourblogurl.tld/sitemap.xml or yourblogurl.tld/?feed=sitemap if you do not use a fancy permalink structure, ready for indexing by search engines like Google, Yahoo, MSN, Ask.com and others. 
 
 A reference to it is added to your (by WordPress dynamically created) robots.txt on yourblogurl.tld/robots.txt to tell search engines where to find your XML Sitemap. If you do not use fancy URL's in WordPress, if you have WP installed in a subdirectory or if you use WP for pages only and do not have any posts, WordPress does not generate a robots.txt output. You'll have to create your own and upload it to your site root. See FAQ's.
 
@@ -129,9 +129,9 @@ If you already have a robots.txt file with another Sitemap referrence like it, y
 
 No. While I would advise you to use any one of the nicer Permalink structures, you might not be able to (or don't want to) do that. If so, you can still use this plugin: 
 
-Check to see if the URL yourblogurl.tld/index.php?feed=sitemap does produce a feed. Now manually upload your own robots.txt file to your website root containing: 
+Check to see if the URL yourblogurl.tld/?feed=sitemap does produce a feed. Now manually upload your own robots.txt file to your website root containing: 
 `
-Sitemap: http://yourblogurl.tld/index.php?feed=sitemap
+Sitemap: http://yourblogurl.tld/?feed=sitemap
 
 User-agent: *
 Allow: /
@@ -197,8 +197,9 @@ Yes.
 
 == Changelog ==
 
-= 3.7.3 =
+= 3.7.4 =
 * switch from `add_feed` ( on `init` ) to the `do_feed_$feed` hook
+* BUGFIX: force WP to use is_404() condition FALSE and Response Header 200 on sites without posts
 * BUGFIX: is_feed() condition FALSE after custom query_posts
 * BUGFIX: no lastmod on home url when only pages on a site
 
@@ -248,8 +249,8 @@ Yes.
 
 == Upgrade Notice ==
 
-= 3.7.3 =
-Hook improvement and bugfix release. Now your XML Sitemap will be cached same (as other feeds) when you are using WP Super Cache plus no more missing home URL lastmod when you have no posts but only pages on your site!
+= 3.7.4 =
+Hook improvement and bugfix release.
 
 = 3.7 =
 Massive changefreq calculation improvement and further priority calculation improvement taking last comment date into account.
