@@ -94,25 +94,25 @@ function xml_sitemap_deactivate() {
 
 // MISSING WORDPRESS FUNCTIONS
 
-if( !function_exists(get_firstmodified) ) {
-function get_firstmodified($timezone = 'server') {
+if( !function_exists('get_firstmodified') ) {
+ function get_firstmodified($timezone = 'server') {
 	$firstpostmodified = get_firstpostmodified($timezone);
 	$firstpagemodified = get_firstpagemodified($timezone);
 	if ( mysql2date('U',$firstpostmodified) < mysql2date('U',$firstpagemodified) )
 		return $firstpostmodified;
 	else
 		return $firstpagemodified;
+ }
 }
-}
-if( !function_exists(get_lastmodified) ) {
-function get_lastmodified($timezone = 'server') {
+if( !function_exists('get_lastmodified') ) {
+ function get_lastmodified($timezone = 'server') {
 	$lastpostmodified = get_lastpostmodified($timezone);
 	$lastpagemodified = get_lastpagemodified($timezone);
 	if ( mysql2date('U',$lastpostmodified) > mysql2date('U',$lastpagemodified) )
 		return $lastpostmodified;
 	else
 		return $lastpagemodified;
-}
+ }
 }
 
 /**
@@ -131,8 +131,8 @@ function get_lastmodified($timezone = 'server') {
  * @param string $timezone The location to get the time. Can be 'gmt', 'blog', or 'server'.
  * @return string The date the post was last modified.
  */
-if( !function_exists(get_lastpagemodified) ) {
-function get_lastpagemodified($timezone = 'server') {
+if( !function_exists('get_lastpagemodified') ) {
+ function get_lastpagemodified($timezone = 'server') {
 	global $wpdb;
 
 	$add_seconds_server = date('Z');
@@ -162,7 +162,7 @@ function get_lastpagemodified($timezone = 'server') {
 		wp_cache_set( "lastpagemodified:$timezone", $lastpagemodified, 'timeinfo' );
 
 	return apply_filters( 'get_lastpagemodified', $lastpagemodified, $timezone );
-}
+ }
 }
 
 /**
@@ -184,8 +184,8 @@ function get_lastpagemodified($timezone = 'server') {
  * @param string $timezone The location to get the time. Can be 'gmt', 'blog', or 'server'.
  * @return string The date of the last post.
  */
-if( !function_exists(get_lastpagedate) ) {
-function get_lastpagedate($timezone = 'server') {
+if( !function_exists('get_lastpagedate') ) {
+ function get_lastpagedate($timezone = 'server') {
 	global $cache_lastpagedate, $wpdb, $blog_id;
 	$add_seconds_server = date('Z');
 	if ( !isset($cache_lastpagedate[$blog_id][$timezone]) ) {
@@ -205,7 +205,7 @@ function get_lastpagedate($timezone = 'server') {
 		$lastpagedate = $cache_lastpagedate[$blog_id][$timezone];
 	}
 	return apply_filters( 'get_lastpagedate', $lastpagedate, $timezone );
-}
+ }
 }
 
 /**
@@ -223,8 +223,8 @@ function get_lastpagedate($timezone = 'server') {
  * @param string $timezone The location to get the time. Can be 'gmt', 'blog', or 'server'.
  * @return string The date of the oldest modified post.
  */
-if( !function_exists(get_firstpostmodified) ) {
-function get_firstpostmodified($timezone = 'server') {
+if( !function_exists('get_firstpostmodified') ) {
+ function get_firstpostmodified($timezone = 'server') {
 	global $wpdb;
 
 	$add_seconds_server = date('Z');
@@ -254,7 +254,7 @@ function get_firstpostmodified($timezone = 'server') {
 		wp_cache_set( "firstpostmodified:$timezone", $firstpostmodified, 'timeinfo' );
 
 	return apply_filters( 'get_firstpostmodified', $firstpostmodified, $timezone );
-}
+ }
 }
 
 /**
@@ -272,8 +272,8 @@ function get_firstpostmodified($timezone = 'server') {
  * @param string $timezone The location to get the time. Can be 'gmt', 'blog', or 'server'.
  * @return string The date of the oldest modified page.
  */
-if( !function_exists(get_firstpagemodified) ) {
-function get_firstpagemodified($timezone = 'server') {
+if( !function_exists('get_firstpagemodified') ) {
+ function get_firstpagemodified($timezone = 'server') {
 	global $wpdb;
 
 	$add_seconds_server = date('Z');
@@ -303,7 +303,7 @@ function get_firstpagemodified($timezone = 'server') {
 		wp_cache_set( "firstpagemodified:$timezone", $firstpagemodified, 'timeinfo' );
 
 	return apply_filters( 'get_firstpagemodified', $firstpagemodified, $timezone );
-}
+ }
 }
 
 /**
@@ -323,8 +323,8 @@ function get_firstpagemodified($timezone = 'server') {
  * @param string $timezone The location to get the time. Can be 'gmt', 'blog', or 'server'.
  * @return string The date of the last post.
  */
-if( !function_exists(get_firstpostdate) ) {
-function get_firstpostdate($timezone = 'server') {
+if( !function_exists('get_firstpostdate') ) {
+ function get_firstpostdate($timezone = 'server') {
 	global $cache_firstpostdate, $wpdb, $blog_id;
 	$add_seconds_server = date('Z');
 	if ( !isset($cache_firstpostdate[$blog_id][$timezone]) ) {
@@ -344,7 +344,7 @@ function get_firstpostdate($timezone = 'server') {
 		$firstpostdate = $cache_firstpostdate[$blog_id][$timezone];
 	}
 	return apply_filters( 'get_firstpostdate', $firstpostdate, $timezone );
-}
+ }
 }
 
 /**
@@ -364,8 +364,8 @@ function get_firstpostdate($timezone = 'server') {
  * @param string $timezone The location to get the time. Can be 'gmt', 'blog', or 'server'.
  * @return string The date of the last post.
  */
-if( !function_exists(get_firstpagedate) ) {
-function get_firstpagedate($timezone = 'server') {
+if( !function_exists('get_firstpagedate') ) {
+ function get_firstpagedate($timezone = 'server') {
 	global $cache_firstpagedate, $wpdb, $blog_id;
 	$add_seconds_server = date('Z');
 	if ( !isset($cache_firstpagedate[$blog_id][$timezone]) ) {
@@ -385,7 +385,7 @@ function get_firstpagedate($timezone = 'server') {
 		$firstpagedate = $cache_firstpagedate[$blog_id][$timezone];
 	}
 	return apply_filters( 'get_firstpagedate', $firstpagedate, $timezone );
-}
+ }
 }
 
 /* --------------------
