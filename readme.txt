@@ -198,10 +198,11 @@ Yes.
 == Changelog ==
 
 = 3.7.4 =
-* switch from `add_feed` ( on `init` ) to the `do_feed_$feed` hook
-* BUGFIX: force WP to use is_404() condition FALSE and Response Header 200 on sites without posts
-* BUGFIX: is_feed() condition FALSE after custom query_posts
+* switch from `add_feed` (on init) to the `do_feed_$feed` hook
+* BUGFIX: `is_404()` condition TRUE and Response Header 404 on sites without posts
+* BUGFIX: `is_feed()` condition FALSE after custom query_posts
 * BUGFIX: no lastmod on home url when only pages on a site
+* BUGFIX: stylesheet url wrong when WP installed in a subdir
 
 = 3.7 =
 * massive changefreq calculation improvement

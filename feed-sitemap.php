@@ -10,11 +10,9 @@ status_header('200');
 header('Content-Type: ' . feed_content_type('rss-http') . '; charset=' . get_option('blog_charset'), true);
 $more = 1;
 
-// NOTE 1: feed_content_type('rss-http') should output text/xml which we need for our XML Sitemap
-// NOTE 2: not using WP_PLUGIN_URL to avoid problems when installed in /mu-plugins/
-// alternative to explore: echo plugins_url('sitemap.xsl.php', __FILE__)
+// NOTE: feed_content_type('rss-http') should output text/xml which we need for our XML Sitemap
 echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?>
-<?xml-stylesheet type="text/xsl" href="'.get_option('home').'/'.str_replace(ABSPATH,"", XMLSF_PLUGIN_DIR).'/sitemap.xsl.php?v='.XMLSF_VERSION.'&amp;url='.get_option('home').'/'.str_replace(ABSPATH,"", XMLSF_PLUGIN_DIR).'"?>
+<?xml-stylesheet type="text/xsl" href="'.XMLSF_PLUGIN_URL.'/sitemap.xsl.php?v='.XMLSF_VERSION.'&amp;url='.XMLSF_PLUGIN_URL.'"?>
 <!-- generated-on="'.date('Y-m-d\TH:i:s+00:00').'" -->
 <!-- generator="XML Sitemap Feed plugin for WordPress" -->
 <!-- generator-url="http://4visions.nl/wordpress-plugins/xml-sitemap-feed/" -->

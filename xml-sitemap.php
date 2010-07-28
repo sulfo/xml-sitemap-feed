@@ -43,10 +43,14 @@ define('XMLSF_VERSION','3.7.4');
 $xmlsf_dir = dirname(__FILE__);
 
 // check if xml-sitemap.php is moved one dir up like in WPMU's /mu-plugins/
-if (file_exists($xmlsf_dir.'/xml-sitemap-feed'))
+// NOTE: don't use WP_PLUGIN_URL to avoid problems when installed in /mu-plugins/
+if (file_exists($xmlsf_dir.'/xml-sitemap-feed')) {
 	define('XMLSF_PLUGIN_DIR', $xmlsf_dir.'/xml-sitemap-feed');
-else
+	define('XMLSF_PLUGIN_URL', plugins_url('xml-sitemap-feed/', __FILE__) );
+} else {
 	define('XMLSF_PLUGIN_DIR', $xmlsf_dir);
+	define('XMLSF_PLUGIN_URL', plugins_url('', __FILE__) );
+}
 
 /* --------------------
        FUNCTIONS
