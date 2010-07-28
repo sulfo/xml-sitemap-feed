@@ -46,7 +46,7 @@ $xmlsf_dir = dirname(__FILE__);
 // NOTE: don't use WP_PLUGIN_URL to avoid problems when installed in /mu-plugins/
 if (file_exists($xmlsf_dir.'/xml-sitemap-feed')) {
 	define('XMLSF_PLUGIN_DIR', $xmlsf_dir.'/xml-sitemap-feed');
-	define('XMLSF_PLUGIN_URL', plugins_url('xml-sitemap-feed/', __FILE__) );
+	define('XMLSF_PLUGIN_URL', plugins_url('xml-sitemap-feed', __FILE__) );
 } else {
 	define('XMLSF_PLUGIN_DIR', $xmlsf_dir);
 	define('XMLSF_PLUGIN_URL', plugins_url('', __FILE__) );
