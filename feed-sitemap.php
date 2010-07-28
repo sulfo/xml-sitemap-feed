@@ -5,12 +5,10 @@
  * @package XML Sitemap Feed plugin for WordPress
  */
 
-//header('HTTP/1.1 200 OK'); or header("Status: 200"); or status_header('200'); or add_filter( 'status_header', '...'); ??
-status_header('200');
+status_header('200'); // force header('HTTP/1.1 200 OK') for sites without posts
 header('Content-Type: ' . feed_content_type('rss-http') . '; charset=' . get_option('blog_charset'), true);
-$more = 1;
+	// NOTE: feed_content_type('rss-http') should output text/xml which we need for our XML Sitemap
 
-// NOTE: feed_content_type('rss-http') should output text/xml which we need for our XML Sitemap
 echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?>
 <?xml-stylesheet type="text/xsl" href="'.XMLSF_PLUGIN_URL.'/sitemap.xsl.php?v='.XMLSF_VERSION.'&amp;url='.XMLSF_PLUGIN_URL.'"?>
 <!-- generated-on="'.date('Y-m-d\TH:i:s+00:00').'" -->
@@ -35,23 +33,19 @@ $month_weight = 0.1;	// Fall-back value normally ignored by automatic priority c
 
 // editing below here is not advised!
 
-global $wp_query;
-// change the main query
+// the main query
 query_posts( array(
-	'posts_per_page' => -1,
 	'post_type' => 'any', 
 	'post_status' => 'publish', 
-	'caller_get_posts' => '1'
-	)
+	'caller_get_posts' => '1',
+	'nopaging' => true,
+	'posts_per_page' => -1 )
 ); 
 
-// force is_feed condition to true to allow WP Super Cache to include the sitemap in its feeds cache
-$wp_query->is_feed = true;
-
-// force is_404 condition to fals to prevent WP treating the sitemap query as a 404 when the site
-// has no posts, only pages
-$wp_query->is_404 = false;
-
+global $wp_query;
+$wp_query->is_404 = false;	// force is_404() condition to false when on site without posts
+$wp_query->is_feed = true;	// force is_feed() condition to true so WP Super Cache includes
+				// the sitemap in its feeds cache
 // setup site variables
 $_post_count = wp_count_posts('post');
 $_page_count = wp_count_posts('page');
@@ -68,8 +62,8 @@ else
 	$comment_weight = 0;
 
 if ($_post_count->publish > $_page_count->publish) { // site emphasis on posts
-	$post_priority = 0.8;
-	$page_priority = 0.4;
+	$post_priority = 0.7;
+	$page_priority = 0.3;
 } else { // site emphasis on pages
 	$post_priority = 0.4;
 	$page_priority = 0.8;
