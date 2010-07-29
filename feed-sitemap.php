@@ -46,6 +46,7 @@ global $wp_query;
 $wp_query->is_404 = false;	// force is_404() condition to false when on site without posts
 $wp_query->is_feed = true;	// force is_feed() condition to true so WP Super Cache includes
 				// the sitemap in its feeds cache
+
 // setup site variables
 $_post_count = wp_count_posts('post');
 $_page_count = wp_count_posts('page');
