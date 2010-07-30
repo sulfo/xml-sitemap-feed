@@ -1,20 +1,24 @@
 === XML Sitemap Feed ===
 Contributors: RavanH
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravanhagen%40gmail%2ecom&item_name=XML%20Sitemap%20Feed&item_number=3%2e8&no_shipping=0&tax=0&bn=PP%2dDonationsBF&charset=UTF%2d8
-Tags: sitemap, xml sitemap, sitemap.xml, google, yahoo, bing, wpmu, feed
+Tags: xml, sitemap, xml sitemap, sitemap.xml, Google, Yahoo, Bing, Live, MSN, wpmu, feed
 Requires at least: 2.6
 Tested up to: 3.0
-Stable tag: 3.7.4
+Stable tag: 3.8
 
-Creates a feed that complies with the XML Sitemap protocol ready for indexing by Google, Yahoo, Bing, Ask and others.
+Creates a feed (or more when using qTranlate) that complies with the XML Sitemap protocol for indexing by Google, Yahoo, Bing, Ask and others.
 
 == Description ==
 
 This plugin dynamically creates an feed that complies with the **XML Sitemap** protocol. There are no options to be set and the feed becomes instantly available after activation on yourblogurl.tld/sitemap.xml and on yourblogurl.tld/?feed=sitemap for if you do not use a fancy permalink structure, ready for indexing by search engines like Google, Yahoo, MSN, Ask.com and others.
 
-A reference to it is added to your (by WordPress dynamically created) **robots.txt** on yourblogurl.tld/robots.txt to tell search engines where to find your XML Sitemap. 
+**Now qTranslate compatible!** Tested in Pre-Path and Query Modus. Each language on your site will have its own XML Sitemap.
 
-*NOTE:* If you _do not use fancy URL's_, if you have WordPress installed in a _subdirectory_ or if have _only pages_ and no posts, WordPress does **not** generate a robots.txt output. _You'll have to create your own and upload it to your site root!_ See FAQ's.
+A reference to it (or them when using qTranslate) is added to the dynamically created **robots.txt** on yourblogurl.tld/robots.txt to tell search engines where to find your XML Sitemap(s). 
+
+*NOTES:* 
+1. If you _do not use fancy URL's_ or you have WordPress installed in a _subdirectory_, a dynamic robots.txt will **not** be generated. _You'll have to create your own and upload it to your site root!_ See FAQ's.
+2. On large sites, it is advised to use a good caching plugin like **Quick Cache**, **WP Super Cache** or **W3 Total Cache** to improve your site _and_ sitemap performance.
 
 = Advantages = 
 
@@ -22,13 +26,14 @@ A reference to it is added to your (by WordPress dynamically created) **robots.t
 * Completely **automatic** post URL _priority_ and _change frequency_ calculation based on post age and comment/trackback activity.
 * Works out-of-the-box, even on **multi-site / shared codebase / multi-blog setups** like WordPress MU, WP 3.0 in MultiSite (WPMS) mode and others. 
 * Also works when **Network Activated** or placed in **/mu-plugins/** on WP 3.0 in MS mode and WPMU and even takes care to exclude any tags blogs to avoid malus points for link spamming.
+* Now **qTranslate** compatible to allow all your languages to be indexed equally.
 
 = Limitations =
 
-* The feed contains the front page and all posts and pages but _excludes_ category, tag and other dynamic archive pages. This should not be a problem and by most it is even advised. There even are SEO plugins around that actively make these archive pages non-index-able by search engines.
+* The feed contains the front page and all posts and pages but _excludes_ category, tag and other dynamic archive pages. This should not be a problem and by most it is advised to exclude them. There even are SEO plugins around that actively block these archive pages from search engines.
 * Except by _re-saving_ older posts from time to time (keeping the lastmod date fairly recent to ensure automatic high priority calculation for those urls) there is no way to manually set the priority of individual posts/pages in the sitemap. See the Faq's for more.
 * This plugin does not ping any search engines. But then, WordPress does this by default already via the Ping-o-Matic service so why bother? See the Faq's for more.
-* Since the feed is dynamically created, on _very_ large sites the creation process might take a while. Search engines are said to have a short fuse about waiting for a sitemap, so if your site is huge you may want to consider using a cache plugin that also (pre)caches feeds. If you are unfamiliar with caching and server setup start with a simple plugin such as Quick Cache but if you are looking for more options you might find solace in WP Super Cache or W3 Total Cache.
+* Because the feed is dynamically created, on _very_ large sites the creation process might take a while. Search engines are said to have a short fuse about waiting for a sitemap, so you may want to consider using a cache plugin that also (pre)caches feeds. If you are unfamiliar with caching and server setup start with a simple plugin such as **Quick Cache**. For more options you might find solace in **WP Super Cache** or **W3 Total Cache**.
 
 = Translations =
 
@@ -155,13 +160,19 @@ The sitemap is dynamically generated just like a feed. There is no actual file c
 
 = I do see a sitemap.xml file in site root but it does not seem to get updated! =
 
-You are most likely looking at a sitemap.xml file that has been created by you or another XML Sitemap plugin before you started using this plugin. Just remove it and let the plugin dynamically generate it just like a feed. There is no actual file created.
+You are most likely looking at a sitemap.xml file that has been created by another XML Sitemap plugin before you started using this plugin. Just remove it and let the plugin dynamically generate it just like a feed. There is no actual file created.
 
-= I get a 404 page instead of my sitemap.xml! =
+If that's not the case, you are probably using a caching plugin or your browser does not update to the latest feed output. Please verify.
+
+= I get an ERROR when opening the sitemap or robots.txt ! = 
+
+The following errors might be encountered:
+
+**404 page instead of my sitemap.xml**
 
 Try to refresh the Permalink structure in WordPress. Go to Settings > Permalinks and re-save them. Then reload the XML Sitemap in your browser with a clean browser cache. ( Try Ctrl+R to bypass the browser cache -- this works on most but not all browsers. )
 
-= I still get a 404 page instead of both sitemap.xml and robots.txt! =
+**404 page instead of both sitemap.xml and robots.txt**
 
 There are plugins like Event Calendar (at least v.3.2.beta2) known to mess with rewrite rules, causing problems with WordPress internal feeds and robots.txt generation and thus conflict with the XML Sitemap Feed plugin. Deactivate all plugins and see if you get a basic robots.txt file showing: 
 `
@@ -170,7 +181,7 @@ Disallow:
 `
 Reactivate your plugins one by one to find out which one is causing the problem. Then report the bug to the plugin developer. 
 
-= I get a 404 page instead of robots.txt while sitemap.xml works fine! =
+**404 page instead of robots.txt while sitemap.xml works fine**
 
 There is a know issue with WordPress (at least up to 2.8) not generating a robots.txt when there are _no posts_ with _published_ status. If you use WordPress as a CMS with only _pages_, this will affect you. 
 
@@ -197,6 +208,10 @@ Yes.
 2. XML Sitemap source as read by search engines.
 
 == Changelog ==
+
+= 3.8 =
+* qTranslate support !
+* no more Sitemap reference in robots.txt on non-public blogs
 
 = 3.7.4 =
 * switch from `add_feed` (on init) to the `do_feed_$feed` hook
@@ -251,8 +266,6 @@ Yes.
 
 == Upgrade Notice ==
 
-= 3.7.4 =
-Hook improvement and bugfix release.
+= 3.8 =
+Now support for **qTranslate**: one XML Sitemap for each language! Plus no more sitemap when site is set to block spidering.
 
-= 3.7 =
-Massive changefreq calculation improvement and further priority calculation improvement taking last comment date into account.
