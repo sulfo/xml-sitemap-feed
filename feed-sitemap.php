@@ -6,8 +6,7 @@
  */
 
 status_header('200'); // force header('HTTP/1.1 200 OK') for sites without posts
-header('Content-Type: ' . feed_content_type('rss-http') . '; charset=' . get_option('blog_charset'), true);
-	// NOTE: feed_content_type('rss-http') should output text/xml which we need for our XML Sitemap
+header('Content-Type: text/xml; charset=' . get_option('blog_charset'), true);
 
 echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?>
 <?xml-stylesheet type="text/xsl" href="'.XMLSF_PLUGIN_URL.'/sitemap.xsl.php?v='.XMLSF_VERSION.'&amp;url='.XMLSF_PLUGIN_URL.'"?>
