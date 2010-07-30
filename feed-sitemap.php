@@ -9,7 +9,7 @@ status_header('200'); // force header('HTTP/1.1 200 OK') for sites without posts
 header('Content-Type: text/xml; charset=' . get_option('blog_charset'), true);
 
 echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?>
-<?xml-stylesheet type="text/xsl" href="'.XMLSF_PLUGIN_URL.'/sitemap.xsl.php?v='.XMLSF_VERSION.'&amp;url='.XMLSF_PLUGIN_URL.'"?>
+<?xml-stylesheet type="text/xsl" href="'.XMLSF_PLUGIN_URL.'/sitemap.xsl.php?v='.XMLSF_VERSION.'&amp;uri='.str_replace(get_option('home'),"",XMLSF_PLUGIN_URL).'"?>
 <!-- generated-on="'.date('Y-m-d\TH:i:s+00:00').'" -->
 <!-- generator="XML Sitemap Feed plugin for WordPress" -->
 <!-- generator-url="http://4visions.nl/wordpress-plugins/xml-sitemap-feed/" -->
