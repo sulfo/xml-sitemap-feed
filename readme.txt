@@ -3,7 +3,7 @@ Contributors: RavanH
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravanhagen%40gmail%2ecom&item_name=XML%20Sitemap%20Feed&item_number=3%2e8&no_shipping=0&tax=0&bn=PP%2dDonationsBF&charset=UTF%2d8
 Tags: xml, sitemap, xml sitemap, sitemap.xml, Google, Yahoo, Bing, Live, MSN, wpmu, feed
 Requires at least: 2.6
-Tested up to: 3.0
+Tested up to: 3.0.1
 Stable tag: 3.8
 
 Creates a feed (or more when using qTranlate) that complies with the XML Sitemap protocol for indexing by Google, Yahoo, Bing, Ask and others.
@@ -14,11 +14,13 @@ This plugin dynamically creates an feed that complies with the **XML Sitemap** p
 
 **Now qTranslate compatible!** Tested in Pre-Path and Query Modus. Each language on your site will have its own XML Sitemap.
 
-A reference to it (or them when using qTranslate) is added to the dynamically created **robots.txt** on yourblogurl.tld/robots.txt to tell search engines where to find your XML Sitemap(s). 
+A reference to it (or _them_, when using qTranslate) is added to the dynamically created **robots.txt** on yourblogurl.tld/robots.txt to tell search engines where to find your XML Sitemap(s). 
 
-*NOTES:* 
-1. If you _do not use fancy URL's_ or you have WordPress installed in a _subdirectory_, a dynamic robots.txt will **not** be generated. _You'll have to create your own and upload it to your site root!_ See FAQ's.
-2. On large sites, it is advised to use a good caching plugin like **Quick Cache**, **WP Super Cache** or **W3 Total Cache** to improve your site _and_ sitemap performance.
+**NOTES:** 
+
+    1. If you _do not use fancy URL's_ or you have WordPress installed in a _subdirectory_, a dynamic **robots.txt will not be generated**. _You'll have to create your own and upload it to your site root!_ See FAQ's.
+
+    2. On large sites, it is advised to use a good caching plugin like **Quick Cache**, **WP Super Cache** or **W3 Total Cache** to improve your site _and_ sitemap performance.
 
 = Advantages = 
 
