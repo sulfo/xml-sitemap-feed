@@ -6,10 +6,10 @@
  */
 
 status_header('200'); // force header('HTTP/1.1 200 OK') for sites without posts
-header('Content-Type: text/xml; charset=' . get_option('blog_charset'), true);
+header('Content-Type: text/xml; charset=' . get_bloginfo('charset'), true);
 
-echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?>
-<?xml-stylesheet type="text/xsl" href="'.XMLSF_PLUGIN_URL.'/sitemap.xsl.php?v='.XMLSF_VERSION.'&amp;uri='.str_replace(get_option('home'),"",XMLSF_PLUGIN_URL).'"?>
+echo '<?xml version="1.0" encoding="'.get_bloginfo('charset').'"?>
+<?xml-stylesheet type="text/xsl" href="'.XMLSF_PLUGIN_URL.'/sitemap.xsl.php?v='.XMLSF_VERSION.'&amp;uri='.str_replace(get_bloginfo('url'),"",XMLSF_PLUGIN_URL).'"?>
 <!-- generated-on="'.date('Y-m-d\TH:i:s+00:00').'" -->
 <!-- generator="XML Sitemap Feed plugin for WordPress" -->
 <!-- generator-url="http://4visions.nl/wordpress-plugins/xml-sitemap-feed/" -->
@@ -83,7 +83,12 @@ $counter = 1;
 	xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"
 	xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 	<url>
-		<loc><?php bloginfo_rss('url') ?>/</loc>
+		<loc><?php 
+		if (function_exists('qtrans_convertURL')) {
+			echo esc_url( qtrans_convertURL(trailingslashit(get_bloginfo('url'))) );
+		} else {
+			echo esc_url( trailingslashit(get_bloginfo('url')) ); 
+		} ?></loc>
 		<lastmod><?php echo mysql2date('Y-m-d\TH:i:s+00:00', $lastmodified_gmt, false); ?></lastmod>
 		<changefreq>daily</changefreq>
 		<priority>1.0</priority>
@@ -92,6 +97,9 @@ $counter = 1;
 // and loop away!
 if ( have_posts() ) : while ( have_posts() && $counter < $maxURLS ) : the_post();
 
+	// check if we are not dealing with an external URL :: Thanks, Francois Deschenes :)
+	if(!preg_match('/^' . preg_quote(get_bloginfo('url'), '/') . '/i', get_permalink())) continue;
+	
 	$thispostmodified_gmt = $post->post_modified_gmt; // post GMT timestamp
 	$thispostmodified = mysql2date('U',$thispostmodified_gmt); // post Unix timestamp
 	$lastcomment = array();
@@ -135,7 +143,7 @@ if ( have_posts() ) : while ( have_posts() && $counter < $maxURLS ) : the_post()
 	$priority = ($priority < $min_priority) ? $min_priority : $priority;
 ?>
 	<url>
-		<loc><?php the_permalink() ?></loc>
+		<loc><?php echo esc_url( get_permalink() ) ?></loc>
 		<lastmod><?php echo mysql2date('Y-m-d\TH:i:s+00:00', $thispostmodified_gmt, false) ?></lastmod>
 <?php 	if(($lastactivityage/86400) < 7) { // last activity less than 1 week old ?>
 		<changefreq>daily</changefreq>

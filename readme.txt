@@ -209,6 +209,10 @@ Yes.
 
 == Changelog ==
 
+= 3.8.2 =
+* filter external URLs inserted by plugins like Page Links To (thanks, Francois)
+* BUGFIX: qTranslate non-default language home URL
+
 = 3.8 =
 * qTranslate support !
 * no more Sitemap reference in robots.txt on non-public blogs
@@ -266,6 +270,9 @@ Yes.
 
 == Upgrade Notice ==
 
+= 3.8.2 =
+BUGFIX RELEASE. Filter external links (thanks to Francois Deschenes) plus improved qTranslate support.
+
 = 3.8 =
-Now support for **qTranslate**: one XML Sitemap for each language! Plus no more sitemap when site is set to block spidering.
+Now support for qTranslate: one XML Sitemap for each language! Plus no more sitemap when site is set to block spidering.
 
