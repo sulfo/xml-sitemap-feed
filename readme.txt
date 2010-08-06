@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravan
 Tags: xml, sitemap, xml sitemap, sitemap.xml, Google, Yahoo, Bing, Live, MSN, wpmu, feed
 Requires at least: 2.6
 Tested up to: 3.0.1
-Stable tag: 3.8
+Stable tag: 3.8.3
 
 Creates a feed (or more when using qTranlate) that complies with the XML Sitemap protocol for indexing by Google, Yahoo, Bing, Ask and others.
 
@@ -211,8 +211,9 @@ Yes.
 
 == Changelog ==
 
-= 3.8.2 =
+= 3.8.3 =
 * filter external URLs inserted by plugins like Page Links To (thanks, Francois)
+* minified sitemap and stylesheet output
 * BUGFIX: qTranslate non-default language home URL
 
 = 3.8 =
@@ -272,7 +273,7 @@ Yes.
 
 == Upgrade Notice ==
 
-= 3.8.2 =
+= 3.8.3 =
 BUGFIX RELEASE. Filter external links (thanks to Francois Deschenes) plus improved qTranslate support.
 
 = 3.8 =

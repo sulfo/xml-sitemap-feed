@@ -8,8 +8,7 @@
 status_header('200'); // force header('HTTP/1.1 200 OK') for sites without posts
 header('Content-Type: text/xml; charset=' . get_bloginfo('charset'), true);
 
-echo '<?xml version="1.0" encoding="'.get_bloginfo('charset').'"?>
-<?xml-stylesheet type="text/xsl" href="'.XMLSF_PLUGIN_URL.'/sitemap.xsl.php?v='.XMLSF_VERSION.'&amp;uri='.str_replace(get_bloginfo('url'),"",XMLSF_PLUGIN_URL).'"?>
+echo '<?xml version="1.0" encoding="'.get_bloginfo('charset').'"?><?xml-stylesheet type="text/xsl" href="'.XMLSF_PLUGIN_URL.'/sitemap.xsl.php?v='.XMLSF_VERSION.'"?>
 <!-- generated-on="'.date('Y-m-d\TH:i:s+00:00').'" -->
 <!-- generator="XML Sitemap Feed plugin for WordPress" -->
 <!-- generator-url="http://4visions.nl/wordpress-plugins/xml-sitemap-feed/" -->
@@ -79,21 +78,12 @@ $counter = 1;
 
 // start with the main URL
 ?>
-<urlset	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"
-	xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-	<url>
-		<loc><?php 
+<urlset	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc><?php 
 		if (function_exists('qtrans_convertURL')) {
 			echo esc_url( qtrans_convertURL(trailingslashit(get_bloginfo('url'))) );
 		} else {
 			echo esc_url( trailingslashit(get_bloginfo('url')) ); 
-		} ?></loc>
-		<lastmod><?php echo mysql2date('Y-m-d\TH:i:s+00:00', $lastmodified_gmt, false); ?></lastmod>
-		<changefreq>daily</changefreq>
-		<priority>1.0</priority>
-	</url>
-<?php
+		} ?></loc><lastmod><?php echo mysql2date('Y-m-d\TH:i:s+00:00', $lastmodified_gmt, false); ?></lastmod><changefreq>daily</changefreq><priority>1.0</priority></url><?php
 // and loop away!
 if ( have_posts() ) : while ( have_posts() && $counter < $maxURLS ) : the_post();
 
@@ -141,24 +131,16 @@ if ( have_posts() ) : while ( have_posts() && $counter < $maxURLS ) : the_post()
 	// trim priority
 	$priority = ($priority > $max_priority) ? $max_priority : $priority;
 	$priority = ($priority < $min_priority) ? $min_priority : $priority;
-?>
-	<url>
-		<loc><?php echo esc_url( get_permalink() ) ?></loc>
-		<lastmod><?php echo mysql2date('Y-m-d\TH:i:s+00:00', $thispostmodified_gmt, false) ?></lastmod>
-<?php 	if(($lastactivityage/86400) < 7) { // last activity less than 1 week old ?>
-		<changefreq>daily</changefreq>
-<?php	} else if(($lastactivityage/604800) < 12) { // last activity between 1 and 12 weeks old ?>
-		<changefreq>weekly</changefreq>
-<?php	} else if(($lastactivityage/604800) < 52) { // last activity between 12 and 52 weeks old ?>
-		<changefreq>monthly</changefreq>
-<?php 	} else { ?>
-		<changefreq>yearly</changefreq>
-<?php	} ?>
-		<priority><?php echo round($priority,1) ?></priority>
-	</url>
-<?php 
+?><url><loc><?php echo esc_url( get_permalink() ) ?></loc><lastmod><?php echo mysql2date('Y-m-d\TH:i:s+00:00', $thispostmodified_gmt, false) ?></lastmod><?php
+ 	if(($lastactivityage/86400) < 7) { // last activity less than 1 week old 
+ 		 ?><changefreq>daily</changefreq><?php
+ 	} else if(($lastactivityage/604800) < 12) { // last activity between 1 and 12 weeks old 
+ 		 ?><changefreq>weekly</changefreq><?php	
+ 	} else if(($lastactivityage/604800) < 52) { // last activity between 12 and 52 weeks old 
+ 		 ?><changefreq>monthly</changefreq><?php 
+ 	} else { ?><changefreq>yearly</changefreq><?php	
+ 	} ?><priority><?php echo round($priority,1) ?></priority></url><?php 
 	$counter++;
 
 endwhile; endif; 
-?>
-</urlset>
+?></urlset>
