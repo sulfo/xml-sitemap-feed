@@ -66,7 +66,7 @@ function xml_sitemap_load_template() {
 // add sitemap rewrite rules
 function xml_sitemap_rewrite($wp_rewrite) {
 	$feed_rules = array(
-		'sitemap.xml' => $wp_rewrite->index . '?feed=sitemap',
+		'sitemap.xml$' => $wp_rewrite->index . '?feed=sitemap',
 	);
 	$wp_rewrite->rules = $feed_rules + $wp_rewrite->rules;
 }
