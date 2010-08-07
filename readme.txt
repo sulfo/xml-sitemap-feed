@@ -18,9 +18,9 @@ A reference to it (or _them_, when using qTranslate) is added to the dynamically
 
 **NOTES:** 
 
-    1. If you _do not use fancy URL's_ or you have WordPress installed in a _subdirectory_, a dynamic **robots.txt will not be generated**. _You'll have to create your own and upload it to your site root!_ See FAQ's.
+1. If you _do not use fancy URL's_ or you have WordPress installed in a _subdirectory_, a dynamic **robots.txt will not be generated**. _You'll have to create your own and upload it to your site root!_ See FAQ's.
 
-    2. On large sites, it is advised to use a good caching plugin like **Quick Cache**, **WP Super Cache** or **W3 Total Cache** to improve your site _and_ sitemap performance.
+2. On large sites, it is advised to use a good caching plugin like **Quick Cache**, **WP Super Cache** or **W3 Total Cache** to improve your site _and_ sitemap performance.
 
 = Advantages = 
 
