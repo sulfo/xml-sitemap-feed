@@ -51,21 +51,21 @@ XML Sitemap Feed was originally based on the (discontinued?) plugin Standard XML
 
 Quick installation: [Install now](http://coveredwebservices.com/wp-plugin-install/?plugin=xml-sitemap-feed) !
 
-    &hellip; OR &hellip;
+ &hellip; OR &hellip;
 
 Search for "xml sitemap feed" and install with that slick **Plugins > Add New** back-end page.
 
-    &hellip; OR &hellip;
+ &hellip; OR &hellip;
 
 Follow these steps:
 
-    1. Download archive.
+1. Download archive.
 
-    2. Upload the zip file via the Plugins > Add New > Upload page &hellip; OR &hellip; unpack and upload with your favourite FTP client to the /plugins/ folder.
+2. Upload the zip file via the Plugins > Add New > Upload page &hellip; OR &hellip; unpack and upload with your favourite FTP client to the /plugins/ folder.
 
-    3. Activate the plugin on the Plug-ins page.
+3. Activate the plugin on the Plug-ins page.
 
-    4. If you have been using another XML Sitemap plugin before, check your site root and remove any created sitemap.xml file that remained there.
+4. If you have been using another XML Sitemap plugin before, check your site root and remove any created sitemap.xml file that remained there.
 
 Done! Check your sparkling new XML Sitemap by visiting yourblogurl.tld/sitemap.xml (adapted to your domain name ofcourse) with a browser or any online XML Sitemap validator. You might also want to check if the sitemap is listed in your yourblogurl.tld/robots.txt file.
 

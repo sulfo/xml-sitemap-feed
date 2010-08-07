@@ -6,7 +6,6 @@ Description: Creates a feed that complies with the XML Sitemap protocol ready fo
 Version: 3.8.3
 Author: RavanH
 Author URI: http://4visions.nl/
-Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravanhagen%40gmail%2ecom&amp;item_name=XML%20Sitemap%20Feed&amp;item_number=3%2e8&amp;no_shipping=0&amp;tax=0&amp;bn=PP%2dDonationsBF&amp;charset=UTF%2d8
 */
 
 /*  Copyright 2009 RavanH  (http://4visions.nl/ email : ravanhagen@gmail.com)
