@@ -1,6 +1,6 @@
 === XML Sitemap Feed ===
 Contributors: RavanH
-Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravanhagen%40gmail%2ecom&item_name=XML%20Sitemap%20Feed&item_number=3%2e8&no_shipping=0&tax=0&bn=PP%2dDonationsBF&charset=UTF%2d8
+Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=ravanhagen%40gmail%2ecom&amp;item_name=XML%20Sitemap%20Feed&amp;item_number=3%2e8&amp;no_shipping=0&amp;tax=0&amp;bn=PP%2dDonationsBF&amp;charset=UTF%2d8
 Tags: xml, sitemap, xml sitemap, sitemap.xml, Google, Yahoo, Bing, Live, MSN, wpmu, feed
 Requires at least: 2.6
 Tested up to: 3.0.1
@@ -10,9 +10,9 @@ Creates a feed (or more when using qTranlate) that complies with the XML Sitemap
 
 == Description ==
 
-This plugin dynamically creates an feed that complies with the **XML Sitemap** protocol. There are no options to be set and the feed becomes instantly available after activation on yourblogurl.tld/sitemap.xml and on yourblogurl.tld/?feed=sitemap for if you do not use a fancy permalink structure, ready for indexing by search engines like Google, Yahoo, MSN, Ask.com and others.
+This plugin dynamically creates an feed that complies with the **XML Sitemap** protocol. There are no options to be set and the feed becomes instantly available on yourblogurl.tld/sitemap.xml (or yourblogurl.tld/?feed=sitemap), ready for indexing by search engines like Google, Yahoo, MSN, Ask.com and others.
 
-**Now qTranslate compatible!** Tested in Pre-Path and Query Modus. Each language on your site will have its own XML Sitemap.
+**Now qTranslate compatible!** Tested in Pre-Path Mode and Query Mode. Each language on your site will have its own XML Sitemap.
 
 A reference to it (or _them_, when using qTranslate) is added to the dynamically created **robots.txt** on yourblogurl.tld/robots.txt to tell search engines where to find your XML Sitemap(s). 
 
@@ -27,15 +27,15 @@ A reference to it (or _them_, when using qTranslate) is added to the dynamically
 * The main advantage of this plugin over other XML Sitemap plugins is **simplicity**. No need to change file or folder permissions, move files or spend time on a difficult plugin options page. In fact, there are no options at all!
 * Completely **automatic** post URL _priority_ and _change frequency_ calculation based on post age and comment/trackback activity.
 * Works out-of-the-box, even on **multi-site / shared codebase / multi-blog setups** like WordPress MU, WP 3.0 in MultiSite (WPMS) mode and others. 
-* Also works when **Network Activated** or placed in **/mu-plugins/** on WP 3.0 in MS mode and WPMU and even takes care to exclude any tags blogs to avoid malus points for link spamming.
-* Now **qTranslate** compatible to allow all your languages to be indexed equally.
+* Also works upon **Network Activate** or placed in **/mu-plugins/** on WP 3.0 in MS mode and WPMU and even takes care to exclude any tags blogs to avoid malus points for link spamming.
+* Compatible with multi-lingual sites using **qTranslate** to allow all languages to be indexed equally.
 
 = Limitations =
 
-* The feed contains the front page and all posts and pages but _excludes_ category, tag and other dynamic archive pages. This should not be a problem and by most it is advised to exclude them. There even are SEO plugins around that actively block these archive pages from search engines.
-* Except by _re-saving_ older posts from time to time (keeping the lastmod date fairly recent to ensure automatic high priority calculation for those urls) there is no way to manually set the priority of individual posts/pages in the sitemap. See the Faq's for more.
+* The feed contains the front page and all posts and pages but _excludes_ category, tag and other dynamic archive pages. This should not be a problem and by most it is even _advised_ to exclude them. There are SEO plugins around that actively block these archive pages from search engines.
+* Except by _re-saving_ older posts from time to time (keeping the lastmod date fairly recent) there is no way to manually control the priority of individual posts/pages in the sitemap. See the Faq's for more.
 * This plugin does not ping any search engines. But then, WordPress does this by default already via the Ping-o-Matic service so why bother? See the Faq's for more.
-* Because the feed is dynamically created, on _very_ large sites the creation process might take a while. Search engines are said to have a short fuse about waiting for a sitemap, so you may want to consider using a cache plugin that also (pre)caches feeds. If you are unfamiliar with caching and server setup start with a simple plugin such as **Quick Cache**. For more options you might find solace in **WP Super Cache** or **W3 Total Cache**.
+* Because the feed is dynamically created, on _very_ large sites the creation process might take a while. Search engines are said to have a short fuse about waiting for a sitemap, so you may want to consider using a cache plugin that also (pre)caches feeds. If you are unfamiliar with caching and server setup start with an easy caching plugin such as **Quick Cache**. For more options you might find solace in **WP Super Cache** or **W3 Total Cache**.
 
 = Translations =
 
@@ -49,19 +49,23 @@ XML Sitemap Feed was originally based on the (discontinued?) plugin Standard XML
 
 = Wordpress =
 
-Just use that slick installation and auto update feature on your Pugins page
+Quick installation: [Install now](http://coveredwebservices.com/wp-plugin-install/?plugin=xml-sitemap-feed) !
 
-&hellip; OR &hellip;
+    &hellip; OR &hellip;
 
-follow these simple steps:
+Search for "xml sitemap feed" and install with that slick **Plugins > Add New** back-end page.
 
-1. Download archive.
+    &hellip; OR &hellip;
 
-2. Upload the zip file via the Plugins > Add New > Upload page &hellip; OR &hellip; unpack and upload with your favourite FTP client to the /plugins/ folder.
+Follow these steps:
 
-3. Activate the plugin on the Plug-ins page.
+    1. Download archive.
 
-4. If you have been using another XML Sitemap plugin before, check your site root and remove any created sitemap.xml file that remained there.
+    2. Upload the zip file via the Plugins > Add New > Upload page &hellip; OR &hellip; unpack and upload with your favourite FTP client to the /plugins/ folder.
+
+    3. Activate the plugin on the Plug-ins page.
+
+    4. If you have been using another XML Sitemap plugin before, check your site root and remove any created sitemap.xml file that remained there.
 
 Done! Check your sparkling new XML Sitemap by visiting yourblogurl.tld/sitemap.xml (adapted to your domain name ofcourse) with a browser or any online XML Sitemap validator. You might also want to check if the sitemap is listed in your yourblogurl.tld/robots.txt file.
 
@@ -202,7 +206,7 @@ Yes.
 
 = Can I run this plugin from /mu-plugins/ on WP3.0 MS / WPMU ? =
 
-Yes.
+Yes. Upload the complete /xml-sitemap-feed/ directory to /wp-content/mu-plugins/ and move the file xml-sitemap.php one dir up.
 
 == Screenshots ==
 
@@ -214,6 +218,7 @@ Yes.
 = 3.8.3 =
 * filter external URLs inserted by plugins like Page Links To (thanks, Francois)
 * minified sitemap and stylesheet output
+
 * BUGFIX: qTranslate non-default language home URL
 
 = 3.8 =
