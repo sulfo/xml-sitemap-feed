@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=r
 Tags: xml, sitemap, xml sitemap, sitemap.xml, Google, Yahoo, Bing, Live, MSN, wpmu, feed
 Requires at least: 2.6
 Tested up to: 3.0.1
-Stable tag: 3.8.4
+Stable tag: 3.8.3
 
 Creates a feed (or more when using qTranlate) that complies with the XML Sitemap protocol for indexing by Google, Yahoo, Bing, Ask and others.
 
