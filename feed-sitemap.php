@@ -139,7 +139,7 @@ if ( have_posts() ) : while ( have_posts() && $counter < $maxURLS ) : the_post()
  	} else if(($lastactivityage/604800) < 52) { // last activity between 12 and 52 weeks old 
  		 ?><changefreq>monthly</changefreq><?php 
  	} else { ?><changefreq>yearly</changefreq><?php	
- 	} ?><priority><?php echo round(number_format($priority),1) ?></priority></url><?php 
+ 	} ?><priority><?php echo number_format($priority,1) ?></priority></url><?php 
 	$counter++;
 
 endwhile; endif; 
