@@ -1,7 +1,7 @@
 === XML Sitemap Feed ===
 Contributors: RavanH
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=ravanhagen%40gmail%2ecom&amp;item_name=XML%20Sitemap%20Feed&amp;item_number=3%2e8&amp;no_shipping=0&amp;tax=0&amp;bn=PP%2dDonationsBF&amp;charset=UTF%2d8
-Tags: xml, sitemap, xml sitemap, sitemap.xml, Google, Yahoo, Bing, Live, MSN, wpmu, feed
+Tags: xml, sitemap, xml sitemap, sitemap.xml, Google, Yahoo, Bing, Live, MSN, seo, wpmu, feed, qtranslate, xlanguage
 Requires at least: 2.6
 Tested up to: 3.0.1
 Stable tag: 3.8.3
@@ -12,9 +12,9 @@ Creates a feed (or more when using qTranlate) that complies with the XML Sitemap
 
 This plugin dynamically creates an feed that complies with the **XML Sitemap** protocol. There are no options to be set and the feed becomes instantly available on yourblogurl.tld/sitemap.xml (or yourblogurl.tld/?feed=sitemap), ready for indexing by search engines like Google, Yahoo, MSN, Ask.com and others.
 
-**Now qTranslate compatible!** Tested in Pre-Path Mode and Query Mode. Each language on your site will have its own XML Sitemap.
+**Now qTranslate and xLanguage compatible!** Tested in Pre-Path Mode and Query Mode. Each language on your site will have its own XML Sitemap.
 
-A reference to it (or _them_, when using qTranslate) is added to the dynamically created **robots.txt** on yourblogurl.tld/robots.txt to tell search engines where to find your XML Sitemap(s). 
+A reference to it (or _them_, when using qTranslate or xLanguage) is added to the dynamically created **robots.txt** on yourblogurl.tld/robots.txt to tell search engines where to find your XML Sitemap(s). 
 
 **NOTES:** 
 
@@ -28,7 +28,7 @@ A reference to it (or _them_, when using qTranslate) is added to the dynamically
 * Completely **automatic** post URL _priority_ and _change frequency_ calculation based on post age and comment/trackback activity.
 * Works out-of-the-box, even on **multi-site / shared codebase / multi-blog setups** like WordPress MU, WP 3.0 in MultiSite (WPMS) mode and others. 
 * Also works upon **Network Activate** or placed in **/mu-plugins/** on WP 3.0 in MS mode and WPMU and even takes care to exclude any tags blogs to avoid malus points for link spamming.
-* Compatible with multi-lingual sites using **qTranslate** to allow all languages to be indexed equally.
+* Compatible with multi-lingual sites using **qTranslate** or **xLanguage** to allow all languages to be indexed equally.
 
 = Limitations =
 
@@ -40,6 +40,10 @@ A reference to it (or _them_, when using qTranslate) is added to the dynamically
 = Translations =
 
 There is nothing to translate. The sitemap protocol is international, there is no options page nor any front-end or widget output. Nothing to see here, please move along ;)  
+
+= Plugin developers =
+
+Since 3.8.5, there is a FILTER hook `robotstxt_sitemap_url` available that lets you filter the URL for the sitemap reference in the generated robots.txt. It accepts both string (for single url) and array (for multiple urls) as return. See pre-packaged examples of it's use in xml-sitemap.php for the qTranslate and xLanguage plugins.  
 
 = Credits =
 
@@ -215,10 +219,14 @@ Yes. Upload the complete /xml-sitemap-feed/ directory to /wp-content/mu-plugins/
 
 == Changelog ==
 
+= 3.8.5 =
+* xLanguage support thanks to Daniele Pelagatti
+* new FILTER HOOK `robotstxt_sitemap_url` for any translate and url changing plugins.
+* BUGFIX: Decimal separator cannot be a comma! 
+
 = 3.8.3 =
 * filter external URLs inserted by plugins like Page Links To (thanks, Francois)
 * minified sitemap and stylesheet output
-
 * BUGFIX: qTranslate non-default language home URL
 
 = 3.8 =
@@ -277,6 +285,9 @@ Yes. Upload the complete /xml-sitemap-feed/ directory to /wp-content/mu-plugins/
 * increased post urls limit from 100 to 1000 (of max. 50,000 allowed by the Sitemap protocol)
 
 == Upgrade Notice ==
+
+= 3.8.5 =
+Automatic xLanguage support thanks to Daniele Pelagatti + new FILTER HOOK for other translate and url changing plugins. BUGFIX: Decimal separator cannot be a comma! 
 
 = 3.8.3 =
 BUGFIX RELEASE. Filter external links (thanks to Francois Deschenes) plus improved qTranslate support.
