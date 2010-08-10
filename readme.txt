@@ -6,7 +6,7 @@ Requires at least: 2.6
 Tested up to: 3.0.1
 Stable tag: 3.8.3
 
-Creates a feed (or more when using qTranlate) that complies with the XML Sitemap protocol for indexing by Google, Yahoo, Bing, Ask and others.
+Creates one or more (when using qTranlate or xLanguage) feeds that comply with the XML Sitemap protocol for fast indexing by Google, Yahoo, Bing, Ask and others.
 
 == Description ==
 
@@ -25,7 +25,7 @@ A reference to it (or _them_, when using qTranslate or xLanguage) is added to th
 = Advantages = 
 
 * The main advantage of this plugin over other XML Sitemap plugins is **simplicity**. No need to change file or folder permissions, move files or spend time on a difficult plugin options page. In fact, there are no options at all!
-* Completely **automatic** post URL _priority_ and _change frequency_ calculation based on post age and comment/trackback activity.
+* Completely **automatic** post URL _priority_ and _change frequency_ calculation based on post age and comment and trackback activity.
 * Works out-of-the-box, even on **multi-site / shared codebase / multi-blog setups** like WordPress MU, WP 3.0 in MultiSite (WPMS) mode and others. 
 * Also works upon **Network Activate** or placed in **/mu-plugins/** on WP 3.0 in MS mode and WPMU and even takes care to exclude any tags blogs to avoid malus points for link spamming.
 * Compatible with multi-lingual sites using **qTranslate** or **xLanguage** to allow all languages to be indexed equally.
