@@ -79,11 +79,10 @@ $counter = 1;
 // start with the main URL
 ?>
 <urlset	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc><?php 
-		if (function_exists('qtrans_convertURL')) {
-			echo esc_url( qtrans_convertURL(trailingslashit(get_bloginfo('url'))) );
-		} else {
-			echo esc_url( trailingslashit(get_bloginfo('url')) ); 
-		} ?></loc><lastmod><?php echo mysql2date('Y-m-d\TH:i:s+00:00', $lastmodified_gmt, false); ?></lastmod><changefreq>daily</changefreq><priority>1.0</priority></url><?php
+		// hook for filter 'xml_sitemap_url' provides a string here and MUST get a string returned
+		$url = apply_filters( 'xml_sitemap_url', trailingslashit(get_bloginfo('url')) );
+		if ( is_string($url) ) echo esc_url( $url ); else echo esc_url( trailingslashit(get_bloginfo('url')) );
+		?></loc><lastmod><?php echo mysql2date('Y-m-d\TH:i:s+00:00', $lastmodified_gmt, false); ?></lastmod><changefreq>daily</changefreq><priority>1.0</priority></url><?php
 // and loop away!
 if ( have_posts() ) : while ( have_posts() && $counter < $maxURLS ) : the_post();
 

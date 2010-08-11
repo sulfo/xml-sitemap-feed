@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=r
 Tags: xml, sitemap, xml sitemap, sitemap.xml, Google, Yahoo, Bing, Live, MSN, seo, wpmu, feed, qtranslate, xlanguage
 Requires at least: 2.6
 Tested up to: 3.0.1
-Stable tag: 3.8.3
+Stable tag: 3.8.5
 
 Creates one or more (when using qTranlate or xLanguage) feeds that comply with the XML Sitemap protocol for fast indexing by Google, Yahoo, Bing, Ask and others.
 
@@ -43,7 +43,7 @@ There is nothing to translate. The sitemap protocol is international, there is n
 
 = Plugin developers =
 
-Since 3.8.5, there is a FILTER hook `robotstxt_sitemap_url` available that lets you filter the URL for the sitemap reference in the generated robots.txt. It accepts both string (for single url) and array (for multiple urls) as return. See pre-packaged examples of it's use in xml-sitemap.php for the qTranslate and xLanguage plugins.  
+Since 3.8.5, there is a FILTER hook `xml_sitemap_url` available that lets you filter the URL for the sitemap reference in the generated robots.txt and the home URL in the sitemap. It accepts both string (for single url) and array (for multiple urls) and should receive the same. See pre-packaged examples of it's use in xml-sitemap.php for the qTranslate and xLanguage plugins.  
 
 = Credits =
 
@@ -220,17 +220,17 @@ Yes. Upload the complete /xml-sitemap-feed/ directory to /wp-content/mu-plugins/
 == Changelog ==
 
 = 3.8.5 =
-* xLanguage support thanks to Daniele Pelagatti
+* **xLanguage support** based on code and testing by **Daniele Pelagatti**
 * new FILTER HOOK `robotstxt_sitemap_url` for any translate and url changing plugins.
 * BUGFIX: Decimal separator cannot be a comma! 
 
 = 3.8.3 =
-* filter external URLs inserted by plugins like Page Links To (thanks, Francois)
-* minified sitemap and stylesheet output
+* filter out external URLs inserted by plugins like Page Links To (thanks, Francois)
+* minify sitemap and stylesheet output
 * BUGFIX: qTranslate non-default language home URL
 
 = 3.8 =
-* qTranslate support !
+* **qTranslate support**
 * no more Sitemap reference in robots.txt on non-public blogs
 
 = 3.7.4 =
@@ -287,11 +287,5 @@ Yes. Upload the complete /xml-sitemap-feed/ directory to /wp-content/mu-plugins/
 == Upgrade Notice ==
 
 = 3.8.5 =
-Automatic xLanguage support thanks to Daniele Pelagatti + new FILTER HOOK for other translate and url changing plugins. BUGFIX: Decimal separator cannot be a comma! 
-
-= 3.8.3 =
-BUGFIX RELEASE. Filter external links (thanks to Francois Deschenes) plus improved qTranslate support.
-
-= 3.8 =
-Now support for qTranslate: one XML Sitemap for each language! Plus no more sitemap when site is set to block spidering.
+Automatic xLanguage support thanks to Daniele Pelagatti + new FILTER HOOK for other translate and url changing plugins. BUGFIX: Decimal separator cannot be a comma!
 
