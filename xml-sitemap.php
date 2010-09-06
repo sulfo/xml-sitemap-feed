@@ -2,7 +2,7 @@
 /*
 Plugin Name: XML Sitemap Feed
 Plugin URI: http://4visions.nl/en/wordpress-plugins/xml-sitemap-feed/
-Description: Creates a feed that complies with the XML Sitemap protocol ready for indexing by Google, Yahoo, Bing, Ask and others. Happy with it? Please leave me a <strong><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=ravanhagen%40gmail%2ecom&amp;item_name=XML%20Sitemap%20Feed&amp;item_number=3%2e8&no_shipping=0&amp;tax=0&bn=PP%2dDonationsBF&amp;charset=UTF%2d8">Tip</a></strong> for development and support time. Thanks :)
+Description: Creates a feed that complies with the XML Sitemap protocol ready for indexing by Google, Yahoo, Bing, Ask and others. Happy with it? Please leave me a <strong><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravanhagen%40gmail%2ecom&item_name=XML%20Sitemap%20Feed&item_number=3%2e8&no_shipping=0&tax=0&bn=PP%2dDonationsBF&charset=UTF%2d8&lc=us">Tip</a></strong> for development and support time. Thanks :)
 Version: 3.8.5
 Author: RavanH
 Author URI: http://4visions.nl/
