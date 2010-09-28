@@ -1,16 +1,16 @@
 === XML Sitemap Feed ===
 Contributors: RavanH
-Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=ravanhagen%40gmail%2ecom&amp;item_name=XML%20Sitemap%20Feed&amp;item_number=3%2e8&amp;no_shipping=0&amp;tax=0&amp;bn=PP%2dDonationsBF&amp;charset=UTF%2d8
+Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravanhagen%40gmail%2ecom&item_name=XML%20Sitemap%20Feed&item_number=3%2e8&no_shipping=0&tax=0&bn=PP%2dDonationsBF&charset=UTF%2d8&lc=us
 Tags: xml, sitemap, xml sitemap, sitemap.xml, Google, Yahoo, Bing, Live, MSN, seo, wpmu, feed, qtranslate, xlanguage
 Requires at least: 2.6
 Tested up to: 3.0.1
-Stable tag: 3.8.5
+Stable tag: 3.8.6
 
 Creates one or more (when using qTranlate or xLanguage) feeds that comply with the XML Sitemap protocol for fast indexing by Google, Yahoo, Bing, Ask and others.
 
 == Description ==
 
-This plugin dynamically creates an feed that complies with the **XML Sitemap** protocol. There are no options to be set and the feed becomes instantly available on yourblogurl.tld/sitemap.xml (or yourblogurl.tld/?feed=sitemap), ready for indexing by search engines like Google, Yahoo, MSN, Ask.com and others.
+This plugin dynamically creates a feed that complies with the **XML Sitemap** protocol. There are no options to be set and the feed becomes instantly available on yourblogurl.tld/sitemap.xml (or yourblogurl.tld/?feed=sitemap), ready for indexing by search engines like Google, Yahoo, MSN, Ask.com and others.
 
 **Now qTranslate and xLanguage compatible!** Tested in Pre-Path Mode and Query Mode. Each language on your site will have its own XML Sitemap.
 
@@ -100,6 +100,7 @@ Dynamic pages like category pages, tag pages and archive pages are not listed in
 Yes and No. This plugin has no options page so there is no way to manually set the priority of urls in the sitemap. But there is automatic post priority calculation based on _post modifaction date_ and _comment activity_, that can either make post priority go to 100% (1.0) for posts with many and recent comments or 0% (0) for the oldest posts with no comments. 
 
 This feature can be used to your advantage: by re-saving your most important older posts from time to time, keeping the **lastmod date** fairly recent, you can ensure a priority of at least 80% (0.8) for those URLs. And if you have comments on on those pages, the priority will even go up to 90% (0.9).
+
 
 If you cannot live with these rules, edit the values `$min_priority`, `$max_priority` and `$frontpage_priority` in xml-sitemap-feed/feed-sitemap.php but be careful to not do an automatic upgrade or it will overwrite your customisation.
 
@@ -217,7 +218,16 @@ Yes. Upload the complete /xml-sitemap-feed/ directory to /wp-content/mu-plugins/
 1. XML Sitemap feed viewed in a normal browser. For human eyes only ;)
 2. XML Sitemap source as read by search engines.
 
+== Upgrade Notice ==
+
+= 3.8.6 =
+Sitemap output minified + core update
+
 == Changelog ==
+
+= 3.8.6 =
+* core change to class
+* minified sitemap output by default
 
 = 3.8.5 =
 * **xLanguage support** based on code and testing by **Daniele Pelagatti**
@@ -283,9 +293,3 @@ Yes. Upload the complete /xml-sitemap-feed/ directory to /wp-content/mu-plugins/
 = 0.1 =
 * rework from Patrick Chia's [Standard XML Sitemaps](http://wordpress.org/extend/plugins/standard-xml-sitemap/)
 * increased post urls limit from 100 to 1000 (of max. 50,000 allowed by the Sitemap protocol)
-
-== Upgrade Notice ==
-
-= 3.8.5 =
-Automatic xLanguage support thanks to Daniele Pelagatti + new FILTER HOOK for other translate and url changing plugins. BUGFIX: Decimal separator cannot be a comma!
-
