@@ -6,19 +6,21 @@ Requires at least: 2.6
 Tested up to: 3.0.1
 Stable tag: 3.8.6
 
-Creates one or more (when using qTranlate or xLanguage) feeds that comply with the XML Sitemap protocol for fast indexing by Google, Yahoo, Bing, Ask and others.
+Creates one or more (when using qTranlate or xLanguage) feeds that comply with the XML Sitemap protocol for fast indexing by Google, Yahoo, Bing, Ask and others. WP 3+ Multi-Site compatible!
 
 == Description ==
 
 This plugin dynamically creates a feed that complies with the **XML Sitemap** protocol. There are no options to be set and the feed becomes instantly available on yourblogurl.tld/sitemap.xml (or yourblogurl.tld/?feed=sitemap), ready for indexing by search engines like Google, Yahoo, MSN, Ask.com and others.
 
-**Now qTranslate and xLanguage compatible!** Tested in Pre-Path Mode and Query Mode. Each language on your site will have its own XML Sitemap.
+**Compatible with caching plugins like Super Cache, W3 Total Cache and Quick Cache** that cache feeds, allowing better performance to serve the impatient (when hungry) spider.
+
+**qTranslate and xLanguage compatible!** Tested in Pre-Path Mode and Query Mode. Each language on your site will have its own XML Sitemap.
 
 A reference to it (or _them_, when using qTranslate or xLanguage) is added to the dynamically created **robots.txt** on yourblogurl.tld/robots.txt to tell search engines where to find your XML Sitemap(s). 
 
 **NOTES:** 
 
-1. If you _do not use fancy URL's_ or you have WordPress installed in a _subdirectory_, a dynamic **robots.txt will not be generated**. _You'll have to create your own and upload it to your site root!_ See FAQ's.
+1. If you _do not use fancy URL's_ or you have WordPress installed in a _subdirectory_, a dynamic **robots.txt will NOT be generated**. You'll have to create your own and upload it to your site root! See FAQ's.
 
 2. On large sites, it is advised to use a good caching plugin like **Quick Cache**, **WP Super Cache** or **W3 Total Cache** to improve your site _and_ sitemap performance.
 
@@ -99,10 +101,9 @@ Dynamic pages like category pages, tag pages and archive pages are not listed in
 
 Yes and No. This plugin has no options page so there is no way to manually set the priority of urls in the sitemap. But there is automatic post priority calculation based on _post modifaction date_ and _comment activity_, that can either make post priority go to 100% (1.0) for posts with many and recent comments or 0% (0) for the oldest posts with no comments. 
 
-This feature can be used to your advantage: by re-saving your most important older posts from time to time, keeping the **lastmod date** fairly recent, you can ensure a priority of at least 80% (0.8) for those URLs. And if you have comments on on those pages, the priority will even go up to 90% (0.9).
+This feature can be used to your advantage: by re-saving your most important older posts from time to time, keeping the **lastmod date** fairly recent, you can ensure a priority of at least 80% (0.8) for those URLs. And if you have enough comments on on those pages, the priority can even go up to 100% (1.0).
 
-
-If you cannot live with these rules, edit the values `$min_priority`, `$max_priority` and `$frontpage_priority` in xml-sitemap-feed/feed-sitemap.php but be careful to not do an automatic upgrade or it will overwrite your customisation.
+If you cannot live with these rules, edit the values `$min_priority`, `$max_priority` and `$frontpage_priority` in xml-sitemap-feed/feed-sitemap.php but be careful to NOT do an automatic upgrade or it will overwrite your customisation.
 
 = Do I need to submit the sitemap to search engines? =
 
@@ -135,12 +136,12 @@ Or if you have WP installed in a subdirectory, on a server without rewrite_rules
 
 = My WordPress powered blog is installed in a subdirectory. Does that change anything? =
 
-That depends on where the index.php and .htaccess of your installation resides. If it is in the root, meaning WP is installed in a subdir but the blog is accessible from your domain root, you do not have to do anything. It should work out of the box. However, if the index.php is (e.g. still with your wp-config.php and all other WP files) in a subdir, meaning your blog is only accessible via that subdir, you need to manage your own robots.txt file in your domain root. It _has_ to be in the root (!) and needs a line starting with `Sitemap:` followed by the full URL to the sitemap feed provided by XML Sitemap Feed plugin. Like:
+That depends on where the index.php and .htaccess of your installation reside. If they are in the root while the rest of the WP files are installed in a subdir, so the site is accessible from your domain root, you do not have to do anything. It should work out of the box. But if the index.php is together with your wp-config.php and all other WP files in a subdir, meaning your blog is only accessible via that subdir, you need to manage your own robots.txt file in your **domain root**. It _has_ to be in the root (!) and needs a line starting with `Sitemap:` followed by the full URL to the sitemap feed provided by XML Sitemap Feed plugin. Like:
 `
 Sitemap: http://yourblogurl.tld/subdir/sitemap.xml
 ` 
 
-If you already have a robots.txt file with another Sitemap referrence like it, you might want to read more about creating an XML Sitemap Index on [sitemaps.org](http://www.sitemaps.org/protocol.php#index) to be able to referrence both sitemaps.
+If you already have a robots.txt file with another Sitemap reference like it, just add the full line below or above it.
 
 = Do I need to use a fancy Permalink structure? =
 
@@ -169,13 +170,19 @@ The stylesheet (to make the sitemap human readable) can be edited in `xml-sitema
 
 The sitemap is dynamically generated just like a feed. There is no actual file created.
 
-= I do see a sitemap.xml file in site root but it does not seem to get updated! =
+= I see a sitemap.xml file in site root but it does not seem to get updated! =
 
 You are most likely looking at a sitemap.xml file that has been created by another XML Sitemap plugin before you started using this plugin. Just remove it and let the plugin dynamically generate it just like a feed. There is no actual file created.
 
 If that's not the case, you are probably using a caching plugin or your browser does not update to the latest feed output. Please verify.
 
-= I get an ERROR when opening the sitemap or robots.txt ! = 
+= I use a caching plugin but the sitemap is not cached =
+
+Some caching plugins have the option to switch on/off caching of feeds. Make sure it is turned on. 
+
+Frederick Townes, developer of **W3 Total Cache**, says: "There's a checkbox option on the page cache settings tab to cache feeds. They will expire according to the expires field value on the browser cache setting for HTML."
+
+= I get an ERROR when opening the sitemap or robots.txt! = 
 
 The following errors might be encountered:
 
@@ -204,6 +211,14 @@ User-agent: *
 Allow: /
 `
 and upload it to your web root...
+
+** Error loading stylesheet: An unknown error has occurred **
+
+On some setups (usually using the WordPress MU Domain Mapping plugin) this error occurs. The problem is known, the cause is not... Until I find out why this is happening, please take comfort in knowing that this only affects reading the sitemap in normal browsers but will NOT affect any spidering/indexing on your site. The sitemap is still readable by all search engines! 
+
+= Can I run this on a WPMU / WP3+ Multi-Site setup? =
+
+Yes. In fact, it has been designed for it. Tested on WPMU 2.9.2 and WPMS 3.0.1
 
 = Can I do a Network Activate on WP3.0 MS / Site Wide Activate on WPMU with this plugin ? =
 
