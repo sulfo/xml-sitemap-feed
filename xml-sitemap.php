@@ -3,7 +3,7 @@
 Plugin Name: XML Sitemap Feed
 Plugin URI: http://4visions.nl/en/wordpress-plugins/xml-sitemap-feed/
 Description: Creates a feed that complies with the XML Sitemap protocol ready for indexing by Google, Yahoo, Bing, Ask and others. Happy with it? Please leave me a <strong><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravanhagen%40gmail%2ecom&item_name=XML%20Sitemap%20Feed&item_number=3%2e8&no_shipping=0&tax=0&bn=PP%2dDonationsBF&charset=UTF%2d8&lc=us">Tip</a></strong> for development and support time. Thanks :)
-Version: 3.8.6
+Version: 3.8.7
 Author: RavanH
 Author URI: http://4visions.nl/
 */
@@ -47,9 +47,9 @@ Author URI: http://4visions.nl/
 if(!class_exists(XMLSitemapFeed)) {
  class XMLSitemapFeed {
 
-	function init() {
+	function go() {
 		// set version
-		define('XMLSF_VERSION','3.8.6');
+		define('XMLSF_VERSION','3.8.7');
 
 		$xmlsf_dir = dirname(__FILE__);
 		define('XMLSF_PLUGIN_DIR', $xmlsf_dir);
@@ -67,7 +67,7 @@ if(!class_exists(XMLSitemapFeed)) {
 			// of links outside the blogs own domain...
 		} else {
 			// INIT
-			add_action('init', array(__CLASS__, 'wp_init') );
+			add_action('init', array(__CLASS__, 'init') );
 	
 			// FEEDS
 			add_action('do_feed_sitemap', array(__CLASS__, 'load_template'), 10, 1);
@@ -76,11 +76,10 @@ if(!class_exists(XMLSitemapFeed)) {
 			add_filter('generate_rewrite_rules', array(__CLASS__, 'rewrite') );
 
 			// ROBOTSTXT
-			add_action('do_robotstxt', array(__CLASS__, 'robots') );
+			add_action('do_robotstxt', array(__CLASS__, 'robots'), 1 );
 		}
 
-		// DE/ACTIVATION
-		register_activation_hook( __FILE__, array(__CLASS__, 'activate') );
+		// DE-ACTIVATION
 		register_deactivation_hook( __FILE__, array(__CLASS__, 'deactivate') );
 	}
 
@@ -97,11 +96,6 @@ if(!class_exists(XMLSitemapFeed)) {
 			'sitemap.xml$' => $wp_rewrite->index . '?feed=sitemap',
 		);
 		$wp_rewrite->rules = $feed_rules + $wp_rewrite->rules;
-	}
-	// recreate rewrite rules
-	function flush_rewrite_rules() {
-		global $wp_rewrite;
-		$wp_rewrite->flush_rules();
 	}
 
 	// ROBOTSTXT //
@@ -123,15 +117,12 @@ if(!class_exists(XMLSitemapFeed)) {
 		echo "\n\n";
 	}
 
-	// DE/ACTIVATION //
-	function activate() {
-		update_option('xml-sitemap-feed-version', XMLSF_VERSION);
-		self::flush_rewrite_rules();
-	}
+	// DE-ACTIVATION
 	function deactivate() {
 		remove_filter('generate_rewrite_rules', array(__CLASS__, 'rewrite') );
 		delete_option('xml-sitemap-feed-version');
-		self::flush_rewrite_rules();
+		global $wp_rewrite;
+		$wp_rewrite->flush_rules();
 	}
 
 	// MULTI-LANGUAGE PLUGIN FILTERS
@@ -164,18 +155,19 @@ if(!class_exists(XMLSitemapFeed)) {
 		return $return;
 	}
 
-	function wp_init() {
-		// FLUSH RULES check
-		// limited to after (site wide) plugin upgrade
+	function init() {
+		// FLUSH RULES after (site wide) plugin upgrade
 		if (get_option('xml-sitemap-feed-version') != XMLSF_VERSION) {
-			self::activate();
+			update_option('xml-sitemap-feed-version', XMLSF_VERSION);
+			global $wp_rewrite;
+			$wp_rewrite->flush_rules();
 		}
 
-		// check for qTranslate and activate filter
+		// check for qTranslate and add filter
 		if (defined('QT_LANGUAGE'))
 			add_filter('xml_sitemap_url', array(__CLASS__, 'qtranslate'), 99);
 
-		// check for xLanguage and activate filter
+		// check for xLanguage and add filter
 		if (defined('xLanguageTagQuery'))
 			add_filter('xml_sitemap_url', array(__CLASS__, 'xlanguage'), 99);
 	}
@@ -183,7 +175,8 @@ if(!class_exists(XMLSitemapFeed)) {
  }
 }
 
-XMLSitemapFeed::init();
+XMLSitemapFeed::go();
+
 
 /* -------------------------------------
  *      MISSING WORDPRESS FUNCTIONS
