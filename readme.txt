@@ -6,13 +6,13 @@ Requires at least: 2.6
 Tested up to: 3.0.1
 Stable tag: 3.8.6
 
-Creates one or more (when using qTranlate or xLanguage) feeds that comply with the XML Sitemap protocol for fast indexing by Google, Yahoo, Bing, Ask and others. WP 3+ Multi-Site compatible!
+Creates one or more feeds that comply with the XML Sitemap protocol for fast indexing by Google, Yahoo, Bing, Ask and others. Multi-Site and Multi-Lingual compatible!
 
 == Description ==
 
 This plugin dynamically creates a feed that complies with the **XML Sitemap** protocol. There are no options to be set and the feed becomes instantly available on yourblogurl.tld/sitemap.xml (or yourblogurl.tld/?feed=sitemap), ready for indexing by search engines like Google, Yahoo, MSN, Ask.com and others.
 
-**Compatible with caching plugins like Super Cache, W3 Total Cache and Quick Cache** that cache feeds, allowing better performance to serve the impatient (when hungry) spider.
+**Compatible with caching plugins** like Super Cache, W3 Total Cache and Quick Cache that cache feeds, allowing better performance to serve the hungry (impatient) spider.
 
 **qTranslate and xLanguage compatible!** Tested in Pre-Path Mode and Query Mode. Each language on your site will have its own XML Sitemap.
 
@@ -37,7 +37,7 @@ A reference to it (or _them_, when using qTranslate or xLanguage) is added to th
 * The feed contains the front page and all posts and pages but _excludes_ category, tag and other dynamic archive pages. This should not be a problem and by most it is even _advised_ to exclude them. There are SEO plugins around that actively block these archive pages from search engines.
 * Except by _re-saving_ older posts from time to time (keeping the lastmod date fairly recent) there is no way to manually control the priority of individual posts/pages in the sitemap. See the Faq's for more.
 * This plugin does not ping any search engines. But then, WordPress does this by default already via the Ping-o-Matic service so why bother? See the Faq's for more.
-* Because the feed is dynamically created, on _very_ large sites the creation process might take a while. Search engines are said to have a short fuse about waiting for a sitemap, so you may want to consider using a cache plugin that also (pre)caches feeds. If you are unfamiliar with caching and server setup start with an easy caching plugin such as **Quick Cache**. For more options you might find solace in **WP Super Cache** or **W3 Total Cache**.
+* Because the feed is dynamically created, on _very_ large sites the creation process might take a while. Search engines are said to have a short fuse about waiting for a sitemap, so you may want to consider using a cache plugin that also (pre)caches feeds. If you are unfamiliar with caching and server setup start with an easy caching plugin such as **Quick Cache**. For more options (and better performance?) you might find solace in **WP Super Cache** or **W3 Total Cache**.
 
 = Translations =
 
@@ -49,7 +49,7 @@ Since 3.8.5, there is a FILTER hook `xml_sitemap_url` available that lets you fi
 
 = Credits =
 
-XML Sitemap Feed was originally based on the (discontinued?) plugin Standard XML Sitemap Generator by Patrick Chia. Many thanks! Since then, it has been completely rewriten.
+XML Sitemap Feed was originally based on the (discontinued?) plugin Standard XML Sitemap Generator by Patrick Chia. Many thanks! Since then, it has been completely rewritten.
 
 == Installation ==
 
