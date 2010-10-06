@@ -6,7 +6,7 @@ Requires at least: 2.6
 Tested up to: 3.0.1
 Stable tag: 3.8.7
 
-Creates one or more feeds that comply with the XML Sitemap protocol for fast indexing by Google, Yahoo, Bing, Ask and others. Multi-Site and Multi-Lingual compatible!
+A feed that complies with the XML Sitemap protocol for fast indexing by Google, Yahoo, Bing, Ask and others. Multi-Site and Multi-Lingual compatible!
 
 == Description ==
 
