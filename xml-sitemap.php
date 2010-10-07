@@ -42,22 +42,22 @@ Author URI: http://4visions.nl/
  */
 
 /* --------------------
+ *      CONSTANTS
+ * -------------------- */
+define('XMLSF_VERSION','3.8.7');
+
+if (file_exists(dirname(__FILE__).'/xml-sitemap-feed'))
+	define('XMLSF_PLUGIN_DIR', dirname(__FILE__).'/xml-sitemap-feed');
+else
+	define('XMLSF_PLUGIN_DIR', dirname(__FILE__));		
+
+/* --------------------
  *      CLASS
  * -------------------- */
 if(!class_exists(XMLSitemapFeed)) {
  class XMLSitemapFeed {
 
-	function go() {
-		// set version
-		define('XMLSF_VERSION','3.8.7');
-
-		$xmlsf_dir = dirname(__FILE__);
-		define('XMLSF_PLUGIN_DIR', $xmlsf_dir);
-		if (file_exists($xmlsf_dir.'/xml-sitemap-feed'))
-			define('XMLSF_PLUGIN_SUBDIR', '/xml-sitemap-feed');
-		else
-			define('XMLSF_PLUGIN_SUBDIR', '');
-
+	function go() {		
 		if ( '0' == get_option( 'blog_public' ) || ( $wpdb->blogid && function_exists('get_site_option') && get_site_option('tags_blog_id') == $wpdb->blogid ) ) {
 			// we are on a blog that blocks spiders!
 			// create NO sitemap
@@ -86,7 +86,7 @@ if(!class_exists(XMLSitemapFeed)) {
 	// FEEDS //
 	// set up the feed template
 	function load_template() {
-		load_template( XMLSF_PLUGIN_DIR . XMLSF_PLUGIN_SUBDIR . '/feed-sitemap.php' );
+		load_template( XMLSF_PLUGIN_DIR . '/feed-sitemap.php' );
 	}
 
 	// REWRITES //
@@ -182,7 +182,7 @@ XMLSitemapFeed::go();
  *      MISSING WORDPRESS FUNCTIONS
  * ------------------------------------- */
 
-require_once(XMLSF_PLUGIN_DIR . XMLSF_PLUGIN_SUBDIR . '/hacks.php');
+require_once(XMLSF_PLUGIN_DIR . '/hacks.php');
 
 if( !function_exists('get_firstmodified') ) {
  function get_firstmodified($timezone = 'server') {
