@@ -8,7 +8,7 @@
 status_header('200'); // force header('HTTP/1.1 200 OK') for sites without posts
 header('Content-Type: text/xml; charset=' . get_bloginfo('charset'), true);
 
-echo '<?xml version="1.0" encoding="'.get_bloginfo('charset').'"?><?xml-stylesheet type="text/xsl" href="'.plugins_url(XMLSF_PLUGIN_SUBDIR.'/sitemap.xsl.php', __FILE__).'?v='.XMLSF_VERSION.'"?>
+echo '<?xml version="1.0" encoding="'.get_bloginfo('charset').'"?><?xml-stylesheet type="text/xsl" href="'.plugins_url('/sitemap.xsl.php', __FILE__).'?v='.XMLSF_VERSION.'"?>
 <!-- generated-on="'.date('Y-m-d\TH:i:s+00:00').'" -->
 <!-- generator="XML Sitemap Feed plugin for WordPress" -->
 <!-- generator-url="http://4visions.nl/en/wordpress-plugins/xml-sitemap-feed/" -->
@@ -83,7 +83,8 @@ $counter = 1;
 		$url = apply_filters( 'xml_sitemap_url', trailingslashit(get_bloginfo('url')) );
 		if ( is_string($url) ) echo esc_url( $url ); else echo esc_url( trailingslashit(get_bloginfo('url')) );
 		?></loc><lastmod><?php echo mysql2date('Y-m-d\TH:i:s+00:00', $lastmodified_gmt, false); ?></lastmod><changefreq>daily</changefreq><priority>1.0</priority></url><?php
-// and loop away!
+
+// then loop away!
 if ( have_posts() ) : while ( have_posts() && $counter < $maxURLS ) : the_post();
 
 	// check if we are not dealing with an external URL :: Thanks, Francois Deschenes :)

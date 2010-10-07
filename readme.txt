@@ -236,12 +236,13 @@ Yes. Upload the complete /xml-sitemap-feed/ directory to /wp-content/mu-plugins/
 == Upgrade Notice ==
 
 = 3.8.7 =
-Sitemap output minified + core update + PHP4 compatibility
+Bugfixes: PHP4 compatibility + mu-plugins URL
 
 == Changelog ==
 
 = 3.8.7 =
 * Bugfix: PHP4 compatibility
+* Bugfix: stylesheet URL when installed in mu-plugins
 
 = 3.8.6 =
 * core change to class
