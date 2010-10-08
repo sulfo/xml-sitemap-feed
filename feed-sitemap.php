@@ -8,14 +8,15 @@
 status_header('200'); // force header('HTTP/1.1 200 OK') for sites without posts
 header('Content-Type: text/xml; charset=' . get_bloginfo('charset'), true);
 
-echo '<?xml version="1.0" encoding="'.get_bloginfo('charset').'"?><?xml-stylesheet type="text/xsl" href="'.plugins_url('/sitemap.xsl.php', __FILE__).'?v='.XMLSF_VERSION.'"?>
+echo '<?xml version="1.0" encoding="'.get_bloginfo('charset').'"?><?xml-stylesheet type="text/xsl" href="'.get_option('home').'/'.str_replace(ABSPATH,"", XMLSF_PLUGIN_DIR).'/sitemap.xsl.php?v='.XMLSF_VERSION.'"?>
 <!-- generated-on="'.date('Y-m-d\TH:i:s+00:00').'" -->
 <!-- generator="XML Sitemap Feed plugin for WordPress" -->
 <!-- generator-url="http://4visions.nl/en/wordpress-plugins/xml-sitemap-feed/" -->
 <!-- generator-version="'.XMLSF_VERSION.'" -->
 ';
 
-// presets are changable; please read comments:
+// presets are changable
+// please read comments:
 $max_priority = 1.0;	// Maximum priority value for any URL in the sitemap; set to any other value between 0 and 1.
 $min_priority = 0;	// Minimum priority value for any URL in the sitemap; set to any other value between 0 and 1.
 			// NOTE: Changing these values will influence each URL's priority. Priority values are taken by 
