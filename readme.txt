@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravan
 Tags: xml, sitemap, xml sitemap, sitemap.xml, Google, Yahoo, Bing, Live, MSN, seo, wpmu, feed, qtranslate, xlanguage
 Requires at least: 2.6
 Tested up to: 3.0.1
-Stable tag: 3.8.7
+Stable tag: 3.8.8
 
 A feed that complies with the XML Sitemap protocol for fast indexing by Google, Yahoo, Bing, Ask and others. Multi-Site and Multi-Lingual compatible!
 
@@ -235,12 +235,12 @@ Yes. Upload the complete /xml-sitemap-feed/ directory to /wp-content/mu-plugins/
 
 == Upgrade Notice ==
 
-= 3.8.7 =
-Bugfixes: PHP4 compatibility + mu-plugins URL
+= 3.8.8 =
+Bugfixes: PHP4 compatibility + mu-plugins URL stylesheet
 
 == Changelog ==
 
-= 3.8.7 =
+= 3.8.8 =
 * Bugfix: PHP4 compatibility
 * Bugfix: stylesheet URL when installed in mu-plugins
 
