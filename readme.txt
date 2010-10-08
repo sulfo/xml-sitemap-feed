@@ -243,8 +243,6 @@ Bugfixes: PHP4 compatibility + mu-plugins URL stylesheet
 = 3.8.8 =
 * Bugfix: PHP4 compatibility
 * Bugfix: stylesheet URL when installed in mu-plugins
-
-= 3.8.6 =
 * core change to class
 * minified sitemap output by default
 
