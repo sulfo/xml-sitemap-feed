@@ -13,6 +13,7 @@ echo '<?xml version="1.0" encoding="'.get_bloginfo('charset').'"?><?xml-styleshe
 <!-- generator="XML Sitemap Feed plugin for WordPress" -->
 <!-- generator-url="http://4visions.nl/en/wordpress-plugins/xml-sitemap-feed/" -->
 <!-- generator-version="'.XMLSF_VERSION.'" -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 ';
 
 // presets are changable
@@ -79,7 +80,7 @@ $counter = 1;
 
 // start with the main URL
 ?>
-<urlset	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc><?php 
+<url><loc><?php 
 		// hook for filter 'xml_sitemap_url' provides a string here and MUST get a string returned
 		$url = apply_filters( 'xml_sitemap_url', trailingslashit(get_bloginfo('url')) );
 		if ( is_string($url) ) echo esc_url( $url ); else echo esc_url( trailingslashit(get_bloginfo('url')) );
