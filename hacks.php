@@ -1,4 +1,8 @@
 <?php
+/* -------------------------------------
+ *      MISSING WORDPRESS FUNCTIONS
+ * ------------------------------------- */
+
 /**
  * Retrieve last page modified date depending on timezone.
  *
@@ -269,5 +273,53 @@ if( !function_exists('get_firstpagedate') ) {
 		$firstpagedate = $cache_firstpagedate[$blog_id][$timezone];
 	}
 	return apply_filters( 'get_firstpagedate', $firstpagedate, $timezone );
+ }
+}
+
+/**
+ * Retrieve first post/page modified date depending on timezone.
+ *
+ * The server timezone is the default and is the difference between GMT and
+ * server time. The 'blog' value is the date when the last post was posted. The
+ * 'gmt' is when the last post was posted in GMT formatted date.
+ *
+ * Combination of get_firstpostmodified and get_firstpagemodified
+ * defined in this file
+ *
+ * @param string $timezone The location to get the time. Can be 'gmt', 'blog', or 'server'.
+ * @return string The date of the oldest modified post or page.
+ */
+if( !function_exists('get_firstmodified') ) {
+ function get_firstmodified($timezone = 'server') {
+	$firstpostmodified = get_firstpostmodified($timezone);
+	$firstpagemodified = get_firstpagemodified($timezone);
+	if ( mysql2date('U',$firstpostmodified) < mysql2date('U',$firstpagemodified) )
+		return $firstpostmodified;
+	else
+		return $firstpagemodified;
+ }
+}
+
+/**
+ * Retrieve last post/page modified date depending on timezone.
+ *
+ * The server timezone is the default and is the difference between GMT and
+ * server time. The 'blog' value is the date when the last post was posted. The
+ * 'gmt' is when the last post was posted in GMT formatted date.
+ *
+ * Combination of get_lastpostmodified and get_lastpagemodified
+ * defined in wp-includes/post.php since WP 1.2.0
+ *
+ * @param string $timezone The location to get the time. Can be 'gmt', 'blog', or 'server'.
+ * @return string The date of the oldest modified post.
+ */
+if( !function_exists('get_lastmodified') ) {
+ function get_lastmodified($timezone = 'server') {
+	$lastpostmodified = get_lastpostmodified($timezone);
+	$lastpagemodified = get_lastpagemodified($timezone);
+	if ( mysql2date('U',$lastpostmodified) > mysql2date('U',$lastpagemodified) )
+		return $lastpostmodified;
+	else
+		return $lastpagemodified;
  }
 }

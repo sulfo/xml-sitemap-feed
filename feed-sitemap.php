@@ -15,7 +15,8 @@ echo '<?xml version="1.0" encoding="'.get_bloginfo('charset').'"?><?xml-styleshe
 <!-- generator-version="'.XMLSF_VERSION.'" -->
 ';
 
-// presets are changable; please read comments:
+// presets are changable
+// please read comments:
 $max_priority = 1.0;	// Maximum priority value for any URL in the sitemap; set to any other value between 0 and 1.
 $min_priority = 0;	// Minimum priority value for any URL in the sitemap; set to any other value between 0 and 1.
 			// NOTE: Changing these values will influence each URL's priority. Priority values are taken by 
