@@ -1,22 +1,22 @@
-=== XML Sitemap Feed ===
+=== XML & Google News Sitemap Feed ===
 Contributors: RavanH
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravanhagen%40gmail%2ecom&item_name=XML%20Sitemap%20Feed&item_number=3%2e8&no_shipping=0&tax=0&bn=PP%2dDonationsBF&charset=UTF%2d8&lc=us
-Tags: xml, sitemap, xml sitemap, sitemap.xml, Google, Yahoo, Bing, Live, MSN, seo, wpmu, feed, qtranslate, xlanguage
+Tags: xml sitemap, google news sitemap, sitemap.xml, Google, Google News, Yahoo, Bing, Live, MSN, seo, wpmu, feed, qtranslate, xlanguage
 Requires at least: 2.6
 Tested up to: 3.0.1
 Stable tag: 3.8.8
 
-A feed that complies with the XML Sitemap protocol for fast indexing by Google, Yahoo, Bing, Ask and others. Multi-Site and Multi-Lingual compatible!
+Feeds that comply with the XML Sitemap and Google News protocol for fast indexing by Google, Yahoo, Bing, Ask and others. Multi-Site and Multi-Lingual compatible!
 
 == Description ==
 
-This plugin dynamically creates a feed that complies with the **XML Sitemap** protocol. There are no options to be set and the feed becomes instantly available on yourblogurl.tld/sitemap.xml (or yourblogurl.tld/?feed=sitemap), ready for indexing by search engines like Google, Yahoo, MSN, Ask.com and others.
+This plugin dynamically creates feeds that comply with the **XML Sitemap** and the **Google News Sitemap** protocol. There are no options to be set nor file or dir access rights to be tampered with and the feeds become instantly available. One XML Sitemap on yourblogurl.tld/sitemap.xml (or yourblogurl.tld/?feed=sitemap), ready for indexing by search engines like Google, Yahoo, MSN, Ask.com and others. And one Google News Sitemap on yourblogurl.tld/sitemap-news.xml (or yourblogurl.tld/?feed=sitemap-news), ready for indexing by Google News. Please read the FAQ's for info on how to get your articles listed on Google News.
 
 **Compatible with caching plugins** like Super Cache, W3 Total Cache and Quick Cache that cache feeds, allowing better performance to serve the hungry (impatient) spider.
 
 **qTranslate and xLanguage compatible!** Tested in Pre-Path Mode and Query Mode. Each language on your site will have its own XML Sitemap.
 
-A reference to it (or _them_, when using qTranslate or xLanguage) is added to the dynamically created **robots.txt** on yourblogurl.tld/robots.txt to tell search engines where to find your XML Sitemap(s). 
+References are automatically added to the dynamically created **robots.txt** on yourblogurl.tld/robots.txt to tell search engines where to find your XML Sitemaps. 
 
 **NOTES:** 
 
@@ -49,7 +49,7 @@ Since 3.8.5, there is a FILTER hook `xml_sitemap_url` available that lets you fi
 
 = Credits =
 
-XML Sitemap Feed was originally based on the (discontinued?) plugin Standard XML Sitemap Generator by Patrick Chia. Many thanks! Since then, it has been completely rewritten.
+XML Sitemap Feed was originally based on the (discontinued?) plugin Standard XML Sitemap Generator by Patrick Chia. Many thanks! Since then, it has been completely rewritten and extended in many ways.
 
 == Installation ==
 
@@ -86,6 +86,16 @@ The plugin works best from the **/mu-plugins/** folder where it runs quietly in 
 Installed alongside [WordPress MU Sitewide Tags Pages](http://wordpress.org/extend/plugins/wordpress-mu-sitewide-tags/), XML Sitemap Feed will **not** create a sitemap.xml nor change robots.txt for any tag blogs. This is done deliberately because they would be full of links outside the tags blogs own domain and subsequently ignored (or worse: penalised) by Google.
 
 == Frequently Asked Questions ==
+
+= How do I get my latest articles listed on Google News? =
+
+Go to [Suggest News Content for Google News](http://www.google.com/support/news_pub/bin/request.py?contact_type=suggest_content) and submit your website info as detailed as possible there. Give them the URL(s) of your fresh new Google News Sitemap in the text field 'Other' at the bottom.
+
+You will also want to add the sitemap to your [Google Webmasters Tools account](https://www.google.com/webmasters/tools/). Create one if you don't have an account yet.
+
+= My Google News Sitemap seems empty! =
+
+The rules of the Google News game are that you do not feed the cookie monster any stale food. Older than 2 days is bad. You probably need to bake him some fresh news ;)
 
 = How are the values for priority and changefreq calculated? =
 
@@ -124,7 +134,7 @@ Read more on [Ping-O-Matic](http://pingomatic.com) about what excellent service 
 
 2. For the average website, in my experience, pinging Google or others after each little change does not benefit anything except a theoretical smaller delay in re-indexation of your website. This is only theoretical because if your site is popular and active, major search engines will likely be crawling your site on a very regular basis anyway. And if, on the other hand, your site is not high on the agenda of the major search engines, they will likely give no priority to your pings at all.
 
-You can always take a [Google Webmaster Tools account](https://www.google.com/webmasters/tools/) which will tell you many interesting things about your website, sitemap downloads, search terms and your visitors. Try it!
+You can always take a [Google Webmasters Tools account](https://www.google.com/webmasters/tools/) which will tell you many interesting things about your website, sitemap downloads, search terms and your visitors. Try it!
 
 = Do I need to change my robots.txt? =
 
@@ -154,7 +164,7 @@ Sitemap: http://yourblogurl.tld/?feed=sitemap
 User-agent: *
 Allow: /
 `
-You can also choose to notify major search engines of your new XML sitemap manually. Start with getting a [Google Webmaster Tools account](https://www.google.com/webmasters/tools/) and submit your sitemap for the first time from there to enable tracking of sitemap downloads by Google! or head over to [XML-Sitemaps.com](http://www.xml-sitemaps.com/validate-xml-sitemap.html) and enter your sites sitemap URL.
+You can also choose to notify major search engines of your new XML sitemap manually. Start with getting a [Google Webmasters Tools account](https://www.google.com/webmasters/tools/) and submit your sitemap for the first time from there to enable tracking of sitemap downloads by Google! or head over to [XML-Sitemaps.com](http://www.xml-sitemaps.com/validate-xml-sitemap.html) and enter your sites sitemap URL.
 
 = Can I change the sitemap name/URL? =
 
@@ -235,10 +245,13 @@ Yes. Upload the complete /xml-sitemap-feed/ directory to /wp-content/mu-plugins/
 
 == Upgrade Notice ==
 
-= 3.8.8 =
-Bugfixes: PHP4 compatibility + mu-plugins URL stylesheet
+= 3.9 =
+Google News Sitemap!
 
 == Changelog ==
+
+= 3.9 =
+* Google News Sitemap
 
 = 3.8.8 =
 * Bugfix: PHP4 compatibility

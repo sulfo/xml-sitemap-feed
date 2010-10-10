@@ -18,7 +18,8 @@ class XMLSitemapFeed {
 			add_action('init', array(__CLASS__, 'init') );
 	
 			// FEEDS
-			add_action('do_feed_sitemap', array(__CLASS__, 'load_template'), 10, 1);
+			add_action('do_feed_sitemap', array(__CLASS__, 'load_template_sitemap'), 10, 1);
+			add_action('do_feed_sitemap-news', array(__CLASS__, 'load_template_sitemap_news'), 10, 1);
 
 			// REWRITES
 			add_filter('generate_rewrite_rules', array(__CLASS__, 'rewrite') );
@@ -32,9 +33,22 @@ class XMLSitemapFeed {
 	}
 
 	// FEEDS //
-	// set up the feed template
-	function load_template() {
+	// set up the sitemap template
+	function load_template_sitemap() {
 		load_template( XMLSF_PLUGIN_DIR . '/feed-sitemap.php' );
+	}
+
+	// set up the news sitemap template
+	function load_template_sitemap_news() {
+		load_template( XMLSF_PLUGIN_DIR . '/feed-sitemap-news.php' );
+	}
+
+	// Create a new filtering function that will add a where clause to the query,
+	// used for the Google News Sitemap
+	function xml_sitemap_feed_news_filter_where($where = '') {
+	  //posts in the last 2 days
+	  $where .= " AND post_date > '" . date('Y-m-d', strtotime('-2 days')) . "'";
+	  return $where;
 	}
 
 	// REWRITES //
@@ -42,6 +56,7 @@ class XMLSitemapFeed {
 	function rewrite($wp_rewrite) {
 		$feed_rules = array(
 			'sitemap.xml$' => $wp_rewrite->index . '?feed=sitemap',
+			'sitemap-news.xml$' => $wp_rewrite->index . '?feed=sitemap-news',
 		);
 		$wp_rewrite->rules = $feed_rules + $wp_rewrite->rules;
 	}
@@ -52,7 +67,8 @@ class XMLSitemapFeed {
 	function robots() {
 
 		// hook for filter 'xml_sitemap_url' provides an array here and MUST get an array returned
-		$sitemap_array = apply_filters('xml_sitemap_url',array(trailingslashit(get_bloginfo('url'))."sitemap.xml"));
+		$blog_url = trailingslashit(get_bloginfo('url'));
+		$sitemap_array = apply_filters('xml_sitemap_url',array($blog_url."sitemap.xml",$blog_url."sitemap-news.xml"));
 
 		echo "\n# XML Sitemap Feed ".XMLSF_VERSION." (http://4visions.nl/en/wordpress-plugins/xml-sitemap-feed/)";
 
@@ -64,7 +80,7 @@ class XMLSitemapFeed {
 	
 		echo "\n\n";
 	}
-
+	
 	// DE-ACTIVATION
 	function deactivate() {
 		remove_filter('generate_rewrite_rules', array(__CLASS__, 'rewrite') );

@@ -10,11 +10,10 @@ header('Content-Type: text/xml; charset=' . get_bloginfo('charset'), true);
 
 echo '<?xml version="1.0" encoding="'.get_bloginfo('charset').'"?><?xml-stylesheet type="text/xsl" href="'.get_option('home').'/'.str_replace(ABSPATH,"", XMLSF_PLUGIN_DIR).'/sitemap.xsl.php?v='.XMLSF_VERSION.'"?>
 <!-- generated-on="'.date('Y-m-d\TH:i:s+00:00').'" -->
-<!-- generator="XML Sitemap Feed plugin for WordPress" -->
+<!-- generator="XML & Google News Sitemap Feed plugin for WordPress" -->
 <!-- generator-url="http://4visions.nl/en/wordpress-plugins/xml-sitemap-feed/" -->
 <!-- generator-version="'.XMLSF_VERSION.'" -->
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-';
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">';
 
 // presets are changable
 // please read comments:
@@ -37,7 +36,7 @@ $month_weight = 0.1;	// Fall-back value normally ignored by automatic priority c
 query_posts( array(
 	'post_type' => 'any', 
 	'post_status' => 'publish', 
-	'caller_get_posts' => '1',
+	'caller_get_posts' => 1,
 	'nopaging' => true,
 	'posts_per_page' => -1 )
 ); 
@@ -133,15 +132,15 @@ if ( have_posts() ) : while ( have_posts() && $counter < $maxURLS ) : the_post()
 	// trim priority
 	$priority = ($priority > $max_priority) ? $max_priority : $priority;
 	$priority = ($priority < $min_priority) ? $min_priority : $priority;
-?><url><loc><?php echo esc_url( get_permalink() ) ?></loc><lastmod><?php echo mysql2date('Y-m-d\TH:i:s+00:00', $thispostmodified_gmt, false) ?></lastmod><?php
+?><url><loc><?php echo esc_url( get_permalink() ) ?></loc><lastmod><?php echo mysql2date('Y-m-d\TH:i:s+00:00', $thispostmodified_gmt, false) ?></lastmod><changefreq><?php
  	if(($lastactivityage/86400) < 7) { // last activity less than 1 week old 
- 		 ?><changefreq>daily</changefreq><?php
+ 		 ?>daily<?php
  	} else if(($lastactivityage/604800) < 12) { // last activity between 1 and 12 weeks old 
- 		 ?><changefreq>weekly</changefreq><?php	
+ 		 ?>weekly<?php	
  	} else if(($lastactivityage/604800) < 52) { // last activity between 12 and 52 weeks old 
- 		 ?><changefreq>monthly</changefreq><?php 
- 	} else { ?><changefreq>yearly</changefreq><?php	
- 	} ?><priority><?php echo number_format($priority,1) ?></priority></url><?php 
+ 		 ?>monthly<?php 
+ 	} else { ?>yearly<?php	
+ 	} ?></changefreq><priority><?php echo number_format($priority,1) ?></priority></url><?php 
 	$counter++;
 
 endwhile; endif; 
