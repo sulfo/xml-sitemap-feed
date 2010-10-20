@@ -25,7 +25,7 @@ class XMLSitemapFeed {
 			add_filter('generate_rewrite_rules', array(__CLASS__, 'rewrite') );
 
 			// ROBOTSTXT
-			add_action('do_robotstxt', array(__CLASS__, 'robots'), 1 );
+			add_action('do_robotstxt', array(__CLASS__, 'robots') );
 		}
 
 		// DE-ACTIVATION

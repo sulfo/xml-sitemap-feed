@@ -25,9 +25,9 @@ add_filter('posts_where', array('XMLSitemapFeed','xml_sitemap_feed_news_filter_w
 // Perform the query, the filter will be applied automatically
 query_posts( array(
 	'post_type' => 'post', 
-	'post_status' => 'publish', 
+//	'post_status' => 'publish', 
 	'caller_get_posts' => 1,
-	'nopaging' => true,
+//	'nopaging' => true,
 	'posts_per_page' => -1 )
 ); 
 

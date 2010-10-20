@@ -8,7 +8,7 @@
 status_header('200'); // force header('HTTP/1.1 200 OK') for sites without posts
 header('Content-Type: text/xml; charset=' . get_bloginfo('charset'), true);
 
-echo '<?xml version="1.0" encoding="'.get_bloginfo('charset').'"?><?xml-stylesheet type="text/xsl" href="'.get_option('home').'/'.str_replace(ABSPATH,"", XMLSF_PLUGIN_DIR).'/sitemap.xsl.php?v='.XMLSF_VERSION.'"?>
+echo '<?xml version="1.0" encoding="'.get_bloginfo('charset').'"?><?xml-stylesheet type="text/xsl" href="'.get_option('siteurl').'/'.str_replace(ABSPATH,"", XMLSF_PLUGIN_DIR).'/sitemap.xsl.php?v='.XMLSF_VERSION.'"?>
 <!-- generated-on="'.date('Y-m-d\TH:i:s+00:00').'" -->
 <!-- generator="XML & Google News Sitemap Feed plugin for WordPress" -->
 <!-- generator-url="http://4visions.nl/en/wordpress-plugins/xml-sitemap-feed/" -->
@@ -35,9 +35,9 @@ $month_weight = 0.1;	// Fall-back value normally ignored by automatic priority c
 // the main query
 query_posts( array(
 	'post_type' => 'any', 
-	'post_status' => 'publish', 
-	'caller_get_posts' => 1,
-	'nopaging' => true,
+//	'post_status' => 'publish', 
+//	'caller_get_posts' => 1,
+//	'nopaging' => true,
 	'posts_per_page' => -1 )
 ); 
 
