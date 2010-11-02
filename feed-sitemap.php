@@ -13,7 +13,7 @@ echo '<?xml version="1.0" encoding="'.get_bloginfo('charset').'"?><?xml-styleshe
 <!-- generator="XML & Google News Sitemap Feed plugin for WordPress" -->
 <!-- generator-url="http://4visions.nl/en/wordpress-plugins/xml-sitemap-feed/" -->
 <!-- generator-version="'.XMLSF_VERSION.'" -->
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">';
+';
 
 // presets are changable
 // please read comments:
@@ -31,6 +31,18 @@ $month_weight = 0.1;	// Fall-back value normally ignored by automatic priority c
 			// makes a post loose 10% of priority monthly; set to any other value between 0 and 1.
 
 // editing below here is not advised!
+
+// Memory issue fix will try to increase allowed PHP memory size to XMLSF_MEMORY_LIMIT constant
+// as set in xml-sitemap.php if the current memory limit is lower than that.
+if ( function_exists('memory_get_usage') && ( (int) @ini_get('memory_limit') < abs(intval(XMLSF_MEMORY_LIMIT)) ) ) {
+	if ( $memory_limit = @ini_set('memory_limit', XMLSF_MEMORY_LIMIT) ) {
+		echo '<!-- memory-limit-increase="' . ( abs(intval(XMLSF_MEMORY_LIMIT)) - (int) $memory_limit ) . 'M" -->
+';
+	} else {
+		echo '<!-- memory-limit="' . @ini_get('memory_limit') . '" -->
+';
+	}
+}
 
 // the main query
 query_posts( array(
@@ -79,7 +91,7 @@ $counter = 1;
 
 // start with the main URL
 ?>
-<url><loc><?php 
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"><url><loc><?php 
 		// hook for filter 'xml_sitemap_url' provides a string here and MUST get a string returned
 		$url = apply_filters( 'xml_sitemap_url', trailingslashit(get_bloginfo('url')) );
 		if ( is_string($url) ) echo esc_url( $url ); else echo esc_url( trailingslashit(get_bloginfo('url')) );

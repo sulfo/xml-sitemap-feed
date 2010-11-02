@@ -246,12 +246,13 @@ Yes. Upload the complete /xml-sitemap-feed/ directory to /wp-content/mu-plugins/
 == Upgrade Notice ==
 
 = 3.9 =
-Google News Sitemap!
+Google News Sitemap! And a workaround for memory limit errors for most sites.
 
 == Changelog ==
 
 = 3.9 =
 * Google News Sitemap
+* Memory limit error workaround (for most sites)
 
 = 3.8.8 =
 * Bugfix: PHP4 compatibility
