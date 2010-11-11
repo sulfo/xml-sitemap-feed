@@ -1,10 +1,10 @@
 === XML & Google News Sitemap Feed ===
 Contributors: RavanH
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravanhagen%40gmail%2ecom&item_name=XML%20Sitemap%20Feed&item_number=3%2e8&no_shipping=0&tax=0&bn=PP%2dDonationsBF&charset=UTF%2d8&lc=us
-Tags: xml sitemap, google news sitemap, sitemap.xml, Google, Google News, Yahoo, Bing, Live, MSN, seo, wpmu, feed, qtranslate, xlanguage
+Tags: xml sitemap, news sitemap, sitemap.xml, Google, Google News, Yahoo, Bing, Live, MSN, seo, wpmu, feed, qtranslate, xlanguage
 Requires at least: 2.6
 Tested up to: 3.0.1
-Stable tag: 3.8.8
+Stable tag: 3.9
 
 Feeds that comply with the XML Sitemap and Google News protocol for fast indexing by Google, Yahoo, Bing, Ask and others. Multi-Site and Multi-Lingual compatible!
 
@@ -45,7 +45,7 @@ There is nothing to translate. The sitemap protocol is international, there is n
 
 = Plugin developers =
 
-Since 3.8.5, there is a FILTER hook `xml_sitemap_url` available that lets you filter the URL for the sitemap reference in the generated robots.txt and the home URL in the sitemap. It accepts both string (for single url) and array (for multiple urls) and should receive the same. See pre-packaged examples of it's use in xml-sitemap.php for the qTranslate and xLanguage plugins.  
+Since 3.8.5, there is a FILTER hook `xml_sitemap_url` available that lets you filter the URL for the sitemap reference in the generated robots.txt and the home URL in the sitemap. It sends both string (for single url) and array (for multiple urls) and should receive the same. See pre-packaged examples of it's use in xml-sitemap.php for the qTranslate and xLanguage plugins.  
 
 = Credits =
 
@@ -91,11 +91,11 @@ Installed alongside [WordPress MU Sitewide Tags Pages](http://wordpress.org/exte
 
 Go to [Suggest News Content for Google News](http://www.google.com/support/news_pub/bin/request.py?contact_type=suggest_content) and submit your website info as detailed as possible there. Give them the URL(s) of your fresh new Google News Sitemap in the text field 'Other' at the bottom.
 
-You will also want to add the sitemap to your [Google Webmasters Tools account](https://www.google.com/webmasters/tools/). Create one if you don't have an account yet.
+You will also want to add the sitemap to your [Google Webmasters Tools account](https://www.google.com/webmasters/tools/) to check its validity and performance. Create an account if you don't have one yet.
 
-= My Google News Sitemap seems empty! =
+= My Google News Sitemap is empty! =
 
-The rules of the Google News game are that you do not feed the cookie monster any stale food. Older than 2 days is bad. You probably need to bake him some fresh news ;)
+The rules of the Google News game are that you do not feed the cookie monster any stale food. Older than 2 days is bad. You need to bake him some fresh bread ;)
 
 = How are the values for priority and changefreq calculated? =
 
@@ -126,13 +126,8 @@ No. In normal circumstances, your site will be indexed by the major search engin
 
 No. While other XML Sitemap plugins provide pinging to some search engines upon each post edit or publication, this plugin does not. There are two reasons for that:
 
-1. WordPress has a built-in pinging feature. Go in your WP Admin section to Settings > Writing and make sure that the text area under **Update services** contains at least 
-`
-http://rpc.pingomatic.com
-` 
-Read more on [Ping-O-Matic](http://pingomatic.com) about what excellent service you are actually getting _for free with every WordPress blog_ installation!
-
-2. For the average website, in my experience, pinging Google or others after each little change does not benefit anything except a theoretical smaller delay in re-indexation of your website. This is only theoretical because if your site is popular and active, major search engines will likely be crawling your site on a very regular basis anyway. And if, on the other hand, your site is not high on the agenda of the major search engines, they will likely give no priority to your pings at all.
+1. WordPress has a built-in pinging feature. Go in your WP Admin section to Settings > Writing and make sure that the text area under **Update services** contains at least `http://rpc.pingomatic.com`. Read more on [Ping-O-Matic](http://pingomatic.com) about what excellent service you are actually getting _for free with every WordPress blog_ installation!
+1. For the average website, in my experience, pinging Google or others after each little change does not benefit anything except a theoretical smaller delay in re-indexation of your website. This is only theoretical because if your site is popular and active, major search engines will likely be crawling your site on a very regular basis anyway. And if, on the other hand, your site is not high on the agenda of the major search engines, they will likely give no priority to your pings at all.
 
 You can always take a [Google Webmasters Tools account](https://www.google.com/webmasters/tools/) which will tell you many interesting things about your website, sitemap downloads, search terms and your visitors. Try it!
 
@@ -228,13 +223,9 @@ On some setups (usually using the WordPress MU Domain Mapping plugin) this error
 
 = Can I run this on a WPMU / WP3+ Multi-Site setup? =
 
-Yes. In fact, it has been designed for it. Tested on WPMU 2.9.2 and WPMS 3.0.1
+Yes. In fact, it has been designed for it. Tested on WPMU 2.9.2 and WPMS 3.0.1 both with normal activation and with Network Activate / Site Wide Activate.
 
-= Can I do a Network Activate on WP3.0 MS / Site Wide Activate on WPMU with this plugin ? =
-
-Yes.
-
-= Can I run this plugin from /mu-plugins/ on WP3.0 MS / WPMU ? =
+= Can I run this plugin from /mu-plugins/ on WP3.0 MS or WPMU ? =
 
 Yes. Upload the complete /xml-sitemap-feed/ directory to /wp-content/mu-plugins/ and move the file xml-sitemap.php one dir up.
 
