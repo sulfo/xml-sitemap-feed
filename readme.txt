@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravan
 Tags: xml sitemap, news sitemap, sitemap.xml, Google, Google News, Yahoo, Bing, Live, MSN, seo, wpmu, feed, qtranslate, xlanguage
 Requires at least: 2.6
 Tested up to: 3.0.1
-Stable tag: 3.9
+Stable tag: 3.9.1
 
 Feeds that comply with the XML Sitemap and Google News protocol for fast indexing by Google, Yahoo, Bing, Ask and others. Multi-Site and Multi-Lingual compatible!
 
@@ -236,10 +236,13 @@ Yes. Upload the complete /xml-sitemap-feed/ directory to /wp-content/mu-plugins/
 
 == Upgrade Notice ==
 
-= 3.9 =
-Google News Sitemap! And a workaround for memory limit errors for most sites.
+= 3.9.1 =
+XSS vulnerability fix release.
 
 == Changelog ==
+
+= 3.9.1 =
+* BUGFIX: XSS vulnerability in sitemap.xsl.php
 
 = 3.9 =
 * Google News Sitemap
