@@ -3,7 +3,7 @@
 Plugin Name: XML Sitemap Feed
 Plugin URI: http://4visions.nl/en/wordpress-plugins/xml-sitemap-feed/
 Description: Creates a feed that complies with the XML Sitemap protocol ready for indexing by Google, Yahoo, Bing, Ask and others. Happy with it? Please leave me a <strong><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravanhagen%40gmail%2ecom&item_name=XML%20Sitemap%20Feed&item_number=3%2e8&no_shipping=0&tax=0&bn=PP%2dDonationsBF&charset=UTF%2d8&lc=us">Tip</a></strong> for development and support time. Thanks :)
-Version: 3.9.1
+Version: 3.9.2
 Author: RavanH
 Author URI: http://4visions.nl/
 */
@@ -38,31 +38,32 @@ Author URI: http://4visions.nl/
  *				XMLSitemapFeed::qtranslate() in XMLSitemapFeed.class.php as an
  *				example.
  * ACTIONS
- *	[ none at this point, but feel free to request, suggest or code one :) ]
+ *	[ none at this point, but feel free to request, suggest or submit one :) ]
  *	
  */
 
 /* --------------------
  *      CONSTANTS
  * -------------------- */
-define('XMLSF_VERSION','3.9.1');
-define('XMLSF_MEMORY_LIMIT','128M');
+
+	define('XMLSF_VERSION','3.9.2');
+	define('XMLSF_MEMORY_LIMIT','128M');
 
 if (file_exists(dirname(__FILE__).'/xml-sitemap-feed'))
-	define('XMLSF_PLUGIN_DIR', dirname(__FILE__).'/xml-sitemap-feed');
+	define('XMLSF_PLUGIN_DIR', dirname(__FILE__) . '/xml-sitemap-feed/');
 else
-	define('XMLSF_PLUGIN_DIR', dirname(__FILE__));		
+	define('XMLSF_PLUGIN_DIR', dirname(__FILE__) . '/');		
 
 /* -----------------
  *      CLASS
  * ----------------- */
 
-if( class_exists('XMLSitemapFeed') || include( XMLSF_PLUGIN_DIR . '/XMLSitemapFeed.class.php' ) )
+if( class_exists('XMLSitemapFeed') || include( XMLSF_PLUGIN_DIR . 'XMLSitemapFeed.class.php' ) )
 	XMLSitemapFeed::go();
 
 /* -------------------------------------
  *      MISSING WORDPRESS FUNCTIONS
  * ------------------------------------- */
 
-include_once(XMLSF_PLUGIN_DIR . '/hacks.php');
+include_once(XMLSF_PLUGIN_DIR . 'hacks.php');
 

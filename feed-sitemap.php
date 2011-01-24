@@ -8,15 +8,15 @@
 status_header('200'); // force header('HTTP/1.1 200 OK') for sites without posts
 header('Content-Type: text/xml; charset=' . get_bloginfo('charset'), true);
 
-echo '<?xml version="1.0" encoding="'.get_bloginfo('charset').'"?><?xml-stylesheet type="text/xsl" href="'.get_option('siteurl').'/'.str_replace(ABSPATH,"", XMLSF_PLUGIN_DIR).'/sitemap.xsl.php?v='.XMLSF_VERSION.'"?>
-<!-- generated-on="'.date('Y-m-d\TH:i:s+00:00').'" -->
+echo '<?xml version="1.0" encoding="' . get_bloginfo('charset') . '"?><?xml-stylesheet type="text/xsl" href="' . plugins_url('',__FILE__) . '/sitemap.xsl.php?ver=' . XMLSF_VERSION . '"?>
+<!-- generated-on="' . date('Y-m-d\TH:i:s+00:00') . '" -->
 <!-- generator="XML & Google News Sitemap Feed plugin for WordPress" -->
 <!-- generator-url="http://4visions.nl/en/wordpress-plugins/xml-sitemap-feed/" -->
-<!-- generator-version="'.XMLSF_VERSION.'" -->
+<!-- generator-version="' . XMLSF_VERSION . '" -->
 ';
 
-// presets are changable
-// please read comments:
+// PRESETS are changable -- please read comments:
+
 $max_priority = 1.0;	// Maximum priority value for any URL in the sitemap; set to any other value between 0 and 1.
 $min_priority = 0;	// Minimum priority value for any URL in the sitemap; set to any other value between 0 and 1.
 			// NOTE: Changing these values will influence each URL's priority. Priority values are taken by 
@@ -30,7 +30,11 @@ $level_weight = 0.1;	// Makes a sub-page loose 10% for each level; set to any ot
 $month_weight = 0.1;	// Fall-back value normally ignored by automatic priority calculation, which
 			// makes a post loose 10% of priority monthly; set to any other value between 0 and 1.
 
-// editing below here is not advised!
+// /* 
+// ^^ PLEASE REMOVE the "//" in front of the line above IF your sitemap.xml 
+// does not continue after showing <!-- generator-version="..." -->
+
+// EDITING below here is NOT ADVICED!
 
 // Memory issue fix will try to increase allowed PHP memory size to XMLSF_MEMORY_LIMIT constant
 // as set in xml-sitemap.php if the current memory limit is lower than that.
@@ -42,7 +46,7 @@ if ( function_exists('memory_get_usage') && ( (int) @ini_get('memory_limit') < a
 		echo '<!-- memory-limit="' . @ini_get('memory_limit') . '" -->
 ';
 	}
-}
+} //  */
 
 // the main query
 query_posts( array(

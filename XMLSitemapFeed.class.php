@@ -29,25 +29,25 @@ class XMLSitemapFeed {
 		}
 
 		// DE-ACTIVATION
-		register_deactivation_hook( XMLSF_PLUGIN_DIR . '/xml-sitemap.php', array(__CLASS__, 'deactivate') );
+		register_deactivation_hook( XMLSF_PLUGIN_DIR . 'xml-sitemap.php', array(__CLASS__, 'deactivate') );
 	}
 
 	// FEEDS //
 	// set up the sitemap template
 	function load_template_sitemap() {
-		load_template( XMLSF_PLUGIN_DIR . '/feed-sitemap.php' );
+		load_template( XMLSF_PLUGIN_DIR . 'feed-sitemap.php' );
 	}
 
 	// set up the news sitemap template
 	function load_template_sitemap_news() {
-		load_template( XMLSF_PLUGIN_DIR . '/feed-sitemap-news.php' );
+		load_template( XMLSF_PLUGIN_DIR . 'feed-sitemap-news.php' );
 	}
 
 	// Create a new filtering function that will add a where clause to the query,
 	// used for the Google News Sitemap
 	function xml_sitemap_feed_news_filter_where($where = '') {
 	  //posts in the last 2 days
-	  $where .= " AND post_date > '" . date('Y-m-d', strtotime('-2 days')) . "'";
+	  $where .= " AND post_date > '" . date('Y-m-d', strtotime('-49 hours')) . "'";
 	  return $where;
 	}
 

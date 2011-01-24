@@ -3,14 +3,14 @@ Contributors: RavanH
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravanhagen%40gmail%2ecom&item_name=XML%20Sitemap%20Feed&item_number=3%2e8&no_shipping=0&tax=0&bn=PP%2dDonationsBF&charset=UTF%2d8&lc=us
 Tags: xml sitemap, news sitemap, sitemap.xml, Google, Google News, Yahoo, Bing, Live, MSN, seo, wpmu, feed, qtranslate, xlanguage
 Requires at least: 2.6
-Tested up to: 3.0.3
+Tested up to: 3.1
 Stable tag: 3.9.1
 
 Feeds that comply with the XML Sitemap and Google News protocol for fast indexing by Google, Yahoo, Bing, Ask and others. Multi-Site and Multi-Lingual compatible!
 
 == Description ==
 
-This plugin dynamically creates feeds that comply with the **XML Sitemap** and the **Google News Sitemap** protocol. There are no options to be set nor file or dir access rights to be tampered with and the feeds become instantly available. One XML Sitemap on yourblogurl.tld/sitemap.xml (or yourblogurl.tld/?feed=sitemap), ready for indexing by search engines like Google, Yahoo, MSN, Ask.com and others. And one Google News Sitemap on yourblogurl.tld/sitemap-news.xml (or yourblogurl.tld/?feed=sitemap-news), ready for indexing by Google News. Please read the FAQ's for info on how to get your articles listed on Google News.
+This plugin dynamically creates feeds that comply with the **XML Sitemap** and the **Google News Sitemap** protocol. Multi-Site and Multi-Lingual compatible and there are no options to be set nor file or dir access rights to be tampered with and the feeds become instantly available. One XML Sitemap on yourblogurl.tld/sitemap.xml (or yourblogurl.tld/?feed=sitemap), ready for indexing by search engines like Google, Yahoo, MSN, Ask.com and others. And one Google News Sitemap on yourblogurl.tld/sitemap-news.xml (or yourblogurl.tld/?feed=sitemap-news), ready for indexing by Google News. Please read the FAQ's for info on how to get your articles listed on Google News.
 
 **Compatible with caching plugins** like Super Cache, W3 Total Cache and Quick Cache that cache feeds, allowing better performance to serve the hungry (impatient) spider.
 
@@ -236,21 +236,25 @@ Yes. Upload the complete /xml-sitemap-feed/ directory to /wp-content/mu-plugins/
 
 == Upgrade Notice ==
 
-= 3.9.1 =
-XSS vulnerability fix release.
+= 3.9.2 =
+Basic Google News feed stylesheet and XSS vulnerability improvement.
 
 == Changelog ==
 
+= 3.9.2 =
+* Basic Google News feed stylesheet
+* improvement on XSS vulnerability fix
+
 = 3.9.1 =
-* BUGFIX: XSS vulnerability in sitemap.xsl.php
+* SECURITY: XSS vulnerability in sitemap.xsl.php
 
 = 3.9 =
 * Google News Sitemap
 * Memory limit error workaround (for most sites)
 
 = 3.8.8 =
-* Bugfix: PHP4 compatibility
-* Bugfix: stylesheet URL when installed in mu-plugins
+* BUGFIX: PHP4 compatibility
+* BUGFIX: stylesheet URL when installed in mu-plugins
 * core change to class
 * minified sitemap output by default
 
@@ -291,7 +295,7 @@ XSS vulnerability fix release.
 * WP 3.0 (normal and MS mode) ready
 
 = 3.4 =
-* bugfix: use home instead of siteurl for blog url for sitemap reference in robots.txt
+* BUGFIX: use home instead of siteurl for blog url for sitemap reference in robots.txt
 * code streamline and cleanup
 
 = 3.3 =
@@ -299,13 +303,13 @@ XSS vulnerability fix release.
 
 = 3.2 =
 * rewrite and add_feed calls improvements
-* bugfix: double entry when static page is frontpage
+* BUGFIX: double entry when static page is frontpage
 
 = 3.0 =
 * added styling to the xml feed to make it human readable
 
 = 2.1 =
-* bugfix: lastmod timezone offset displayed wrong (extra space and missing double-colon)
+* BUGFIX: lastmod timezone offset displayed wrong (extra space and missing double-colon)
 
 = 2.0 =
 * priority calculation based on comments and age
@@ -313,7 +317,7 @@ XSS vulnerability fix release.
 
 = 1.0 =
 * changed feed template location to avoid the need to relocate files outside the plugins folder
-* bugfix: `get_post_modified_time` instead of `get_post_time`
+* BUGFIX: `get_post_modified_time` instead of `get_post_time`
 
 = 0.1 =
 * rework from Patrick Chia's [Standard XML Sitemaps](http://wordpress.org/extend/plugins/standard-xml-sitemap/)
