@@ -5,7 +5,8 @@
 
 class XMLSitemapFeed {
 
-	function go() {		
+	function go() {	
+		global $wpdb;
 		if ( '0' == get_option( 'blog_public' ) || ( $wpdb->blogid && function_exists('get_site_option') && get_site_option('tags_blog_id') == $wpdb->blogid ) ) {
 			// we are on a blog that blocks spiders!
 			// create NO sitemap
@@ -29,18 +30,18 @@ class XMLSitemapFeed {
 		}
 
 		// DE-ACTIVATION
-		register_deactivation_hook( XMLSF_PLUGIN_DIR . 'xml-sitemap.php', array(__CLASS__, 'deactivate') );
+		register_deactivation_hook( XMLSF_PLUGIN_DIR . '/xml-sitemap.php', array(__CLASS__, 'deactivate') );
 	}
 
 	// FEEDS //
 	// set up the sitemap template
 	function load_template_sitemap() {
-		load_template( XMLSF_PLUGIN_DIR . 'feed-sitemap.php' );
+		load_template( XMLSF_PLUGIN_DIR . '/feed-sitemap.php' );
 	}
 
 	// set up the news sitemap template
 	function load_template_sitemap_news() {
-		load_template( XMLSF_PLUGIN_DIR . 'feed-sitemap-news.php' );
+		load_template( XMLSF_PLUGIN_DIR . '/feed-sitemap-news.php' );
 	}
 
 	// Create a new filtering function that will add a where clause to the query,

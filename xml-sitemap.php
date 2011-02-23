@@ -47,23 +47,23 @@ Author URI: http://4visions.nl/
  * -------------------- */
 
 	define('XMLSF_VERSION','3.9.2');
-	define('XMLSF_MEMORY_LIMIT','128M');
+	define('XMLSF_MEMORY_LIMIT','256M');
 
 if (file_exists(dirname(__FILE__).'/xml-sitemap-feed'))
-	define('XMLSF_PLUGIN_DIR', dirname(__FILE__) . '/xml-sitemap-feed/');
+	define('XMLSF_PLUGIN_DIR', dirname(__FILE__) . '/xml-sitemap-feed');
 else
-	define('XMLSF_PLUGIN_DIR', dirname(__FILE__) . '/');		
+	define('XMLSF_PLUGIN_DIR', dirname(__FILE__));		
 
 /* -----------------
  *      CLASS
  * ----------------- */
 
-if( class_exists('XMLSitemapFeed') || include( XMLSF_PLUGIN_DIR . 'XMLSitemapFeed.class.php' ) )
+if( class_exists('XMLSitemapFeed') || include( XMLSF_PLUGIN_DIR . '/XMLSitemapFeed.class.php' ) )
 	XMLSitemapFeed::go();
 
 /* -------------------------------------
  *      MISSING WORDPRESS FUNCTIONS
  * ------------------------------------- */
 
-include_once(XMLSF_PLUGIN_DIR . 'hacks.php');
+include_once(XMLSF_PLUGIN_DIR . '/hacks.php');
 

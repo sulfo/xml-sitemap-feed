@@ -8,12 +8,13 @@
 status_header('200'); // force header('HTTP/1.1 200 OK') for sites without posts
 header('Content-Type: text/xml; charset=' . get_bloginfo('charset'), true);
 
-echo '<?xml version="1.0" encoding="' . get_bloginfo('charset') . '"?><?xml-stylesheet type="text/xsl" href="' . plugins_url('',__FILE__) . '/sitemap.xsl.php?ver=' . XMLSF_VERSION . '"?>
+echo '<?xml version="1.0" encoding="' . get_bloginfo('charset') . '"?><?xml-stylesheet type="text/xsl" href="' . plugins_url('/sitemap.xsl.php',XMLSF_PLUGIN_DIR . '/feed-sitemap.php') . '?ver=' . XMLSF_VERSION . '"?>
 <!-- generated-on="' . date('Y-m-d\TH:i:s+00:00') . '" -->
 <!-- generator="XML & Google News Sitemap Feed plugin for WordPress" -->
 <!-- generator-url="http://4visions.nl/en/wordpress-plugins/xml-sitemap-feed/" -->
 <!-- generator-version="' . XMLSF_VERSION . '" -->
-';
+<!-- dir="' . WP_PLUGIN_DIR . '" -->
+<!-- file="' . PLUGINDIR . '" -->';
 
 // PRESETS are changable -- please read comments:
 
@@ -51,10 +52,10 @@ if ( function_exists('memory_get_usage') && ( (int) @ini_get('memory_limit') < a
 // the main query
 query_posts( array(
 	'post_type' => 'any', 
-//	'post_status' => 'publish', 
-//	'caller_get_posts' => 1,
-//	'nopaging' => true,
-	'posts_per_page' => -1 )
+	'post_status' => 'publish',
+	'orderby' => 'modified',
+	'ignore_sticky_posts' => 1,
+	'nopaging' => true )
 ); 
 
 global $wp_query;
