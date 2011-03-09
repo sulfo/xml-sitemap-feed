@@ -13,8 +13,7 @@ echo '<?xml version="1.0" encoding="' . get_bloginfo('charset') . '"?><?xml-styl
 <!-- generator="XML & Google News Sitemap Feed plugin for WordPress" -->
 <!-- generator-url="http://4visions.nl/en/wordpress-plugins/xml-sitemap-feed/" -->
 <!-- generator-version="' . XMLSF_VERSION . '" -->
-<!-- dir="' . WP_PLUGIN_DIR . '" -->
-<!-- file="' . PLUGINDIR . '" -->';
+';
 
 // PRESETS are changable -- please read comments:
 

@@ -47,6 +47,8 @@ Author URI: http://4visions.nl/
  * -------------------- */
 
 	define('XMLSF_VERSION','3.9.2');
+
+if(!defined('XMLSF_MEMORY_LIMIT'))
 	define('XMLSF_MEMORY_LIMIT','256M');
 
 if (file_exists(dirname(__FILE__).'/xml-sitemap-feed'))
