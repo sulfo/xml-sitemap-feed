@@ -189,7 +189,9 @@ Frederick Townes, developer of **W3 Total Cache**, says: "There's a checkbox opt
 
 = I get an ERROR when opening the sitemap or robots.txt! = 
 
-The following errors might be encountered:
+The absolute first thing you need to check is your blogs privacy settings. Go to **Settings > Privacy** and make sure you are **allowing search engines to index your site**. If they are blocked, your sitemap will _not_ be available.
+
+If that did not solve the issue, check the following errors that might be encountered along with their respective solutions:
 
 **404 page instead of my sitemap.xml**
 
@@ -217,7 +219,7 @@ Allow: /
 `
 and upload it to your web root...
 
-** Error loading stylesheet: An unknown error has occurred **
+**Error loading stylesheet: An unknown error has occurred**
 
 On some setups (usually using the WordPress MU Domain Mapping plugin) this error occurs. The problem is known, the cause is not... Until I find out why this is happening, please take comfort in knowing that this only affects reading the sitemap in normal browsers but will NOT affect any spidering/indexing on your site. The sitemap is still readable by all search engines! 
 
