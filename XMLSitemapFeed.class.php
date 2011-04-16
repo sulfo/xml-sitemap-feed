@@ -24,7 +24,8 @@ class XMLSitemapFeed {
 
 			// REWRITES
 			add_filter('generate_rewrite_rules', array(__CLASS__, 'rewrite') );
-
+			add_filter('user_trailingslashit', array(__CLASS__, 'trailingslash') );
+			
 			// ROBOTSTXT
 			add_action('do_robotstxt', array(__CLASS__, 'robots') );
 		}
@@ -47,7 +48,7 @@ class XMLSitemapFeed {
 	// Create a new filtering function that will add a where clause to the query,
 	// used for the Google News Sitemap
 	function xml_sitemap_feed_news_filter_where($where = '') {
-	  //posts in the last 2 days
+	  //posts from the last 2 days (+ 1 hour to be sure)
 	  $where .= " AND post_date > '" . date('Y-m-d', strtotime('-49 hours')) . "'";
 	  return $where;
 	}
@@ -60,6 +61,19 @@ class XMLSitemapFeed {
 			'sitemap-news.xml$' => $wp_rewrite->index . '?feed=sitemap-news',
 		);
 		$wp_rewrite->rules = $feed_rules + $wp_rewrite->rules;
+	}
+
+	/**
+	 * Remove the trailing slash from permalinks that have an extension,
+	 * such as /sitemap.xml (thanks to Permalink Editor plugin for WordPress)
+	 *
+	 * @param string $request
+	 */
+	function trailingslash($request) {
+		if (pathinfo($request, PATHINFO_EXTENSION)) {
+			return untrailingslashit($request);
+		}
+		return trailingslashit($request);
 	}
 
 	// ROBOTSTXT //
@@ -115,7 +129,7 @@ class XMLSitemapFeed {
 				foreach($xlanguage->options['language'] as $language)
 					$return[] = $xlanguage->filter_link_in_lang($url,$language['code']);
 	 	else // not an array? just convert the string.
-	       		$return = $xlanguage->filter_link($input);
+	       	$return = $xlanguage->filter_link($input);
 
 		return $return;
 	}

@@ -50,7 +50,7 @@ if ( have_posts() ) :
 
 		// TODO : include categories too ??
 
-		?><url><loc><?php echo esc_url( get_permalink() ) ?></loc><news:news><news:publication><news:name><?php if(defined('XMLSF_GOOGLE_NEWS_NAME')) echo XMLSF_GOOGLE_NEWS_NAME; else bloginfo('name'); ?></news:name><news:language><?php echo get_option('rss_language'); ?></news:language></news:publication><news:publication_date><?php echo mysql2date('Y-m-d\TH:i:s+00:00', $post->post_date_gmt, false); ?></news:publication_date><news:title><?php the_title(); ?></news:title><news:keywords><?php $comma = 0; if ($keys_arr) foreach($keys_arr as $key) { if ( $comma == 1 ) { echo ', '; } echo $key->name; $comma = 1; } ?></news:keywords><news:genres>Blog</news:genres></news:news></url><?php 
+		?><url><loc><?php echo esc_url( get_permalink() ) ?></loc><news:news><news:publication><news:name><?php if(defined('XMLSF_GOOGLE_NEWS_NAME')) echo strip_tags(XMLSF_GOOGLE_NEWS_NAME); else echo strip_tags(get_bloginfo('name')); ?></news:name><news:language><?php echo get_option('rss_language'); ?></news:language></news:publication><news:publication_date><?php echo mysql2date('Y-m-d\TH:i:s+00:00', $post->post_date_gmt, false); ?></news:publication_date><news:title><?php echo strip_tags(get_the_title(get_the_ID())); ?></news:title><news:keywords><?php $comma = 0; if ($keys_arr) foreach($keys_arr as $key) { if ( $comma == 1 ) { echo ', '; } echo $key->name; $comma = 1; } ?></news:keywords><news:genres>Blog</news:genres></news:news></url><?php 
 
 		$counter++;
 

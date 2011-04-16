@@ -3,7 +3,7 @@ Contributors: RavanH
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravanhagen%40gmail%2ecom&item_name=XML%20Sitemap%20Feed&item_number=3%2e8&no_shipping=0&tax=0&bn=PP%2dDonationsBF&charset=UTF%2d8&lc=us
 Tags: xml sitemap, news sitemap, sitemap.xml, Google, Google News, Yahoo, Bing, Live, MSN, seo, wpmu, feed, qtranslate, xlanguage
 Requires at least: 2.6
-Tested up to: 3.1
+Tested up to: 3.1.1
 Stable tag: 3.9.1
 
 Feeds that comply with the XML Sitemap and Google News protocol for fast indexing by Google, Yahoo, Bing, Ask and others. Multi-Site and Multi-Lingual compatible!
@@ -12,7 +12,7 @@ Feeds that comply with the XML Sitemap and Google News protocol for fast indexin
 
 This plugin dynamically creates feeds that comply with the **XML Sitemap** and the **Google News Sitemap** protocol. Multi-Site and Multi-Lingual compatible and there are no options to be set nor file or dir access rights to be tampered with and the feeds become instantly available. One XML Sitemap on yourblogurl.tld/sitemap.xml (or yourblogurl.tld/?feed=sitemap), ready for indexing by search engines like Google, Yahoo, MSN, Ask.com and others. And one Google News Sitemap on yourblogurl.tld/sitemap-news.xml (or yourblogurl.tld/?feed=sitemap-news), ready for indexing by Google News. Please read the FAQ's for info on how to get your articles listed on Google News.
 
-**Compatible with caching plugins** like Super Cache, W3 Total Cache and Quick Cache that cache feeds, allowing better performance to serve the hungry (impatient) spider.
+**Compatible with caching plugins** like WP Super Cache, W3 Total Cache and Quick Cache that cache feeds, allowing a faster serving to the hungry, impatient (!) spider.
 
 **qTranslate and xLanguage compatible!** Tested in Pre-Path Mode and Query Mode. Each language on your site will have its own XML Sitemap.
 
@@ -37,7 +37,7 @@ References are automatically added to the dynamically created **robots.txt** on 
 * The feed contains the front page and all posts and pages but _excludes_ category, tag and other dynamic archive pages. This should not be a problem and by most it is even _advised_ to exclude them. There are SEO plugins around that actively block these archive pages from search engines.
 * Except by _re-saving_ older posts from time to time (keeping the lastmod date fairly recent) there is no way to manually control the priority of individual posts/pages in the sitemap. See the Faq's for more.
 * This plugin does not ping any search engines. But then, WordPress does this by default already via the Ping-o-Matic service so why bother? See the Faq's for more.
-* Because the feed is dynamically created, on _very_ large sites the creation process might take a while. Search engines are said to have a short fuse about waiting for a sitemap, so you may want to consider using a cache plugin that also (pre)caches feeds. If you are unfamiliar with caching and server setup start with an easy caching plugin such as **Quick Cache**. For more options (and better performance?) you might find solace in **WP Super Cache** or **W3 Total Cache**.
+* Because the feed is dynamically created, on _very_ large sites the creation process might take a while. Search engines are said to have a short fuse about waiting for a sitemap, so you may want to consider using a cache plugin that also (pre)caches feeds. If you are unfamiliar with caching and server setup start with an easy caching plugin such as **Quick Cache**. For more options (and better performance) you might find solace in **WP Super Cache** or **W3 Total Cache**.
 
 = Translations =
 
@@ -49,7 +49,7 @@ Since 3.8.5, there is a FILTER hook `xml_sitemap_url` available that lets you fi
 
 = Credits =
 
-XML Sitemap Feed was originally based on the (discontinued?) plugin Standard XML Sitemap Generator by Patrick Chia. Many thanks! Since then, it has been completely rewritten and extended in many ways.
+XML Sitemap Feed was originally based on the discontinued plugin Standard XML Sitemap Generator by Patrick Chia. Many thanks! Since then, it has been completely rewritten and extended in many ways.
 
 == Installation ==
 
@@ -246,6 +246,7 @@ Basic Google News feed stylesheet and XSS vulnerability improvement.
 = 3.9.2 =
 * Basic Google News feed stylesheet
 * improvement on XSS vulnerability fix
+* Fixed trailing slash
 
 = 3.9.1 =
 * SECURITY: XSS vulnerability in sitemap.xsl.php
