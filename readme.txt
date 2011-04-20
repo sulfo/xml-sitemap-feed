@@ -10,13 +10,15 @@ Feeds that comply with the XML Sitemap and Google News protocol for fast indexin
 
 == Description ==
 
-This plugin dynamically creates feeds that comply with the **XML Sitemap** and the **Google News Sitemap** protocol. There are no options to be set nor file or dir access rights to be tampered with and the feeds become instantly available. One XML Sitemap on yourblogurl.tld/sitemap.xml (or yourblogurl.tld/?feed=sitemap), ready for indexing by search engines like Google, Yahoo, MSN, Ask.com and others. And one Google News Sitemap on yourblogurl.tld/sitemap-news.xml (or yourblogurl.tld/?feed=sitemap-news), ready for indexing by Google News. Please read the FAQ's for info on how to get your articles listed on Google News.
+This plugin dynamically creates feeds that comply with the **XML Sitemap** and the **Google News Sitemap** protocol. It is Multi-Site and Multi-Lingual compatible and there are no options to be set nor file or dir access rights to be tampered with. 
+
+You or your site owners on your Multi-site network will not be bothered with complicated settings like other XML Sitemap plugins. XML sitemap values like ChangeFreq and URL Priority is auto-calculated based on post age and comment activity.
+
+The feeds become instantly available: One XML Sitemap on yourblogurl.tld/sitemap.xml (or yourblogurl.tld/?feed=sitemap), ready for indexing by search engines like Google, Yahoo, MSN, Ask.com and others. And one Google News Sitemap on yourblogurl.tld/sitemap-news.xml (or yourblogurl.tld/?feed=sitemap-news), ready for indexing by Google News. Both are automatically referenced in the dynamically created **robots.txt** on yourblogurl.tld/robots.txt to tell search engines where to find your XML Sitemaps.
 
 **Compatible with caching plugins** like Super Cache, W3 Total Cache and Quick Cache that cache feeds, allowing better performance to serve the hungry (impatient) spider.
 
 **qTranslate and xLanguage compatible!** Tested in Pre-Path Mode and Query Mode. Each language on your site will have its own XML Sitemap.
-
-References are automatically added to the dynamically created **robots.txt** on yourblogurl.tld/robots.txt to tell search engines where to find your XML Sitemaps. 
 
 **NOTES:** 
 
