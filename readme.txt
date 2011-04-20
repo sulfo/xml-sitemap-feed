@@ -10,13 +10,17 @@ Feeds that comply with the XML Sitemap and Google News protocol for fast indexin
 
 == Description ==
 
-This plugin dynamically creates feeds that comply with the **XML Sitemap** and the **Google News Sitemap** protocol. Multi-Site and Multi-Lingual compatible and there are no options to be set nor file or dir access rights to be tampered with and the feeds become instantly available. One XML Sitemap on yourblogurl.tld/sitemap.xml (or yourblogurl.tld/?feed=sitemap), ready for indexing by search engines like Google, Yahoo, MSN, Ask.com and others. And one Google News Sitemap on yourblogurl.tld/sitemap-news.xml (or yourblogurl.tld/?feed=sitemap-news), ready for indexing by Google News. Please read the FAQ's for info on how to get your articles listed on Google News.
+This plugin dynamically creates feeds that comply with the **XML Sitemap** and the **Google News Sitemap** protocol. It is Multi-Site and Multi-Lingual compatible and there are no options to be set nor file or dir access rights to be tampered with. 
 
-**Compatible with caching plugins** like WP Super Cache, W3 Total Cache and Quick Cache that cache feeds, allowing a faster serving to the hungry, impatient (!) spider.
+You or your site owners on your Multi-site network will not be bothered with complicated settings like other XML Sitemap plugins. XML sitemap values like ChangeFreq and URL Priority is auto-calculated based on post age and comment activity.
 
-**qTranslate and xLanguage compatible!** Tested in Pre-Path Mode and Query Mode. Each language on your site will have its own XML Sitemap.
+The feeds become instantly available: One XML Sitemap on yourblogurl.tld/sitemap.xml (or yourblogurl.tld/?feed=sitemap), ready for indexing by search engines like Google, Yahoo, MSN, Ask.com and others. And one Google News Sitemap on yourblogurl.tld/sitemap-news.xml (or yourblogurl.tld/?feed=sitemap-news), ready for indexing by Google News. Both are automatically referenced in the dynamically created **robots.txt** on yourblogurl.tld/robots.txt to tell search engines where to find your XML Sitemaps.
 
-References are automatically added to the dynamically created **robots.txt** on yourblogurl.tld/robots.txt to tell search engines where to find your XML Sitemaps. 
+Please read the FAQ's for info on how to get your articles listed on Google News.
+
+**Compatible with caching plugins** like WP Super Cache, W3 Total Cache and Quick Cache that cache feeds, allowing a faster serving to the hungry, impatient (!) spiders.
+
+**qTranslate and xLanguage compatible!** Tested in Pre-Path Mode and Query Mode. Each language on your site will have its own XML Sitemap. 
 
 **NOTES:** 
 
@@ -38,6 +42,7 @@ References are automatically added to the dynamically created **robots.txt** on 
 * Except by _re-saving_ older posts from time to time (keeping the lastmod date fairly recent) there is no way to manually control the priority of individual posts/pages in the sitemap. See the Faq's for more.
 * This plugin does not ping any search engines. But then, WordPress does this by default already via the Ping-o-Matic service so why bother? See the Faq's for more.
 * Because the feed is dynamically created, on _very_ large sites the creation process might take a while. Search engines are said to have a short fuse about waiting for a sitemap, so you may want to consider using a cache plugin that also (pre)caches feeds. If you are unfamiliar with caching and server setup start with an easy caching plugin such as **Quick Cache**. For more options (and better performance) you might find solace in **WP Super Cache** or **W3 Total Cache**.
+* On **VERY** large sites (read: over 10.000 posts) with limited memory assigned to PHP, the generation of the sitemap might cause a problem when the process runs out of memory. See the FAQ's for tips to increase the PHP memory limit on your server.
 
 = Translations =
 
@@ -50,6 +55,7 @@ Since 3.8.5, there is a FILTER hook `xml_sitemap_url` available that lets you fi
 = Credits =
 
 XML Sitemap Feed was originally based on the discontinued plugin Standard XML Sitemap Generator by Patrick Chia. Many thanks! Since then, it has been completely rewritten and extended in many ways.
+
 
 == Installation ==
 
@@ -85,7 +91,16 @@ The plugin works best from the **/mu-plugins/** folder where it runs quietly in 
 
 Installed alongside [WordPress MU Sitewide Tags Pages](http://wordpress.org/extend/plugins/wordpress-mu-sitewide-tags/), XML Sitemap Feed will **not** create a sitemap.xml nor change robots.txt for any **tag blogs**. This is done deliberately because they would be full of links outside the tags blogs own domain and subsequently ignored (or worse: penalised) by Google.
 
+
 == Frequently Asked Questions ==
+
+= Can I run this on a WPMU / WP3+ Multi-Site setup? =
+
+Yes. In fact, it has been designed for it. Tested on WPMU 2.9.2 and WPMS 3.0.1 both with normal activation and with Network Activate / Site Wide Activate.
+
+= Can I run this plugin from /mu-plugins/ on WP3.0 MS or WPMU ? =
+
+Yes. Upload the complete /xml-sitemap-feed/ directory to /wp-content/mu-plugins/ and move the file xml-sitemap.php one dir up.
 
 = How do I get my latest articles listed on Google News? =
 
@@ -223,23 +238,24 @@ and upload it to your web root...
 
 On some setups (usually using the WordPress MU Domain Mapping plugin) this error occurs. The problem is known, the cause is not... Until I find out why this is happening, please take comfort in knowing that this only affects reading the sitemap in normal browsers but will NOT affect any spidering/indexing on your site. The sitemap is still readable by all search engines! 
 
-= Can I run this on a WPMU / WP3+ Multi-Site setup? =
+= I've got a VERY large website and the sitemap does not work =
 
-Yes. In fact, it has been designed for it. Tested on WPMU 2.9.2 and WPMS 3.0.1 both with normal activation and with Network Activate / Site Wide Activate.
+You might be experiencing an issue with your servers PHP memory limit. The plugin attempts to increase the memory limit to 256M by itself but in some rare cases that does not work. Or your site is so big that that is not even enough... In those cases, you should see a messages like `Allowed memory size of xxxxxx bytes exhausted.` in your server/account error log file.
 
-= Can I run this plugin from /mu-plugins/ on WP3.0 MS or WPMU ? =
+Read more on (Increasing memory allocated to PHP)[http://codex.wordpress.org/Editing_wp-config.php#Increasing_memory_allocated_to_PHP] (try a value higher than 256M) or ask your hosting provider what you can do.
 
-Yes. Upload the complete /xml-sitemap-feed/ directory to /wp-content/mu-plugins/ and move the file xml-sitemap.php one dir up.
 
 == Screenshots ==
 
 1. XML Sitemap feed viewed in a normal browser. For human eyes only ;)
 2. XML Sitemap source as read by search engines.
 
+
 == Upgrade Notice ==
 
 = 3.9.2 =
 Basic Google News feed stylesheet and XSS vulnerability improvement.
+
 
 == Changelog ==
 
