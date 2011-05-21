@@ -30,7 +30,7 @@ $level_weight = 0.1;	// Makes a sub-page loose 10% for each level; set to any ot
 $month_weight = 0.1;	// Fall-back value normally ignored by automatic priority calculation, which
 			// makes a post loose 10% of priority monthly; set to any other value between 0 and 1.
 
-// EDITING below here is NOT ADVICED!
+// EDITING below here is NOT ADVISED!
 
 // Memory issue fix will try to increase allowed PHP memory size to XMLSF_MEMORY_LIMIT constant
 // as set in xml-sitemap.php if the current memory limit is lower than that.
@@ -39,21 +39,22 @@ if ( function_exists('memory_get_usage') ) {
 ';
 	if ( (int) @ini_get('memory_limit') < abs(intval(XMLSF_MEMORY_LIMIT)) ) {
 		if ( $memory_limit = @ini_set('memory_limit', XMLSF_MEMORY_LIMIT) )
-			echo '<!-- memory-limit-increase="' . ( abs(intval(XMLSF_MEMORY_LIMIT)) - (int) $memory_limit ) . 'M" -->
+			echo '<!-- memory-limit increased ' . ( abs(intval(XMLSF_MEMORY_LIMIT)) - (int) $memory_limit ) . 'M to ' . abs(intval(XMLSF_MEMORY_LIMIT)) . 'M successfully -->
 ';
 		else
-			echo '<!-- memory-limit-increase: failed -->
+			echo '<!-- memory-limit increase failed, trying anyway... -->
 ';
 	}
 }
 
 // the main query
 query_posts( array(
-	'post_type' => 'any', 
+	'post_type' => XMLSF_POST_TYPE, 
 	'post_status' => 'publish',
 	'orderby' => 'modified',
 	'ignore_sticky_posts' => 1,
-	'nopaging' => true )
+	'nopaging' => true 
+	)
 ); 
 
 global $wp_query;
