@@ -23,6 +23,7 @@ $maxURLS = 1000;	// maximum number of URLs allowed in a news sitemap.
 add_filter('posts_where', array('XMLSitemapFeed','xml_sitemap_feed_news_filter_where'), 10, 1 );
 
 // Perform the query, the filter will be applied automatically
+// TODO: test if a new query_posts really is necessery here... how does caller_get_posts perform on feeds and can we dump posts_per_page and leave the limit up to WP user settings?
 query_posts( array(
 	'post_type' => 'post', 
 	'caller_get_posts' => 1,
@@ -38,23 +39,37 @@ $wp_query->is_feed = true;	// force is_feed() condition to true so WP Super Cach
 // prepare counter to limit the number of URLs to the absolute max of $maxURLS
 $counter = 1;
 
-if ( have_posts() ) : 
-	// loop away!
-	while ( have_posts() && $counter < $maxURLS ) : the_post();
+if ( !have_posts() ) :
+	// No posts? Then go and get at least one last post to prevent GWT validation error.
+	// Remove the filtering function
+	remove_filter('posts_where', array('XMLSitemapFeed','xml_sitemap_feed_news_filter_where'), 10, 1 );
 
-		// check if we are not dealing with an external URL :: Thanks, Francois Deschenes :)
-		if(!preg_match('/^' . preg_quote(get_bloginfo('url'), '/') . '/i', get_permalink())) continue;
+	// Perform the alternative query
+	query_posts( array(
+		'post_type' => 'post', 
+		'caller_get_posts' => 1,
+		'posts_per_page' => 1 
+		)
+	);
 	
-		// get the article tags
-		$keys_arr = get_the_tags();
+endif; 
+ 
+// loop away!
+while ( have_posts() && $counter < $maxURLS ) : the_post();
 
-		// TODO : include categories too ??
+	// check if we are not dealing with an external URL :: Thanks, Francois Deschenes :)
+	if(!preg_match('/^' . preg_quote(get_bloginfo('url'), '/') . '/i', get_permalink())) continue;
 
-		?><url><loc><?php echo esc_url( get_permalink() ) ?></loc><news:news><news:publication><news:name><?php if(defined('XMLSF_GOOGLE_NEWS_NAME')) echo strip_tags(XMLSF_GOOGLE_NEWS_NAME); else echo strip_tags(get_bloginfo('name')); ?></news:name><news:language><?php echo get_option('rss_language'); ?></news:language></news:publication><news:publication_date><?php echo mysql2date('Y-m-d\TH:i:s+00:00', $post->post_date_gmt, false); ?></news:publication_date><news:title><?php echo strip_tags(get_the_title(get_the_ID())); ?></news:title><news:keywords><?php $comma = 0; if ($keys_arr) foreach($keys_arr as $key) { if ( $comma == 1 ) { echo ', '; } echo $key->name; $comma = 1; } ?></news:keywords><news:genres>Blog</news:genres></news:news></url><?php 
+	// get the article tags
+	$keys_arr = get_the_tags();
 
-		$counter++;
+	// TODO : include categories too ??
 
-	endwhile; 
+	?><url><loc><?php echo esc_url( get_permalink() ) ?></loc><news:news><news:publication><news:name><?php if(defined('XMLSF_GOOGLE_NEWS_NAME')) echo strip_tags(XMLSF_GOOGLE_NEWS_NAME); else echo strip_tags(get_bloginfo('name')); ?></news:name><news:language><?php echo get_option('rss_language'); ?></news:language></news:publication><news:publication_date><?php echo mysql2date('Y-m-d\TH:i:s+00:00', $post->post_date_gmt, false); ?></news:publication_date><news:title><?php echo strip_tags(get_the_title(get_the_ID())); ?></news:title><news:keywords><?php $comma = 0; if ($keys_arr) foreach($keys_arr as $key) { if ( $comma == 1 ) { echo ', '; } echo $key->name; $comma = 1; } ?></news:keywords><news:genres>Blog</news:genres></news:news></url><?php 
+
+	$counter++;
+
+endwhile; 
 
 // Now what if there are no posts less than 48 hours old? We get an urlset without url nodes...
 // ... resulting in an error by Google Webmaster Tools :(
@@ -66,7 +81,6 @@ if ( have_posts() ) :
 //	bloginfo('name');
 //	echo '</news:name><news:language>' . get_option('rss_language') . '</news:language></news:publication><news:publication_date></news:publication_date><news:title></news:title><news:keywords></news:keywords><news:genres>Blog</news:genres></news:news></url>';
 
-endif; 
 	// TODO see what we can do for :
 	//<news:access>Subscription</news:access> (for now always leave off)
 	// and

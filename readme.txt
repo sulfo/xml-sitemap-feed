@@ -3,7 +3,7 @@ Contributors: RavanH
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravanhagen%40gmail%2ecom&item_name=XML%20Sitemap%20Feed&item_number=3%2e8&no_shipping=0&tax=0&bn=PP%2dDonationsBF&charset=UTF%2d8&lc=us
 Tags: xml sitemap, news sitemap, sitemap.xml, Google, Google News, Yahoo, Bing, Live, MSN, seo, wpmu, feed, qtranslate, xlanguage
 Requires at least: 2.6
-Tested up to: 3.1.1
+Tested up to: 3.2
 Stable tag: 3.9.1
 
 Feeds that comply with the XML Sitemap and Google News protocol for fast indexing by Google, Yahoo, Bing, Ask and others. Multi-Site and Multi-Lingual compatible!
@@ -18,7 +18,7 @@ The feeds become instantly available: One XML Sitemap on yourblogurl.tld/sitemap
 
 Please read the FAQ's for info on how to get your articles listed on Google News.
 
-**Compatible with caching plugins** like WP Super Cache, W3 Total Cache and Quick Cache that cache feeds, allowing a faster serving to the hungry, impatient (!) spiders.
+**Compatible with caching plugins** like WP Super Cache, W3 Total Cache and Quick Cache that cache feeds, allowing a faster serving to the hungry, impatient (!) spiders. Read the FAQ's for WP Super Cache instructions.
 
 **qTranslate and xLanguage compatible!** Tested in Pre-Path Mode and Query Mode. Each language on your site will have its own XML Sitemap. 
 
@@ -107,6 +107,12 @@ Yes. Upload the complete /xml-sitemap-feed/ directory to /wp-content/mu-plugins/
 Go to [Suggest News Content for Google News](http://www.google.com/support/news_pub/bin/request.py?contact_type=suggest_content) and submit your website info as detailed as possible there. Give them the URL(s) of your fresh new Google News Sitemap in the text field 'Other' at the bottom.
 
 You will also want to add the sitemap to your [Google Webmasters Tools account](https://www.google.com/webmasters/tools/) to check its validity and performance. Create an account if you don't have one yet.
+
+= I'm using WP Super Cache but the feed is not cached =
+
+Even though the WP Super Cache time-stamp at the bottom of the feed source shows just fine, reloading the sitemap will show a new (different) timestamp. This is true for all feeds, not just the sitemap feed provided by this plugin. 
+
+Even though WP Super Cache is not able to create a static copy of feeds, it still does caching via the legacy WP Cache and in PHP mode with the '304 Not Modified browser caching' option enabled your sitemap speed will benefit greatly.
 
 = My Google News Sitemap is empty! =
 
