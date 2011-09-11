@@ -20,7 +20,8 @@ class XMLSitemapFeed {
 	*/
 
 	function __construct(){
-		global $wpdb;
+		global $wpdb, $query;
+		
 		if ( '0' == get_option( 'blog_public' ) || ( $wpdb->blogid && function_exists('get_site_option') && get_site_option('tags_blog_id') == $wpdb->blogid ) ) {
 			// we are on a blog that blocks spiders! >> create NO sitemap
 			// - OR -
@@ -29,17 +30,6 @@ class XMLSitemapFeed {
 		} else {
 			// INIT
 			add_action('init', array(__CLASS__, 'init') );
-	
-			// FEEDS
-			add_action('do_feed_sitemap', array(__CLASS__, 'load_template_sitemap'), 10, 1);
-			add_action('do_feed_sitemap-news', array(__CLASS__, 'load_template_sitemap_news'), 10, 1);
-
-			// REWRITES
-			add_filter('generate_rewrite_rules', array(__CLASS__, 'rewrite') );
-			add_filter('user_trailingslashit', array(__CLASS__, 'trailingslash') );
-			
-			// ROBOTSTXT
-			add_action('do_robotstxt', array(__CLASS__, 'robots') );
 		}
 
 		// DE-ACTIVATION
@@ -51,23 +41,28 @@ class XMLSitemapFeed {
 	*/
 
 	// set up the sitemap template
-	function load_template_sitemap() {
+	function load_template() {
 		load_template( XMLSF_PLUGIN_DIR . '/feed-sitemap.php' );
 	}
 
 	// set up the news sitemap template
-	function load_template_sitemap_news() {
+	function load_template_news() {
 		load_template( XMLSF_PLUGIN_DIR . '/feed-sitemap-news.php' );
+	}
+
+	// override default feed limit
+	function filter_limits( $limits ) {
+		return '';
 	}
 
 	// Create a new filtering function that will add a where clause to the query,
 	// used for the Google News Sitemap
-	function xml_sitemap_feed_news_filter_where($where = '') {
+	function filter_news_where($where = '') {
 	  //posts from the last 2 days (48 hours + 1 hour to be sure)
 	  $where .= " AND post_date > '" . date('Y-m-d', strtotime('-49 hours')) . "'";
 	  return $where;
 	}
-
+	
 	/**
 	* REWRITES
 	*/
@@ -80,7 +75,7 @@ class XMLSitemapFeed {
 		);
 		$wp_rewrite->rules = $feed_rules + $wp_rewrite->rules;
 	}
-
+	
 	/**
 	 * Remove the trailing slash from permalinks that have an extension,
 	 * such as /sitemap.xml (thanks to Permalink Editor plugin for WordPress)
@@ -162,12 +157,27 @@ class XMLSitemapFeed {
 	}
 
 	function init() {
+		// FEEDS
+		add_action('do_feed_sitemap', array(__CLASS__, 'load_template'), 10, 1);
+		add_action('do_feed_sitemap-news', array(__CLASS__, 'load_template_news'), 10, 1);
+
+		// REWRITES
+		add_filter('generate_rewrite_rules', array(__CLASS__, 'rewrite') );
+		add_filter('user_trailingslashit', array(__CLASS__, 'trailingslash') );
+		
 		// FLUSH RULES after (site wide) plugin upgrade
 		if (get_option('xml-sitemap-feed-version') != XMLSF_VERSION) {
 			update_option('xml-sitemap-feed-version', XMLSF_VERSION);
 			global $wp_rewrite;
 			$wp_rewrite->flush_rules();
 		}
+		
+		// ROBOTSTXT
+		add_action('do_robotstxt', array(__CLASS__, 'robots') );
+
+		//
+		add_filter('request', array(__CLASS__, 'filter_request'), 1 );
+
 
 		// check for qTranslate and add filter
 		if (defined('QT_LANGUAGE'))
@@ -177,5 +187,23 @@ class XMLSitemapFeed {
 		if (defined('xLanguageTagQuery'))
 			add_filter('xml_sitemap_url', array(__CLASS__, 'xlanguage'), 99);
 	}
+	
+	function filter_request( $request ) {
+		if (isset($request['feed'])) {
+			if ( $request['feed'] == 'sitemap' ) {
+				add_filter( 'post_limits', array( __CLASS__, 'filter_limits' ) );
+				
+				$request['post_type'] = XMLSF_POST_TYPE; // get_post_types() for all post types
+				$request['orderby'] = 'modified';
+			}
+			if ( $request['feed'] == 'sitemap-news' ) {
+				add_filter( 'post_limits', array( __CLASS__, 'filter_limits' ) );
+				add_filter( 'posts_where', array( __CLASS__, 'filter_news_where' ), 10, 1  );
+			}
+		}
+
+	    return $request;
+	}
+
 
 }

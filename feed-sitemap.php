@@ -5,7 +5,6 @@
  * @package XML Sitemap Feed plugin for WordPress
  */
 
-status_header('200'); // force header('HTTP/1.1 200 OK') for sites without posts
 header('Content-Type: text/xml; charset=' . get_bloginfo('charset'), true);
 
 echo '<?xml version="1.0" encoding="' . get_bloginfo('charset') . '"?><?xml-stylesheet type="text/xsl" href="' . plugins_url('/sitemap.xsl.php',XMLSF_PLUGIN_DIR . '/feed-sitemap.php') . '?ver=' . XMLSF_VERSION . '"?>
@@ -46,21 +45,6 @@ if ( function_exists('memory_get_usage') ) {
 ';
 	}
 }
-
-// the main query
-query_posts( array(
-	'post_type' => XMLSF_POST_TYPE, 
-	'post_status' => 'publish',
-	'orderby' => 'modified',
-	'ignore_sticky_posts' => 1,
-	'nopaging' => true 
-	)
-); 
-
-global $wp_query;
-$wp_query->is_404 = false;	// force is_404() condition to false when on site without posts
-$wp_query->is_feed = true;	// force is_feed() condition to true so WP Super Cache includes
-				// the sitemap in its feeds cache
 
 // setup site variables
 $_post_count = wp_count_posts('post');
@@ -142,7 +126,10 @@ if ( have_posts() ) : while ( have_posts() && $counter < $maxURLS ) : the_post()
 		$offset = (($post->comment_count - $average_commentcount) * $comment_weight) - (count($ancestors) * $level_weight);
 		$priority = $page_priority + $offset;
 	} else {
-		$offset = (($post->comment_count - $average_commentcount) * $comment_weight) - (($lastmodified - $thispostmodified) * $age_weight);
+		if(is_sticky($post->ID))
+			$offset = $max_priority - $post_priority;
+		else
+			$offset = (($post->comment_count - $average_commentcount) * $comment_weight) - (($lastmodified - $thispostmodified) * $age_weight);
 		$priority = $post_priority + $offset;
 	}
 	// trim priority

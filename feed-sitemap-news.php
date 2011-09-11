@@ -5,6 +5,28 @@
  * @package XML Sitemap Feed plugin for WordPress
  */
 
+if ( !have_posts() ) :
+
+	// No posts? Temporary redirect to the main xml sitemap.
+	wp_redirect( 'sitemap.xml' ); // default 302... maybe 304 not modified is better?
+	exit;
+	
+	// ALTERNATIVE:
+	// No posts? Then go and get at least one last post to prevent GWT validation error.
+	// Remove the filtering functions
+	remove_filter( 'posts_where', array( 'XMLSitemapFeed', 'filter_news_where' ), 10, 1 );
+	remove_filter( 'post_limits', array( 'XMLSitemapFeed', 'filter_limits' ) );
+
+	// Perform the alternative query
+	query_posts( 'posts_per_page=1' );
+
+	global $wp_query;
+	$wp_query->is_404 = false;	// force is_404() condition to false when on site without posts
+	$wp_query->is_feed = true;	// force is_feed() condition to true so WP Super Cache includes
+				// the sitemap in its feeds cache
+
+endif; 
+ 
 status_header('200'); // force header('HTTP/1.1 200 OK') for sites without posts
 header('Content-Type: text/xml; charset=' . get_bloginfo('charset'), true);
 
@@ -19,41 +41,9 @@ $maxURLS = 1000;	// maximum number of URLs allowed in a news sitemap.
 
 // editing below here is not advised!
 
-// Register the filtering function to limit DB query to last 48h
-add_filter('posts_where', array('XMLSitemapFeed','xml_sitemap_feed_news_filter_where'), 10, 1 );
-
-// Perform the query, the filter will be applied automatically
-// TODO: test if a new query_posts really is necessery here... how does caller_get_posts perform on feeds and can we dump posts_per_page and leave the limit up to WP user settings?
-query_posts( array(
-	'post_type' => 'post', 
-	'caller_get_posts' => 1,
-	'posts_per_page' => -1 
-	)
-);
-
-global $wp_query;
-$wp_query->is_404 = false;	// force is_404() condition to false when on site without posts
-$wp_query->is_feed = true;	// force is_feed() condition to true so WP Super Cache includes
-				// the sitemap in its feeds cache
-
 // prepare counter to limit the number of URLs to the absolute max of $maxURLS
 $counter = 1;
 
-if ( !have_posts() ) :
-	// No posts? Then go and get at least one last post to prevent GWT validation error.
-	// Remove the filtering function
-	remove_filter('posts_where', array('XMLSitemapFeed','xml_sitemap_feed_news_filter_where'), 10, 1 );
-
-	// Perform the alternative query
-	query_posts( array(
-		'post_type' => 'post', 
-		'caller_get_posts' => 1,
-		'posts_per_page' => 1 
-		)
-	);
-	
-endif; 
- 
 // loop away!
 while ( have_posts() && $counter < $maxURLS ) : the_post();
 

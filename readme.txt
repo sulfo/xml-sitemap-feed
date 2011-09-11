@@ -260,7 +260,7 @@ Read more on (Increasing memory allocated to PHP)[http://codex.wordpress.org/Edi
 == Upgrade Notice ==
 
 = 3.9.2 =
-Basic Google News feed stylesheet and XSS vulnerability improvement.
+Pinging, better speed, Google News feed stylesheet and many other improvements.
 
 
 == Changelog ==
@@ -269,6 +269,8 @@ Basic Google News feed stylesheet and XSS vulnerability improvement.
 * Basic Google News feed stylesheet
 * improvement on XSS vulnerability fix
 * Fixed trailing slash
+* Speed improvement: removed extra query_posts()
+* Sticky posts get max priority
 
 = 3.9.1 =
 * SECURITY: XSS vulnerability in sitemap.xsl.php
