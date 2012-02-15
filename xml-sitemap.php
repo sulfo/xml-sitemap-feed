@@ -42,6 +42,9 @@ Author URI: http://4visions.nl/
  *	
  */
 
+if(!empty($_SERVER['SCRIPT_FILENAME']) && 'xml-sitemap.php' == basename($_SERVER['SCRIPT_FILENAME']))
+	die('You can not access this page directly!');
+
 /* --------------------
  *      CONSTANTS
  * -------------------- */
