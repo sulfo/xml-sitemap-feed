@@ -12,7 +12,7 @@ Feeds that comply with the XML Sitemap and Google News protocol for fast indexin
 
 This plugin dynamically creates feeds that comply with the **XML Sitemap** and the **Google News Sitemap** protocol. It is Multi-Site and Multi-Lingual compatible and there are no options to be set nor file or dir access rights to be tampered with. 
 
-You or your site owners on your Multi-site network will not be bothered with complicated settings like other XML Sitemap plugins. XML sitemap values like ChangeFreq and URL Priority is auto-calculated based on post age and comment activity.
+Site owners will not be bothered with complicated settings unlike with other XML Sitemap plugins. XML Sitemap values like ChangeFreq and URL Priority are auto-calculated based on post update age and comment activity.
 
 The feeds become instantly available: One XML Sitemap on yourblogurl.tld/sitemap.xml (or yourblogurl.tld/?feed=sitemap), ready for indexing by search engines like Google, Yahoo, MSN, Ask.com and others. And one Google News Sitemap on yourblogurl.tld/sitemap-news.xml (or yourblogurl.tld/?feed=sitemap-news), ready for indexing by Google News. Both are automatically referenced in the dynamically created **robots.txt** on yourblogurl.tld/robots.txt to tell search engines where to find your XML Sitemaps.
 
@@ -31,17 +31,16 @@ Please read the FAQ's for info on how to get your articles listed on Google News
 = Advantages = 
 
 * The main advantage of this plugin over other XML Sitemap plugins is **simplicity**. No need to change file or folder permissions, move files or spend time on a difficult plugin options page. In fact, there are no options at all!
-* Completely **automatic** post URL _priority_ and _change frequency_ calculation based on post age and comment and trackback activity.
-* Works out-of-the-box, even on **multi-site / shared codebase / multi-blog setups** like WordPress MU, WP 3.0 in MultiSite (WPMS) mode and others. 
-* Also works upon **Network Activate** or placed in **/mu-plugins/** on WP 3.0 in MS mode and WPMU and even takes care to exclude any tags blogs to avoid malus points for link spamming.
+* Completely **automatic** post URL _priority_ and _change frequency_ calculation based on post modification age and comment and trackback activity.
+* Works out-of-the-box, even on **multi-site / shared codebase / multi-blog setups** like WordPress MU, WP 3+ in MultiSite mode (WPMS) and others. 
+* Also works upon **Network Activate** or placed in **/mu-plugins/** on WP 3+ in MS mode and WPMU and even takes care to exclude any tags blogs to avoid malus points for link spamming.
 * Compatible with multi-lingual sites using **qTranslate** or **xLanguage** to allow all languages to be indexed equally.
 
 = Limitations =
 
 * The feed contains the front page and all posts and pages but _excludes_ category, tag and other dynamic archive pages. This should not be a problem and by most it is even _advised_ to exclude them. There are SEO plugins around that actively block these archive pages from search engines.
 * Except by _re-saving_ older posts from time to time (keeping the lastmod date fairly recent) there is no way to manually control the priority of individual posts/pages in the sitemap. See the Faq's for more.
-* This plugin does not ping any search engines. But then, WordPress does this by default already via the Ping-o-Matic service so why bother? See the Faq's for more.
-* Because the feed is dynamically created, on _very_ large sites the creation process might take a while. Search engines are said to have a short fuse about waiting for a sitemap, so you may want to consider using a cache plugin that also (pre)caches feeds. If you are unfamiliar with caching and server setup start with an easy caching plugin such as **Quick Cache**. For more options (and better performance) you might find solace in **WP Super Cache** or **W3 Total Cache**.
+* Because the feed is dynamically created, on large sites the creation process might take a while. Search engines are said to have a short fuse about waiting for a sitemap, so you may want to consider using a cache plugin that also (pre)caches feeds. If you are unfamiliar with caching and server setup start with an easy caching plugin such as **Quick Cache**. For more options (and better performance) you might find solace in **WP Super Cache** or **W3 Total Cache**.
 * On **VERY** large sites (read: over 10.000 posts) with limited memory assigned to PHP, the generation of the sitemap might cause a problem when the process runs out of memory. See the FAQ's for tips to increase the PHP memory limit on your server.
 
 = Translations =
@@ -114,9 +113,9 @@ Even though the WP Super Cache time-stamp at the bottom of the feed source shows
 
 Even though WP Super Cache is not able to create a static copy of feeds, it still does caching via the legacy WP Cache and in PHP mode with the '304 Not Modified browser caching' option enabled your sitemap speed will benefit greatly.
 
-= My Google News Sitemap is empty! =
+= The Google News Sitemap gets redirected to the XML Sitemap! =
 
-The rules of the Google News game are that you do not feed the cookie monster any stale food. Older than 2 days is bad. You need to bake him some fresh bread ;)
+The rules of the Google News game are that you do not feed the hungry spider any stale food. Older than 2 days is bad. You need to bake her some fresh flies ;)
 
 = How are the values for priority and changefreq calculated? =
 
@@ -141,16 +140,7 @@ If you cannot live with these rules, edit the values `$min_priority`, `$max_prio
 No. In normal circumstances, your site will be indexed by the major search engines before you know it. The search engines will be looking for a robots.txt file and (with this plugin activated) find a pointer in it to the XML Sitemap on your blog. The search engines will return on a regular basis to see if your site has updates. 
 ( Read more about _Ping-O-Matic_ under **Does this plugin ping search engines** (below) to make sure your site is under _normal circumstances_ ;) )
 
-**But** if you have a server _without rewrite rules_, use your blog _without fancy URLs_ (meaning, you have WordPress Permalinks set to the old Default value) or have it installed in a _subdirectory_, read **Do I need to change my robots.txt** for more instructions.
-
-= Does this plugin ping search engines? =
-
-No. While other XML Sitemap plugins provide pinging to some search engines upon each post edit or publication, this plugin does not. There are two reasons for that:
-
-1. WordPress has a built-in pinging feature. Go in your WP Admin section to Settings > Writing and make sure that the text area under **Update services** contains at least `http://rpc.pingomatic.com`. Read more on [Ping-O-Matic](http://pingomatic.com) about what excellent service you are actually getting _for free with every WordPress blog_ installation!
-1. For the average website, in my experience, pinging Google or others after each little change does not benefit anything except a theoretical smaller delay in re-indexation of your website. This is only theoretical because if your site is popular and active, major search engines will likely be crawling your site on a very regular basis anyway. And if, on the other hand, your site is not high on the agenda of the major search engines, they will likely give no priority to your pings at all.
-
-You can always take a [Google Webmasters Tools account](https://www.google.com/webmasters/tools/) which will tell you many interesting things about your website, sitemap downloads, search terms and your visitors. Try it!
+**But** if you use your blog _without fancy URLs_ (meaning, you have WordPress Permalinks set to the old Default value) or have it installed in a _subdirectory_, read **Do I need to change my robots.txt** for more instructions.
 
 = Do I need to change my robots.txt? =
 
@@ -162,7 +152,7 @@ Or if you have WP installed in a subdirectory, on a server without rewrite_rules
 
 = My WordPress powered blog is installed in a subdirectory. Does that change anything? =
 
-That depends on where the index.php and .htaccess of your installation reside. If they are in the root while the rest of the WP files are installed in a subdir, so the site is accessible from your domain root, you do not have to do anything. It should work out of the box. But if the index.php is together with your wp-config.php and all other WP files in a subdir, meaning your blog is only accessible via that subdir, you need to manage your own robots.txt file in your **domain root**. It _has_ to be in the root (!) and needs a line starting with `Sitemap:` followed by the full URL to the sitemap feed provided by XML Sitemap Feed plugin. Like:
+That depends on where the index.php of your installation resides. If they are in the root while the rest of the WP files are installed in a subdir, so the site is accessible from your domain root, you do not have to do anything. It should work out of the box. But if the index.php is together with your wp-config.php and all other WP files in a subdir, meaning your blog is only accessible via that subdir, you need to manage your own robots.txt file in your **domain root**. It _has_ to be in the root (!) and needs a line starting with `Sitemap:` followed by the full URL to the sitemap feed provided by XML Sitemap Feed plugin. Like:
 `
 Sitemap: http://yourblogurl.tld/subdir/sitemap.xml
 ` 
@@ -198,7 +188,7 @@ The sitemap is dynamically generated just like a feed. There is no actual file c
 
 = I see a sitemap.xml file in site root but it does not seem to get updated! =
 
-You are most likely looking at a sitemap.xml file that has been created by another XML Sitemap plugin before you started using this plugin. Just remove it and let the plugin dynamically generate it just like a feed. There is no actual file created.
+You are most likely looking at a sitemap.xml file that has been created by another XML Sitemap plugin before you started using this plugin. Just remove the file and let this plugin dynamically generate your XML Sitemap just like a feed. There will be no actual file created.
 
 If that's not the case, you are probably using a caching plugin or your browser does not update to the latest feed output. Please verify.
 
@@ -216,7 +206,7 @@ If that did not solve the issue, check the following errors that might be encoun
 
 **404 page instead of my sitemap.xml**
 
-Try to refresh the Permalink structure in WordPress. Go to Settings > Permalinks and re-save them. Then reload the XML Sitemap in your browser with a clean browser cache. ( Try Ctrl+R to bypass the browser cache -- this works on most but not all browsers. )
+Try to refresh the Permalink structure in WordPress. Go to Settings > Permalinks and re-save them. Then reload the XML Sitemap in your browser with a clean browser cache. Hit Ctrl+R to bypass the browser cache -- this works on most but not all browsers.
 
 **404 page instead of both sitemap.xml and robots.txt**
 
