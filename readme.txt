@@ -1,4 +1,4 @@
-=== XML Sitemap & Google News Sitemap Feeds ===
+=== XML & Google News Sitemap Feeds ===
 Contributors: RavanH
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravanhagen%40gmail%2ecom&item_name=XML%20Sitemap%20Feed&item_number=3%2e8&no_shipping=0&tax=0&bn=PP%2dDonationsBF&charset=UTF%2d8&lc=us
 Tags: xml sitemap, news sitemap, sitemap.xml, Google, Google News, Yahoo, Bing, Live, MSN, seo, wpmu, feed, qtranslate, xlanguage
@@ -6,7 +6,7 @@ Requires at least: 2.6
 Tested up to: 3.3.1
 Stable tag: 3.9.1
 
-Feeds that comply with the XML Sitemap and Google News protocol for fast indexing by Google, Yahoo, Bing, Ask and others. Multi-Site and Multi-Lingual compatible!
+Feeds that comply with the XML and Google News Sitemap protocol for fast indexing by Google, Yahoo, Bing, Ask and others.
 
 == Description ==
 
@@ -17,6 +17,8 @@ Site owners will not be bothered with complicated settings unlike with other XML
 The feeds become instantly available: One XML Sitemap on yourblogurl.tld/sitemap.xml (or yourblogurl.tld/?feed=sitemap), ready for indexing by search engines like Google, Yahoo, MSN, Ask.com and others. And one Google News Sitemap on yourblogurl.tld/sitemap-news.xml (or yourblogurl.tld/?feed=sitemap-news), ready for indexing by Google News. Both are automatically referenced in the dynamically created **robots.txt** on yourblogurl.tld/robots.txt to tell search engines where to find your XML Sitemaps.
 
 Please read the FAQ's for info on how to get your articles listed on Google News.
+
+**Multi-Site compatible**
 
 **Compatible with caching plugins** like WP Super Cache, W3 Total Cache and Quick Cache that cache feeds, allowing a faster serving to the hungry, impatient (!) spiders. Read the FAQ's for WP Super Cache instructions.
 
