@@ -125,8 +125,44 @@ class XMLSitemapFeed {
 	}
 
 	/**
+	* REQUEST FILTER
+	*/
+
+	function filter_request( $request ) {
+		if (isset($request['feed'])) {
+			if ( $request['feed'] == 'sitemap' ) {
+				add_filter( 'post_limits', array( __CLASS__, 'filter_limits' ) );
+				
+				$request['post_type'] = XMLSF_POST_TYPE; // get_post_types() for all post types
+				$request['orderby'] = 'modified';
+			}
+			if ( $request['feed'] == 'sitemap-news' ) {
+				add_filter( 'post_limits', array( __CLASS__, 'filter_limits' ) );
+				add_filter( 'posts_where', array( __CLASS__, 'filter_news_where' ), 10, 1  );
+			}
+		}
+
+	    return $request;
+	}
+
+	/**
 	* MULTI-LANGUAGE PLUGIN FILTERS
 	*/
+
+	// Polylang
+	function polylang($input) {
+		global $polylang;
+
+		if (is_array($input)) // got an array? return one!
+			foreach ( $input as $url )
+				foreach($polylang->get_languages_list() as $language)
+					$return[] = add_query_arg('lang', $language->slug, $url);
+					//$return[] = $polylang->add_language_to_link($url,$language);
+		else // not an array? do nothing Polylang does all the work :)
+			$return = $input;
+
+		return $return;
+	}
 
 	// qTranslate
 	function qtranslate($input) {
@@ -175,35 +211,21 @@ class XMLSitemapFeed {
 		// ROBOTSTXT
 		add_action('do_robotstxt', array(__CLASS__, 'robots') );
 
-		//
+		// REQUEST 
 		add_filter('request', array(__CLASS__, 'filter_request'), 1 );
 
 
+		// LANGUAGE PLUGINS
+		// check for Polylang and add filter
+		global $polylang;
+		if (isset($polylang))
+			add_filter('xml_sitemap_url', array(__CLASS__, 'polylang'), 99);
 		// check for qTranslate and add filter
-		if (defined('QT_LANGUAGE'))
+		elseif (defined('QT_LANGUAGE'))
 			add_filter('xml_sitemap_url', array(__CLASS__, 'qtranslate'), 99);
-
 		// check for xLanguage and add filter
-		if (defined('xLanguageTagQuery'))
+		elseif (defined('xLanguageTagQuery'))
 			add_filter('xml_sitemap_url', array(__CLASS__, 'xlanguage'), 99);
 	}
-	
-	function filter_request( $request ) {
-		if (isset($request['feed'])) {
-			if ( $request['feed'] == 'sitemap' ) {
-				add_filter( 'post_limits', array( __CLASS__, 'filter_limits' ) );
-				
-				$request['post_type'] = XMLSF_POST_TYPE; // get_post_types() for all post types
-				$request['orderby'] = 'modified';
-			}
-			if ( $request['feed'] == 'sitemap-news' ) {
-				add_filter( 'post_limits', array( __CLASS__, 'filter_limits' ) );
-				add_filter( 'posts_where', array( __CLASS__, 'filter_news_where' ), 10, 1  );
-			}
-		}
-
-	    return $request;
-	}
-
 
 }

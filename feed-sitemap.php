@@ -5,6 +5,7 @@
  * @package XML Sitemap Feed plugin for WordPress
  */
 
+status_header('200'); // force header('HTTP/1.1 200 OK') even for sites without posts
 header('Content-Type: text/xml; charset=' . get_bloginfo('charset'), true);
 
 echo '<?xml version="1.0" encoding="' . get_bloginfo('charset') . '"?><?xml-stylesheet type="text/xsl" href="' . plugins_url('/sitemap.xsl.php',XMLSF_PLUGIN_DIR . '/feed-sitemap.php') . '?ver=' . XMLSF_VERSION . '"?>
@@ -53,7 +54,7 @@ $_totalcommentcount = wp_count_comments();
 
 $lastmodified_gmt = get_lastmodified('GMT'); // last posts or page modified date
 $lastmodified = mysql2date('U',$lastmodified_gmt); // last posts or page modified date in Unix seconds
-$firstmodified = mysql2date('U',get_firstmodified('GMT')); // uses new get_firstmodified() function defined in xml-sitemap.php !
+$firstmodified = mysql2date('U',get_firstmodified('GMT')); // uses new get_firstmodified() function defined in xml-sitemap/hacks.php !
 
 // calculated presets
 if ($_totalcommentcount->approved > 0)
@@ -81,15 +82,15 @@ $counter = 1;
 ?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"><url><loc><?php 
 		// hook for filter 'xml_sitemap_url' provides a string here and MUST get a string returned
-		$url = apply_filters( 'xml_sitemap_url', trailingslashit(get_bloginfo('url')) );
-		if ( is_string($url) ) echo esc_url( $url ); else echo esc_url( trailingslashit(get_bloginfo('url')) );
+		$url = apply_filters( 'xml_sitemap_url', trailingslashit(home_url()) );
+		if ( is_string($url) ) echo esc_url( $url ); else echo esc_url( trailingslashit(home_url()) );
 		?></loc><lastmod><?php echo mysql2date('Y-m-d\TH:i:s+00:00', $lastmodified_gmt, false); ?></lastmod><changefreq>daily</changefreq><priority>1.0</priority></url><?php
 
 // then loop away!
 if ( have_posts() ) : while ( have_posts() && $counter < $maxURLS ) : the_post();
 
 	// check if we are not dealing with an external URL :: Thanks, Francois Deschenes :)
-	if(!preg_match('/^' . preg_quote(get_bloginfo('url'), '/') . '/i', get_permalink())) continue;
+	if(!preg_match('/^' . preg_quote(home_url(), '/') . '/i', get_permalink())) continue;
 	
 	$thispostmodified_gmt = $post->post_modified_gmt; // post GMT timestamp
 	$thispostmodified = mysql2date('U',$thispostmodified_gmt); // post Unix timestamp

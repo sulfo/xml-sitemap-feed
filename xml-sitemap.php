@@ -32,7 +32,7 @@ Author URI: http://4visions.nl/
  * FILTERS
  *	xml_sitemap_url	->	Filters the URL used in the sitemap reference in robots.txt
  *				(receives an ARRAY and MUST return one; can be multiple urls) 
- *				and for the home URL in the sitemap (receives a STRING and MUST)
+ *				and for the home URL in the sitemap (receives a STRING and MUST
  *				return one) itself. Useful for multi language plugins or other 
  *				plugins that affect the blogs main URL... See pre-defined filter
  *				XMLSitemapFeed::qtranslate() in XMLSitemapFeed.class.php as an

@@ -1,6 +1,6 @@
 <?php
 /**
- * XML Sitemap Feed Template for displaying an XML Sitemap feed.
+ * Google News Sitemap Feed Template
  *
  * @package XML Sitemap Feed plugin for WordPress
  */
@@ -48,7 +48,7 @@ $counter = 1;
 while ( have_posts() && $counter < $maxURLS ) : the_post();
 
 	// check if we are not dealing with an external URL :: Thanks, Francois Deschenes :)
-	if(!preg_match('/^' . preg_quote(get_bloginfo('url'), '/') . '/i', get_permalink())) continue;
+	if(!preg_match('/^' . preg_quote(home_url(), '/') . '/i', get_permalink())) continue;
 
 	// get the article tags
 	$keys_arr = get_the_tags();
