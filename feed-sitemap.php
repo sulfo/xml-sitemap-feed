@@ -135,8 +135,8 @@ if ( have_posts() ) : while ( have_posts() && $counter < $maxURLS ) : the_post()
 	}
 	// trim priority
 	$priority = ($priority > $max_priority) ? $max_priority : $priority;
-	$priority = ($priority < $min_priority) ? $min_priority : $priority;
-?><url><loc><?php echo esc_url( get_permalink() ) ?></loc><lastmod><?php echo mysql2date('Y-m-d\TH:i:s+00:00', $thispostmodified_gmt, false) ?></lastmod><changefreq><?php
+	$priority = ($priority < $min_priority) ? $min_priority : $priority; ?>
+<url><loc><?php echo esc_url( get_permalink() ) ?></loc><lastmod><?php echo mysql2date('Y-m-d\TH:i:s+00:00', $thispostmodified_gmt, false) ?></lastmod><changefreq><?php
  	if(($lastactivityage/86400) < 7) { // last activity less than 1 week old 
  		 ?>daily<?php
  	} else if(($lastactivityage/604800) < 12) { // last activity between 1 and 12 weeks old 

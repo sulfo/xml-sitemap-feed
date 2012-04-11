@@ -258,6 +258,7 @@ TODO: Pinging. DONE: better speed, Google News feed stylesheet and many other im
 == Changelog ==
 
 = 3.9.2 =
+* Polylang compatibility
 * Basic Google News feed stylesheet
 * improvement on XSS vulnerability fix
 * Fixed trailing slash

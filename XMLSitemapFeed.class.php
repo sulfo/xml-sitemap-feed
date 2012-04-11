@@ -152,14 +152,20 @@ class XMLSitemapFeed {
 	// Polylang
 	function polylang($input) {
 		global $polylang;
+		$options = get_option('polylang');
 
-		if (is_array($input)) // got an array? return one!
-			foreach ( $input as $url )
-				foreach($polylang->get_languages_list() as $language)
-					$return[] = add_query_arg('lang', $language->slug, $url);
-					//$return[] = $polylang->add_language_to_link($url,$language);
-		else // not an array? do nothing Polylang does all the work :)
+		if (is_array($input)) { // got an array? return one!
+			if ('1' == $options['force_lang'] )
+				foreach ( $input as $url )
+					foreach($polylang->get_languages_list() as $language)
+						$return[] = $polylang->add_language_to_link($url,$language);
+			else
+				foreach ( $input as $url )
+					foreach($polylang->get_languages_list() as $language)
+						$return[] = add_query_arg('lang', $language->slug, $url);
+		} else { // not an array? do nothing Polylang does all the work :)
 			$return = $input;
+		}
 
 		return $return;
 	}
