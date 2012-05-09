@@ -25,7 +25,7 @@ $min_priority = 0;	// Minimum priority value for any URL in the sitemap; set to 
 $frontpage_priority = 1.0;	// Your front page priority, usually the same as max priority but if you have any reason
 				// to change it, please be my guest; set to any other value between 0 and 1.
 
-$maxURLS = 50000;	// maximum number of URLs allowed in any sitemap.
+//$maxURLS = 50000;	// maximum number of URLs allowed in any sitemap.
 $level_weight = 0.1;	// Makes a sub-page loose 10% for each level; set to any other value between 0 and 1.
 $month_weight = 0.1;	// Fall-back value normally ignored by automatic priority calculation, which
 			// makes a post loose 10% of priority monthly; set to any other value between 0 and 1.
@@ -76,7 +76,7 @@ else
 	$age_weight = $month_weight / 2629744 ; // else just do 10% per month (that's a month in seconds)
 
 // prepare counter to limit the number of URLs to the absolute max of 50.000
-$counter = 1;
+//$counter = 1;
 
 // start with the main URL
 ?>
@@ -87,7 +87,7 @@ $counter = 1;
 		?></loc><lastmod><?php echo mysql2date('Y-m-d\TH:i:s+00:00', $lastmodified_gmt, false); ?></lastmod><changefreq>daily</changefreq><priority>1.0</priority></url><?php
 
 // then loop away!
-if ( have_posts() ) : while ( have_posts() && $counter < $maxURLS ) : the_post();
+if ( have_posts() ) : while ( have_posts() /* && $counter < $maxURLS */ ) : the_post();
 
 	// check if we are not dealing with an external URL :: Thanks, Francois Deschenes :)
 	if(!preg_match('/^' . preg_quote(home_url(), '/') . '/i', get_permalink())) continue;
@@ -145,7 +145,7 @@ if ( have_posts() ) : while ( have_posts() && $counter < $maxURLS ) : the_post()
  		 ?>monthly<?php 
  	} else { ?>yearly<?php	
  	} ?></changefreq><priority><?php echo number_format($priority,1) ?></priority></url><?php 
-	$counter++;
+//	$counter++;
 
 endwhile; endif; 
 ?></urlset>
