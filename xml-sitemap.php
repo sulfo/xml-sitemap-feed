@@ -68,6 +68,12 @@ if ( !defined('XMLSF_POST_TYPE') )
 if ( !defined('XMLSF_NEWS_POST_TYPE') )
 	define('XMLSF_NEWS_POST_TYPE', 'post');
 
+if ( !defined('XMLSF_NAME') )
+	define('XMLSF_NAME', 'sitemap.xml');
+
+if ( !defined('XMLSF_NEWS_NAME') )
+	define('XMLSF_NEWS_NAME', 'sitemap-news.xml');
+
 /* -----------------
  *      CLASS
  * ----------------- */
