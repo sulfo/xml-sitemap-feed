@@ -197,6 +197,7 @@ class XMLSitemapFeed {
 			update_option('xml-sitemap-feed-version', XMLSF_VERSION);
 			global $wp_rewrite;
 			$wp_rewrite->flush_rules();
+			// TODO fix PHP Fatal error:Call to a member function flush_rules() on a non-object in /var/www/wordpress/wp-content/plugins/xml-sitemap-feed/XMLSitemapFeed.class.php after (any?) plugin upgrade
 		}
 		
 		// ROBOTSTXT

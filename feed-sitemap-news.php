@@ -33,7 +33,7 @@ header('Content-Type: text/xml; charset=' . get_bloginfo('charset'), true);
 echo '<?xml version="1.0" encoding="'.get_bloginfo('charset').'"?><?xml-stylesheet type="text/xsl" href="' . plugins_url('',__FILE__) . '/sitemap-news.xsl.php?ver=' . XMLSF_VERSION . '"?>
 <!-- generated-on="'.date('Y-m-d\TH:i:s+00:00').'" -->
 <!-- generator="XML & Google News Sitemap Feed plugin for WordPress" -->
-<!-- generator-url="http://4visions.nl/en/wordpress-plugins/xml-sitemap-feed/" -->
+<!-- generator-url="http://4visions.nl/wordpress-plugins/xml-sitemap-feed/" -->
 <!-- generator-version="'.XMLSF_VERSION.'" -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">';
 
@@ -56,7 +56,7 @@ while ( have_posts() && $counter < $maxURLS ) : the_post();
 	// TODO : include categories too ??
 
 	?>
-<url><loc><?php echo esc_url( get_permalink() ) ?></loc><news:news><news:publication><news:name><?php if(defined('XMLSF_GOOGLE_NEWS_NAME')) echo strip_tags(XMLSF_GOOGLE_NEWS_NAME); else echo strip_tags(get_bloginfo('name')); ?></news:name><news:language><?php echo get_option('rss_language'); ?></news:language></news:publication><news:publication_date><?php echo mysql2date('Y-m-d\TH:i:s+00:00', $post->post_date_gmt, false); ?></news:publication_date><news:title><?php echo strip_tags(get_the_title(get_the_ID())); ?></news:title><news:keywords><?php $comma = 0; if ($keys_arr) foreach($keys_arr as $key) { if ( $comma == 1 ) { echo ', '; } echo $key->name; $comma = 1; } ?></news:keywords><news:genres>Blog</news:genres></news:news></url><?php 
+<url><loc><?php echo esc_url( get_permalink() ) ?></loc><news:news><news:publication><news:name><?php if(defined('XMLSF_GOOGLE_NEWS_NAME')) echo strip_tags(XMLSF_GOOGLE_NEWS_NAME); else echo strip_tags(get_bloginfo('name')); ?></news:name><news:language><?php echo reset(explode('-', get_bloginfo_rss('language'))); /*bloginfo_rss('language') returns impropper format*/ ?></news:language></news:publication><news:publication_date><?php echo mysql2date('Y-m-d\TH:i:s+00:00', $post->post_date_gmt, false); ?></news:publication_date><news:title><?php echo strip_tags(get_the_title(get_the_ID())); ?></news:title><news:keywords><?php $comma = 0; if ($keys_arr) foreach($keys_arr as $key) { if ( $comma == 1 ) { echo ', '; } echo $key->name; $comma = 1; } ?></news:keywords><news:genres>Blog</news:genres></news:news></url><?php 
 
 	$counter++;
 

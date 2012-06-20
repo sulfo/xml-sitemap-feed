@@ -3,8 +3,8 @@ Contributors: RavanH
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravanhagen%40gmail%2ecom&item_name=XML%20Sitemap%20Feed&item_number=3%2e8&no_shipping=0&tax=0&bn=PP%2dDonationsBF&charset=UTF%2d8&lc=us
 Tags: xml sitemap, news sitemap, sitemap.xml, Google, Google News, Yahoo, Bing, Live, MSN, seo, wpmu, feed, qtranslate, xlanguage
 Requires at least: 2.6
-Tested up to: 3.3.2
-Stable tag: 3.9.1
+Tested up to: 3.4
+Stable tag: 3.9.2
 
 Feeds that comply with the XML and Google News Sitemap protocol for fast indexing by Google, Yahoo, Bing, Ask and others.
 
@@ -252,23 +252,24 @@ Read more on (Increasing memory allocated to PHP)[http://codex.wordpress.org/Edi
 == Upgrade Notice ==
 
 = 3.9.2 =
-TODO: Pinging, Google News feed category. Test Polylang more
-
+Google News stylesheet, bugfixes, WP 3.4 compatibility, basic Polylang compatibility, speed improvement and sticky posts get max priority now
 
 == Changelog ==
 
 = 3.9.2 =
-* Post types for News feed support (constant)
+* BUGFIX: Google News language not rendered on WP 3.4
+* Changeable XML Sitemap and News feed names (through constants)
+* Basic support for Custom Post Types for News feed (through constant)
 * Basic Polylang compatibility
 * Basic Google News feed stylesheet
 * improvement on XSS vulnerability fix
 * Fixed trailing slash
 * Speed improvement: removed extra query_posts()
 * Sticky posts get max priority
-* PHP4 construct bugfix
+* BUGFIX: PHP4 construct
 
 = 3.9.1 =
-* SECURITY: XSS vulnerability in sitemap.xsl.php
+* SECURITY FIX: XSS vulnerability in sitemap.xsl.php
 
 = 3.9 =
 * Google News Sitemap

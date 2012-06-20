@@ -11,7 +11,7 @@ header('Content-Type: text/xml; charset=' . get_bloginfo('charset'), true);
 echo '<?xml version="1.0" encoding="' . get_bloginfo('charset') . '"?><?xml-stylesheet type="text/xsl" href="' . plugins_url('/sitemap.xsl.php',XMLSF_PLUGIN_DIR . '/feed-sitemap.php') . '?ver=' . XMLSF_VERSION . '"?>
 <!-- generated-on="' . date('Y-m-d\TH:i:s+00:00') . '" -->
 <!-- generator="XML & Google News Sitemap Feed plugin for WordPress" -->
-<!-- generator-url="http://4visions.nl/en/wordpress-plugins/xml-sitemap-feed/" -->
+<!-- generator-url="http://4visions.nl/wordpress-plugins/xml-sitemap-feed/" -->
 <!-- generator-version="' . XMLSF_VERSION . '" -->
 ';
 
