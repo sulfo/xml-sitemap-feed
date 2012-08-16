@@ -70,7 +70,7 @@ class XMLSitemapFeed {
 		$blog_url = trailingslashit(get_bloginfo('url'));
 		$sitemap_array = apply_filters('xml_sitemap_url',array($blog_url.XMLSF_NAME,$blog_url.XMLSF_NEWS_NAME));
 
-		echo "\n# XML Sitemap Feed ".XMLSF_VERSION." (http://4visions.nl/en/wordpress-plugins/xml-sitemap-feed/)";
+		echo "\n# XML Sitemap Feed ".XMLSF_VERSION." (http://status301.net/wordpress-plugins/xml-sitemap-feed/)";
 
 		if ( is_array($sitemap_array) && !empty($sitemap_array) )
 			foreach ( $sitemap_array as $url )

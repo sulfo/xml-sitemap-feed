@@ -9,7 +9,7 @@ Author: RavanH
 Author URI: http://status301.net/
 */
 
-/*  Copyright 2010 RavanH  (http://4visions.nl/ email : ravanhagen@gmail.com)
+/*  Copyright 2010 RavanH  (http://status301.net/ email : ravanhagen@gmail.com)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
