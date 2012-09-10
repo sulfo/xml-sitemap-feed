@@ -4,7 +4,7 @@ Plugin Name: XML Sitemap Feed
 Plugin URI: http://4visions.nl/en/wordpress-plugins/xml-sitemap-feed/
 Description: Creates a feed that complies with the XML Sitemap protocol ready for indexing by Google, Yahoo, Bing, Ask and others. Happy with it? Please leave me a <strong><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravanhagen%40gmail%2ecom&item_name=XML%20Sitemap%20Feed&item_number=3%2e8&no_shipping=0&tax=0&bn=PP%2dDonationsBF&charset=UTF%2d8&lc=us">Tip</a></strong> for development and support time. Thanks :)
 Text Domain: xml-sitemap-feed
-Version: 3.9.2
+Version: 3.9.9.10
 Author: RavanH
 Author URI: http://4visions.nl/
 */
@@ -50,7 +50,7 @@ if(!empty($_SERVER['SCRIPT_FILENAME']) && 'xml-sitemap.php' == basename($_SERVER
  *      CONSTANTS
  * -------------------- */
 
-	define('XMLSF_VERSION', '3.9.2');
+	define('XMLSF_VERSION', '3.9.9.17');
 
 if ( file_exists ( dirname(__FILE__).'/xml-sitemap-feed' ) )
 	define('XMLSF_PLUGIN_DIR', dirname(__FILE__) . '/xml-sitemap-feed');
@@ -59,31 +59,25 @@ else
 
 /* The following constants can be overridden by defining them in wp-config.php */
 
-if ( !defined('XMLSF_MEMORY_LIMIT') )
-	define('XMLSF_MEMORY_LIMIT', '256M');
 
-if ( !defined('XMLSF_POST_TYPE') )
-	define('XMLSF_POST_TYPE', 'any');
+if ( !defined('XMLSF_POST_TYPE_NEWS_TAGS') ) // post types append sitemap tags to which  
+	define('XMLSF_POST_TYPE_NEWS_TAGS', 'any');
+
+// dedicated google news sitemap settings
 
 if ( !defined('XMLSF_NEWS_POST_TYPE') )
 	define('XMLSF_NEWS_POST_TYPE', 'post');
-
-if ( !defined('XMLSF_NAME') )
-	define('XMLSF_NAME', 'sitemap.xml');
-
-if ( !defined('XMLSF_NEWS_NAME') )
-	define('XMLSF_NEWS_NAME', 'sitemap-news.xml');
-
-/* -----------------
- *      CLASS
- * ----------------- */
-
-if ( class_exists('XMLSitemapFeed') || include( XMLSF_PLUGIN_DIR . '/XMLSitemapFeed.class.php' ) )
-	XMLSitemapFeed::init();
 
 /* -------------------------------------
  *      MISSING WORDPRESS FUNCTIONS
  * ------------------------------------- */
 
 include_once(XMLSF_PLUGIN_DIR . '/hacks.php');
+
+/* ----------------------
+ *      CLASS OBJECT
+ * ---------------------- */
+
+if ( class_exists('XMLSitemapFeed') || include( XMLSF_PLUGIN_DIR . '/XMLSitemapFeed.class.php' ) )
+	$xmlsitemapfeed = new XMLSitemapFeed();
 
