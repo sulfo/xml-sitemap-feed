@@ -8,16 +8,33 @@
 status_header('200'); // force header('HTTP/1.1 200 OK') even for sites without posts
 header('Content-Type: text/xml; charset=' . get_bloginfo('charset'), true);
 
-echo '<?xml version="1.0" encoding="' . get_bloginfo('charset') . '"?><?xml-stylesheet type="text/xsl" href="' . plugins_url('/sitemap.xsl.php',XMLSF_PLUGIN_DIR . '/feed-sitemap.php') . '?ver=' . XMLSF_VERSION . '"?>
+global $xmlsitemapfeed;
+$post_type = get_query_var('post_type');
+
+echo '<?xml version="1.0" encoding="' . get_bloginfo('charset') . '"?>
+<?xml-stylesheet type="text/xsl" href="' . plugins_url('/sitemap.xsl.php',XMLSF_PLUGIN_DIR . '/feed-sitemap.php') . '?ver=' . XMLSF_VERSION . '"?>
 <!-- generated-on="' . date('Y-m-d\TH:i:s+00:00') . '" -->
 <!-- generator="XML & Google News Sitemap Feed plugin for WordPress" -->
 <!-- generator-url="http://4visions.nl/wordpress-plugins/xml-sitemap-feed/" -->
 <!-- generator-version="' . XMLSF_VERSION . '" -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" ';
+if ( $xmlsitemapfeed->do_news_tags($post_type) )
+	echo '
+	xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" ';
+echo '
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 
+		http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd ';
+if ( $xmlsitemapfeed->do_news_tags($post_type) )
+	echo '
+		http://www.google.com/schemas/sitemap-news/0.9 
+		http://www.google.com/schemas/sitemap-news/0.9/sitemap-news.xsd';
+echo '">
 ';
 
 // PRESETS are changable -- please read comments:
 
-$max_priority = 1.0;	// Maximum priority value for any URL in the sitemap; set to any other value between 0 and 1.
+$max_priority = 0.9;	// Maximum priority value for any URL in the sitemap; set to any other value between 0 and 1.
 $min_priority = 0;	// Minimum priority value for any URL in the sitemap; set to any other value between 0 and 1.
 			// NOTE: Changing these values will influence each URL's priority. Priority values are taken by 
 			// search engines to represent RELATIVE priority within the site domain. Forcing all URLs
@@ -25,27 +42,12 @@ $min_priority = 0;	// Minimum priority value for any URL in the sitemap; set to 
 $frontpage_priority = 1.0;	// Your front page priority, usually the same as max priority but if you have any reason
 				// to change it, please be my guest; set to any other value between 0 and 1.
 
-//$maxURLS = 50000;	// maximum number of URLs allowed in any sitemap.
-$level_weight = 0.1;	// Makes a sub-page loose 10% for each level; set to any other value between 0 and 1.
-$month_weight = 0.1;	// Fall-back value normally ignored by automatic priority calculation, which
+$level_weight = 0.1;	// Makes a sub-page gain or loose priority for each level; set to any other value between 0 and 1.
+$month_weight = -0.1;	// Fall-back value normally ignored by automatic priority calculation, which
 			// makes a post loose 10% of priority monthly; set to any other value between 0 and 1.
+$firstcomment_bonus = 0.1;
 
 // EDITING below here is NOT ADVISED!
-
-// Memory issue fix will try to increase allowed PHP memory size to XMLSF_MEMORY_LIMIT constant
-// as set in xml-sitemap.php if the current memory limit is lower than that.
-if ( function_exists('memory_get_usage') ) {
-	echo '<!-- memory-limit="' . @ini_get('memory_limit') . '" -->
-';
-	if ( (int) @ini_get('memory_limit') < abs(intval(XMLSF_MEMORY_LIMIT)) ) {
-		if ( $memory_limit = @ini_set('memory_limit', XMLSF_MEMORY_LIMIT) )
-			echo '<!-- memory-limit increased ' . ( abs(intval(XMLSF_MEMORY_LIMIT)) - (int) $memory_limit ) . 'M to ' . abs(intval(XMLSF_MEMORY_LIMIT)) . 'M successfully -->
-';
-		else
-			echo '<!-- memory-limit increase failed, trying anyway... -->
-';
-	}
-}
 
 // setup site variables
 $_post_count = wp_count_posts('post');
@@ -54,47 +56,65 @@ $_totalcommentcount = wp_count_comments();
 
 $lastmodified_gmt = get_lastmodified('GMT'); // last posts or page modified date
 $lastmodified = mysql2date('U',$lastmodified_gmt); // last posts or page modified date in Unix seconds
-$firstmodified = mysql2date('U',get_firstmodified('GMT')); // uses new get_firstmodified() function defined in xml-sitemap/hacks.php !
+$firstdate = mysql2date('U',get_firstdate('GMT')); // uses new get_firstdate() function defined in xml-sitemap/hacks.php !
 
 // calculated presets
-if ($_totalcommentcount->approved > 0)
-	$comment_weight =  ($max_priority - $min_priority) / $_totalcommentcount->approved;
-else
-	$comment_weight = 0;
-
-if ($_post_count->publish > $_page_count->publish) { // site emphasis on posts
-	$post_priority = 0.7;
-	$page_priority = 0.3;
-} else { // site emphasis on pages
-	$post_priority = 0.4;
-	$page_priority = 0.8;
+if ($_totalcommentcount->approved > 0) {
+	$average_commentcount = $_totalcommentcount->approved/($_post_count->publish + $_page_count->publish);
+	//$comment_weight =  $average_commentcount / $_totalcommentcount->approved;
+} else {
+	//$comment_weight = 0;
+	$average_commentcount = 0;
 }
 
-if ( $lastmodified > $firstmodified ) // valid blog age found ?
-	$age_weight = ($post_priority - $min_priority) / ($lastmodified - $firstmodified); // calculate relative age weight
+if ( $_post_count->publish > $_page_count->publish ) { // emphasis on posts (blog)
+	$blogbonus = 0.4;
+	$sitebonus = 0;
+} elseif ( $_post_count->publish==0 ) { // only pages (you're kidding... really?? old style site)
+	$blogbonus = 0;
+	$sitebonus = 0.4;
+} else { // emphasis on pages (site)
+	$blogbonus = 0;
+	$sitebonus = 0.2;
+}
+
+if ( $lastmodified > $firstdate ) // valid blog age found ?
+	$age_weight = ($blogbonus - $min_priority) / ($firstdate - $lastmodified); // calculate relative age weight
 else
-	$age_weight = $month_weight / 2629744 ; // else just do 10% per month (that's a month in seconds)
+	$age_weight = $month_weight / 2629744 ; // if not ? malus per month (that's a month in seconds)
 
-// prepare counter to limit the number of URLs to the absolute max of 50.000
-//$counter = 1;
-
-// start with the main URL
+if ( !have_posts() || $post_type == 'page' || $post_type == 'any' || ( is_array($post_type) && in_array('page',$post_type) ) ) {
 ?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"><url><loc><?php 
-		// hook for filter 'xml_sitemap_url' provides a string here and MUST get a string returned
-		$url = apply_filters( 'xml_sitemap_url', trailingslashit(home_url()) );
-		if ( is_string($url) ) echo esc_url( $url ); else echo esc_url( trailingslashit(home_url()) );
-		?></loc><lastmod><?php echo mysql2date('Y-m-d\TH:i:s+00:00', $lastmodified_gmt, false); ?></lastmod><changefreq>daily</changefreq><priority>1.0</priority></url><?php
+	<url>
+		<loc><?php 
+			// hook for filter 'xml_sitemap_url' provides a string here and MUST get a string returned
+			$url = apply_filters( 'xml_sitemap_url', trailingslashit(home_url()) );
+			if ( is_string($url) ) 
+				echo esc_url( $url ); 
+			else 
+				echo esc_url( trailingslashit(home_url()) ); ?></loc>
+		<lastmod><?php echo mysql2date('Y-m-d\TH:i:s+00:00', $lastmodified_gmt, false); ?></lastmod>
+		<changefreq>hourly</changefreq>
+		<priority>1.0</priority>
+	</url>
+<?php
+}
 
-// then loop away!
-if ( have_posts() ) : while ( have_posts() /* && $counter < $maxURLS */ ) : the_post();
+// loop away!
+if ( have_posts() ) :
+    while ( have_posts() ) : 
+	the_post();
 
-	// check if we are not dealing with an external URL :: Thanks, Francois Deschenes :)
-	if(!preg_match('/^' . preg_quote(home_url(), '/') . '/i', get_permalink())) continue;
+	// check if we are not dealing with an external URL :: Thanks to Francois Deschenes :)
+	// or if page is frontpage
+	if ( !preg_match('/^' . preg_quote(home_url(), '/') . '/i', get_permalink()) 
+	     || $post->ID == get_option('page_on_front')) 
+		continue;
 	
 	$thispostmodified_gmt = $post->post_modified_gmt; // post GMT timestamp
 	$thispostmodified = mysql2date('U',$thispostmodified_gmt); // post Unix timestamp
 	$lastcomment = array();
+	$priority = 0;
 
 	if ($post->comment_count && $post->comment_count > 0) {
 		$lastcomment = get_comments( array(
@@ -107,45 +127,108 @@ if ( have_posts() ) : while ( have_posts() /* && $counter < $maxURLS */ ) : the_
 			$thispostmodified = $lastcommentsdate; // replace post with comment Unix timestamp
 			$thispostmodified_gmt = $lastcomment[0]->comment_date_gmt; // and replace modified GMT timestamp
 		}
+		
+		$priority = ( $post->comment_count / ( ( $_totalcommentcount->approved / 2 ) - $average_commentcount ) ) + $firstcomment_bonus;
+		
 	}
-	$lastactivityage = (gmdate('U') - $thispostmodified); // post age
 
 	if($post->post_type == "page") {
-		if ($post->ID == get_option('page_on_front')) // check if we are not doing the front page twice
-			continue;
-		
-		if (!is_array($post->ancestors)) { // $post->ancestors seems always empty (something to do with http://core.trac.wordpress.org/ticket/10381 ?) so we probably need to do it ourselves... 
+	
+		if (!isset($post->ancestors)) { 
+			// could use get_post_ancestors($post) but that creates an 
+			// extra db query per sub-page so better do it ourselves... 
 			$page_obj = $post;
 			$ancestors = array();
 			while($page_obj->post_parent!=0) {
 				$page_obj = get_page($page_obj->post_parent);
 				$ancestors[] = $page_obj->ID;
 			}
-		} else { 
+		} else {
 			$ancestors = $post->ancestors;
 		}
-		$offset = (($post->comment_count - $average_commentcount) * $comment_weight) - (count($ancestors) * $level_weight);
-		$priority = $page_priority + $offset;
+
+		$priority += (count($ancestors) * $level_weight) + $sitebonus;
 	} else {
 		if(is_sticky($post->ID))
-			$offset = $max_priority - $post_priority;
+			$priority = $max_priority;
 		else
-			$offset = (($post->comment_count - $average_commentcount) * $comment_weight) - (($lastmodified - $thispostmodified) * $age_weight);
-		$priority = $post_priority + $offset;
+			$priority += (($lastmodified - $thispostmodified) * $age_weight) + $blogbonus;
 	}
+
+
+	$lastactivityage = (gmdate('U') - $thispostmodified); // post age
+	
 	// trim priority
 	$priority = ($priority > $max_priority) ? $max_priority : $priority;
-	$priority = ($priority < $min_priority) ? $min_priority : $priority; ?>
-<url><loc><?php echo esc_url( get_permalink() ) ?></loc><lastmod><?php echo mysql2date('Y-m-d\TH:i:s+00:00', $thispostmodified_gmt, false) ?></lastmod><changefreq><?php
- 	if(($lastactivityage/86400) < 7) { // last activity less than 1 week old 
- 		 ?>daily<?php
- 	} else if(($lastactivityage/604800) < 12) { // last activity between 1 and 12 weeks old 
- 		 ?>weekly<?php	
- 	} else if(($lastactivityage/604800) < 52) { // last activity between 12 and 52 weeks old 
- 		 ?>monthly<?php 
- 	} else { ?>yearly<?php	
- 	} ?></changefreq><priority><?php echo number_format($priority,1) ?></priority></url><?php 
-//	$counter++;
-
-endwhile; endif; 
+	$priority = ($priority < $min_priority) ? $min_priority : $priority; 
+?>
+	<url>
+		<loc><?php the_permalink_rss(); ?></loc>
+<?php 
+// Google News tags
+if ( $xmlsitemapfeed->do_news_tags($post->post_type) && $post->post_date > date('Y-m-d H:i:s', strtotime('-49 hours') ) ) { ?>
+		<news:news>
+			<news:publication>
+				<news:name><?php 
+					echo ( defined('XMLSF_GOOGLE_NEWS_TITLE') ) ? apply_filters('the_title_rss', XMLSF_GOOGLE_NEWS_TITLE) : bloginfo_rss('name'); ?></news:name>
+				<news:language><?php 
+					$lang = reset(get_the_terms($post->ID,'language'));
+					// bloginfo_rss('language') returns improper format
+					// so using explode but that breaks chinese :°(
+					echo ( is_object($lang) ) ? $lang->slug : reset(explode('-', get_bloginfo_rss('language')));  ?></news:language>
+			</news:publication>
+			<news:publication_date><?php 
+				echo mysql2date('Y-m-d\TH:i:s+00:00', $post->post_date_gmt, false); ?></news:publication_date>
+			<news:title><?php the_title_rss() ?></news:title>
+			<news:keywords><?php 
+				$do_comma = false; 
+				$keys_arr = get_the_category(); 
+				foreach($keys_arr as $key) { 
+					echo ( $do_comma ) ? ', ' : '' ; 
+					echo apply_filters('the_title_rss', $key->name); 
+					$do_comma = true; 
+				} ?></news:keywords>
+<?php 
+		// TODO: create the new taxonomy "Google News Genre" with some genres preset
+		if ( taxonomy_exists('gn_genre') && get_the_terms($post->ID,'gn_genre') ) { 
+		?>
+			<news:genres><?php 
+				$do_comma = false; 
+				foreach(get_the_terms($post->ID,'gn_genre') as $key) { 
+					echo ( $do_comma ) ? ', ' : '' ; 
+					echo apply_filters('the_title_rss', $key->name); 
+					$do_comma = true; 
+				} ?></news:genres>
+		<?php
+		}
+?>
+		</news:news>
+<?php 
+// and lastly, set the priority to news priority level
+$priority = $max_priority;
+} ?>
+		<lastmod><?php echo mysql2date('Y-m-d\TH:i:s+00:00', $thispostmodified_gmt, false); ?></lastmod>
+		<changefreq><?php
+		 	if(($lastactivityage/86400) < 1) { // last activity less than 1 day old 
+		 		echo 'hourly';
+		 	} else if(($lastactivityage/86400) < 7) { // last activity less than 1 week old 
+		 		echo 'daily';
+		 	} else if(($lastactivityage/86400) < 30) { // last activity between 1 week and one month old 
+		 		echo 'weekly';
+		 	} else if(($lastactivityage/86400) < 365) { // last activity between 1 month and 1 year old 
+		 		echo 'monthly';
+		 	} else {
+		 		echo 'yearly'; // never
+		 	} ?></changefreq>
+	 	<priority><?php echo number_format($priority,1) ?></priority>
+ 	</url>
+<?php 
+    endwhile; 
+endif; 
 ?></urlset>
+<?php
+	echo '<!-- Queries executed '.get_num_queries().' | Posts total '.($_post_count->publish + $_page_count->publish);
+	if(function_exists('memory_get_usage'))
+		echo ' | Peak memory usage '.round(memory_get_peak_usage()/1024/1024,2).'M';
+	echo ' -->';
+?>
