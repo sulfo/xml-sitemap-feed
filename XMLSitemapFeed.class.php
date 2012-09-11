@@ -302,7 +302,7 @@ error_log('called test function with parameter: ' . print_r($args, true));
 		// hook for filter 'xml_sitemap_url' provides an array here and MUST get an array returned
 		//$sitemap_array = apply_filters('xml_sitemap_url',$this->sitemaps);
 
-		echo "\n# XML & Google News Sitemap Feeds - version ".XMLSF_VERSION." (http://4visions.nl/wordpress-plugins/xml-sitemap-feed/)";
+		echo "\n# XML & Google News Sitemap Feeds - version ".XMLSF_VERSION." (http://status301.net/wordpress-plugins/xml-sitemap-feed/)";
 
 		if ( !empty($this->sitemaps) )
 			foreach ( $this->sitemaps as $url )
