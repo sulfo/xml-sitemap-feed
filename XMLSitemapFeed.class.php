@@ -22,6 +22,8 @@ class XMLSitemapFeed {
 				'post_types' => array('page','post'),
 				'taxonomies' => array('category','post_tag'),
 				);
+				
+	private $do_news_feed = true;
 	
 	private $do_news_tags = array('post'); // TODO replace by get_option + defaults['news_tags']
 	
