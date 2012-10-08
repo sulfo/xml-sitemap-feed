@@ -23,6 +23,14 @@ echo '<?xml version="1.0" encoding="'.get_bloginfo('charset').'"?>
 		http://www.google.com/schemas/sitemap-news/0.9/sitemap-news.xsd">
 ';
 
+// get site language for default language
+// bloginfo_rss('language') returns improper format so
+// we explode on hyphen and use only first part. 
+// TODO this workaround breaks (simplified) chinese :(
+$language = reset(explode('-', get_bloginfo_rss('language')));
+if ( empty($language) )
+	$language = 'en';
+
 // loop away!
 if ( have_posts() ) : 
     while ( have_posts() ) : 
@@ -66,10 +74,7 @@ if ( have_posts() ) :
 						echo bloginfo_rss('name'); ?></news:name>
 				<news:language><?php 
 					$lang = reset(get_the_terms($post->ID,'language'));
-					if (is_object($lang)) 
-						echo $lang->slug; 
-					else /* bloginfo_rss('language') returns improper format. only this breaks chinese :( */
-						echo reset(explode('-', get_bloginfo_rss('language')));  ?></news:language>
+					echo (is_object($lang)) ? $lang->slug : $language;  ?></news:language>
 			</news:publication>
 			<news:publication_date><?php 
 				echo mysql2date('Y-m-d\TH:i:s+00:00', $post->post_date_gmt, false); ?></news:publication_date>

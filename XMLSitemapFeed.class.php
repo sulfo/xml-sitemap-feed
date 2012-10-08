@@ -429,6 +429,10 @@ error_log('called test function with parameter: ' . print_r($args, true));
 			}
 
 			if ( $request['feed'] == $this->news_name ) {
+				// disable caching
+				define( 'DONOTCACHEPAGE', 1 ); // wp super cache
+				// TODO w3tc
+				
 				// setup actions and filters
 				add_action('do_feed_'.$this->news_name, array($this, 'load_template_news'), 10, 1);
 				add_filter( 'post_limits', array($this, 'filter_news_limits') );
