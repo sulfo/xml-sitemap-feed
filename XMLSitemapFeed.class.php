@@ -430,7 +430,7 @@ error_log('called test function with parameter: ' . print_r($args, true));
 
 			if ( $request['feed'] == $this->news_name ) {
 				// disable caching
-				define( 'DONOTCACHEPAGE', 1 ); // wp super cache
+				define( 'DONOTCACHEPAGE', 1 ); // wp super cache -- or does super cache always clear feeds after new posts??
 				// TODO w3tc
 				
 				// setup actions and filters
