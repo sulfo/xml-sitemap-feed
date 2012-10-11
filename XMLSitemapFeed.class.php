@@ -125,13 +125,14 @@ class XMLSitemapFeed {
 							'default' => '',
 							//'class' => '', // used for text fields
 							'description' => '',
-							//'sanitize_callback' => 'functionname'
+							'sanitize_callback' => ''//'functionname'
 							),
 						'option2' => array(
 							'label' => 'Test 2',
 							'type' => 'function', // select, function, checkbox, text, number, hidden...
 							'function' => 'test',
 							'description' => 'Test 2 description',
+							'sanitize_callback' => ''//'functionname'
 							)
 		
 					);
