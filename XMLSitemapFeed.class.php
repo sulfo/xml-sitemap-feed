@@ -342,7 +342,7 @@ error_log('called test function with parameter: ' . print_r($args, true));
 		if (pathinfo($request, PATHINFO_EXTENSION)) {
 			return untrailingslashit($request);
 		}
-		return trailingslashit($request);
+		return $request; // trailingslashit($request);
 	}
 
 	/**
