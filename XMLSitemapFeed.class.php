@@ -55,7 +55,7 @@ class XMLSitemapFeed {
 		if (pathinfo($request, PATHINFO_EXTENSION)) {
 			return untrailingslashit($request);
 		}
-		return trailingslashit($request);
+		return $request; //trailingslashit($request);
 	}
 
 	/**
