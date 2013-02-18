@@ -242,7 +242,7 @@ On some setups (usually using the WordPress MU Domain Mapping plugin) this error
 
 You might be experiencing an issue with your servers PHP memory limit. The plugin attempts to increase the memory limit to 256M by itself but in some rare cases that does not work. Or your site is just so big that that is not even enough... In those cases, you should see a messages like `PHP Fatal error: Allowed memory size of xxxxxx bytes exhausted.` in your server/account error log file.
 
-Read more on (Increasing memory allocated to PHP)[http://codex.wordpress.org/Editing_wp-config.php#Increasing_memory_allocated_to_PHP] (try a value higher than 256M) or ask your hosting provider what you can do.
+Read more on [Increasing memory allocated to PHP](http://codex.wordpress.org/Editing_wp-config.php#Increasing_memory_allocated_to_PHP) (try a value higher than 256M) or ask your hosting provider what you can do.
 
 
 == Screenshots ==

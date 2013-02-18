@@ -43,9 +43,17 @@ foreach ( $tax_obj->object_type as $post_type) {
 //$_terms_count = wp_count_terms(get_query_var('taxonomy'));
 //$average_count = $_post_count->publish / $_terms_count;
 
+// TODO find a way around term language filtering by Polylang !!!!!!!
+
+/*
+ Solution on http://wordpress.org/support/topic/query-all-language-terms?replies=6#post-3415389 ?
+ Does not work anymore ;(
+*/
+
 $terms = get_terms( get_query_var('taxonomy'), array(
 						'orderby' => 'count',
 						'order' => 'DESC',
+						//'lang' => 'en,nl',
 						'hierachical' => 0,
 						'number' => 50000 ) );
 

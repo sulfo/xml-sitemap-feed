@@ -41,7 +41,7 @@ global $xmlsitemapfeed;
 
 // add rules for custom public post types
 $post_types = $xmlsitemapfeed->get_post_types();
-foreach ( $post_types as $post_type ) {
+foreach ( (array)$post_types as $post_type ) {
 	$count = wp_count_posts( $post_type );
 	if ( $count->publish > 0 ) {
 ?>
