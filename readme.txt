@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravan
 Tags: xml sitemap, news sitemap, sitemap.xml, Google, Google News, Yahoo, Bing, Live, MSN, seo, wpmu, feed, qtranslate, xlanguage
 Requires at least: 3.1
 Tested up to: 3.5.1
-Stable tag: 4.0
+Stable tag: 4.0.1
 
 Feeds that comply with the XML Sitemap and Google News protocol for fast indexing by Google, Yahoo, Bing, Ask and others. Multi-Site and Multi-Lingual compatible!
 
@@ -274,14 +274,15 @@ Thanks for sharing your translation :)
 
 == Upgrade Notice ==
 
-= 4.0.0 =
-New admin options to select which sitemaps, post types and taxonomies..
+= 4.0.1 =
+Bugfix release.
 
 
 == Changelog ==
 
 = 4.0.1 =
 * NEW: Dutch and French translations
+* BUGFIX: Non public sites still have sitemap by default
 * BUGFIX: Invalid argument supplied for foreach() when all post types are off
 * BUGFIX: Wrong translation dir
 

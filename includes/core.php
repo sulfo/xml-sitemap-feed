@@ -20,10 +20,9 @@ class XMLSitemapFeed {
 	private function build_defaults() {
 
 		// sitemaps
-		if (get_option('blog_public')) 
+		if ( '1' == get_option('blog_public') ) 
 			$this->defaults['sitemaps'] = array(
 					'sitemap' => XMLSF_NAME,
-					//'sitemap-news' => XMLSF_NEWS_NAME
 					);
 		else
 			$this->defaults['sitemaps'] = array();
