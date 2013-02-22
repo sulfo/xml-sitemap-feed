@@ -9,10 +9,10 @@ status_header('200'); // force header('HTTP/1.1 200 OK') for sites without posts
 header('Content-Type: text/xml; charset=' . get_bloginfo('charset'), true);
 
 echo '<?xml version="1.0" encoding="'.get_bloginfo('charset').'"?>
-<?xml-stylesheet type="text/xsl" href="' . plugins_url('/sitemap.xsl.php',XMLSF_PLUGIN_DIR . '/feed-sitemap.php') . '?ver=' . XMLSF_VERSION . '"?>
+<?xml-stylesheet type="text/xsl" href="' . plugins_url('xsl/sitemap.xsl.php',__FILE__) . '?ver=' . XMLSF_VERSION . '"?>
 <!-- generated-on="'.date('Y-m-d\TH:i:s+00:00').'" -->
 <!-- generator="XML & Google News Sitemap Feed plugin for WordPress" -->
-<!-- generator-url="http://4visions.nl/wordpress-plugins/xml-sitemap-feed/" -->
+<!-- generator-url="http://status301.net/wordpress-plugins/xml-sitemap-feed/" -->
 <!-- generator-version="'.XMLSF_VERSION.'" -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" 
 	xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" 

@@ -7,13 +7,13 @@
 
 status_header('200'); // force header('HTTP/1.1 200 OK') for sites without posts
 // TODO test if we can do without it
-header('Content-Type: text/xml; charset=' . get_bloginfo('charset'), true);
+header('Content-Type: text/xml; charset=' . get_bloginfo('charset', 'UTF-8'), true);
 
-echo '<?xml version="1.0" encoding="'.get_bloginfo('charset').'"?>
-<?xml-stylesheet type="text/xsl" href="' . plugins_url('/sitemap.xsl.php',XMLSF_PLUGIN_DIR . '/feed-sitemap.php') . '?ver=' . XMLSF_VERSION . '"?>
+echo '<?xml version="1.0" encoding="'.get_bloginfo('charset', 'UTF-8').'"?>
+<?xml-stylesheet type="text/xsl" href="' . plugins_url('xsl/sitemap.xsl.php',__FILE__) . '?ver=' . XMLSF_VERSION . '"?>
 <!-- generated-on="'.date('Y-m-d\TH:i:s+00:00').'" -->
 <!-- generator="XML & Google News Sitemap Feed plugin for WordPress" -->
-<!-- generator-url="http://4visions.nl/wordpress-plugins/xml-sitemap-feed/" -->
+<!-- generator-url="http://status310.net/wordpress-plugins/xml-sitemap-feed/" -->
 <!-- generator-version="'.XMLSF_VERSION.'" -->
 
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" 
@@ -32,9 +32,12 @@ $min_priority = 0.2;	// Minimum priority value for any URL in the sitemap; set t
 
 $level_weight = 0.1;	// TODO Makes a sub-term gain or loose priority for each level; set to any other value between 0 and 1.
 
-$tax_obj = get_taxonomy(get_query_var('taxonomy'));
+$taxonomy = get_query_var('taxonomy');
+$lang = get_query_var('lang');
+echo "<!-- taxonomy: $taxonomy -->";
+$tax_obj = get_taxonomy($taxonomy);
 foreach ( $tax_obj->object_type as $post_type) {
-	echo "<!-- $post_type -->
+	echo "<!-- taxonomy post type: $post_type -->
 ";
 	$_post_count = wp_count_posts($post_type);
 	$postcount += $_post_count->publish;
@@ -43,19 +46,16 @@ foreach ( $tax_obj->object_type as $post_type) {
 //$_terms_count = wp_count_terms(get_query_var('taxonomy'));
 //$average_count = $_post_count->publish / $_terms_count;
 
-// TODO find a way around term language filtering by Polylang !!!!!!!
+// Polylang solution on http://wordpress.org/support/topic/query-all-language-terms?replies=6#post-3415389
+//global $xmlsf;
 
-/*
- Solution on http://wordpress.org/support/topic/query-all-language-terms?replies=6#post-3415389 ?
- Does not work anymore ;(
-*/
-
-$terms = get_terms( get_query_var('taxonomy'), array(
-						'orderby' => 'count',
-						'order' => 'DESC',
-						//'lang' => 'en,nl',
-						'hierachical' => 0,
-						'number' => 50000 ) );
+$terms = get_terms( $taxonomy, array(
+					'orderby' => 'count',
+					'order' => 'DESC',
+					'lang' => $lang,
+					'hierachical' => 0,
+					'pad_counts' => true, // count child term post count too...
+					'number' => 50000 ) );
 
 if ( $terms ) : 
 
@@ -63,10 +63,6 @@ if ( $terms ) :
     
     // calculate priority based on number of posts
     // or maybe take child taxonomy terms into account.?
-	//pad_counts 
-	// (boolean) If true, count all of the children along with the $terms. 
-	// 1 (true) 
-	// 0 (false) - Default
 
 	$priority = $min_priority + ( $term->count / ( $postcount / 2 ) );
 	$priority = ($priority > $max_priority) ? $max_priority : $priority;
@@ -119,7 +115,7 @@ endif;
 ?></urlset>
 <?php
 	echo '<!-- Queries executed '.get_num_queries().' | Posts total '.($_post_count->publish + $_page_count->publish);
-	if(function_exists('memory_get_usage'))
+	if(function_exists('memory_get_peak_usage'))
 		echo ' | Peak memory usage '.round(memory_get_peak_usage()/1024/1024,2).'M';
 	echo ' -->';
 ?>

@@ -3,24 +3,22 @@ Contributors: RavanH
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravanhagen%40gmail%2ecom&item_name=XML%20Sitemap%20Feed&item_number=3%2e8&no_shipping=0&tax=0&bn=PP%2dDonationsBF&charset=UTF%2d8&lc=us
 Tags: xml sitemap, news sitemap, sitemap.xml, Google, Google News, Yahoo, Bing, Live, MSN, seo, wpmu, feed, qtranslate, xlanguage
 Requires at least: 3.1
-Tested up to: 3.4.1
-Stable tag: 3.9.2
+Tested up to: 3.5.1
+Stable tag: 4.0
 
 Feeds that comply with the XML Sitemap and Google News protocol for fast indexing by Google, Yahoo, Bing, Ask and others. Multi-Site and Multi-Lingual compatible!
 
 == Description ==
 
-This plugin dynamically creates feeds that comply with the **XML Sitemap** and the **Google News Sitemap** protocol. It is Multi-Site and Multi-Lingual compatible and there are no options to be set nor file or dir access rights to be tampered with. 
+This plugin dynamically creates feeds that comply with the **XML Sitemap** and the **Google News Sitemap** protocol. It is Multi-Site and **qTranslate / Polylang** compatible and there are no files created. Some new options under the Privacy settings on **Settings > Reading** allow control over the sitemaps, which post and taxonomy types are included and any additional robots.txt rules.
 
-You or your site owners on your Multi-site network will not be bothered with complicated settings like other XML Sitemap plugins. XML sitemap values like ChangeFreq and URL Priority is auto-calculated based on post age and comment activity.
+You or site owners on your Multi-site network will not be bothered with complicated settings like other XML Sitemap plugins. XML sitemap values like ChangeFreq and URL Priority are auto-calculated based on post age and comment activity.
 
 The feeds become instantly available: One XML Sitemap on yourblogurl.tld/sitemap.xml (or yourblogurl.tld/?feed=sitemap), ready for indexing by search engines like Google, Yahoo, MSN, Ask.com and others. And one Google News Sitemap on yourblogurl.tld/sitemap-news.xml (or yourblogurl.tld/?feed=sitemap-news), ready for indexing by Google News. Both are automatically referenced in the dynamically created **robots.txt** on yourblogurl.tld/robots.txt to tell search engines where to find your XML Sitemaps.
 
 Please read the FAQ's for info on how to get your articles listed on Google News.
 
-**Compatible with caching plugins** like WP Super Cache, W3 Total Cache and Quick Cache that cache feeds, allowing a faster serving to the hungry, impatient (!) spiders.
-
-**qTranslate and xLanguage compatible!** Tested in Pre-Path Mode and Query Mode. Each language on your site will have its own XML Sitemap. 
+**Compatible with caching plugins** like WP Super Cache, W3 Total Cache and Quick Cache that cache feeds, allowing a faster serving to the hungry, impatient (!) spider.
 
 **NOTES:** 
 
@@ -34,11 +32,10 @@ Please read the FAQ's for info on how to get your articles listed on Google News
 * Completely **automatic** post URL _priority_ and _change frequency_ calculation based on post age and comment and trackback activity.
 * Works out-of-the-box, even on **multi-site / shared codebase / multi-blog setups** like WordPress MU, WP 3.0 in MultiSite (WPMS) mode and others. 
 * Also works upon **Network Activate** or placed in **/mu-plugins/** on WP 3.0 in MS mode and WPMU and even takes care to exclude any tags blogs to avoid malus points for link spamming.
-* Compatible with multi-lingual sites using **qTranslate** or **xLanguage** to allow all languages to be indexed equally.
+* Compatible with multi-lingual sites using **qTranslate** or **Polylang** to allow all languages to be indexed equally.
 
 = Limitations =
 
-* The feed contains the front page and all posts and pages but _excludes_ category, tag and other dynamic archive pages. This should not be a problem and by most it is even _advised_ to exclude them. There are SEO plugins around that actively block these archive pages from search engines.
 * Except by _re-saving_ older posts from time to time (keeping the lastmod date fairly recent) there is no way to manually control the priority of individual posts/pages in the sitemap. See the Faq's for more.
 * This plugin does not ping any search engines. But then, WordPress does this by default already via the Ping-o-Matic service so why bother? See the Faq's for more.
 * Because the feed is dynamically created, on _very_ large sites the creation process might take a while. Search engines are said to have a short fuse about waiting for a sitemap, so you may want to consider using a cache plugin that also (pre)caches feeds. If you are unfamiliar with caching and server setup start with an easy caching plugin such as **Quick Cache**. For more options (and better performance) you might find solace in **WP Super Cache** or **W3 Total Cache**.
@@ -253,11 +250,21 @@ Read more on [Increasing memory allocated to PHP](http://codex.wordpress.org/Edi
 
 == Upgrade Notice ==
 
-= 3.9.2 =
-Basic Google News feed stylesheet and XSS vulnerability improvement.
+= 4.0.0 =
+New admin options to select which sitemaps, post types and taxonomies..
 
 
 == Changelog ==
+
+= 4.0.0 =
+* Moved to sitemap index and seperated post/page sitemaps
+* NEW: options to dswitch off sitemap and news sitemap
+* NEW: select which post types to include
+* NEW: select which taxonomies to include
+* NEW: set additional robots.txt rules
+* Improved Polylang support
+* Dropped xLanguage support
+* qTranslate currently untested
 
 = 3.9.2 =
 * Basic Google News feed stylesheet

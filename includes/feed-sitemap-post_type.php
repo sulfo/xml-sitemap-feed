@@ -8,27 +8,27 @@
 status_header('200'); // force header('HTTP/1.1 200 OK') even for sites without posts
 header('Content-Type: text/xml; charset=' . get_bloginfo('charset'), true);
 
-global $xmlsitemapfeed;
+global $xmlsf;
 $post_type = get_query_var('post_type');
+foreach ( (array)$xmlsf->get_do_tags($post_type) as $tag )
+	$$tag = true;
 
 echo '<?xml version="1.0" encoding="' . get_bloginfo('charset') . '"?>
-<?xml-stylesheet type="text/xsl" href="' . plugins_url('/sitemap.xsl.php',XMLSF_PLUGIN_DIR . '/feed-sitemap.php') . '?ver=' . XMLSF_VERSION . '"?>
+<?xml-stylesheet type="text/xsl" href="' . plugins_url('xsl/sitemap.xsl.php',__FILE__) . '?ver=' . XMLSF_VERSION . '"?>
 <!-- generated-on="' . date('Y-m-d\TH:i:s+00:00') . '" -->
 <!-- generator="XML & Google News Sitemap Feed plugin for WordPress" -->
-<!-- generator-url="http://4visions.nl/wordpress-plugins/xml-sitemap-feed/" -->
+<!-- generator-url="http://status301.net/wordpress-plugins/xml-sitemap-feed/" -->
 <!-- generator-version="' . XMLSF_VERSION . '" -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" ';
-if ( $xmlsitemapfeed->do_news_tags($post_type) )
-	echo '
-	xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" ';
+echo $do_news ? '
+	xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" ' : '';
 echo '
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 
 		http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd ';
-if ( $xmlsitemapfeed->do_news_tags($post_type) )
-	echo '
+echo $do_news ? '
 		http://www.google.com/schemas/sitemap-news/0.9 
-		http://www.google.com/schemas/sitemap-news/0.9/sitemap-news.xsd';
+		http://www.google.com/schemas/sitemap-news/0.9/sitemap-news.xsd ' : '';
 echo '">
 ';
 
@@ -83,21 +83,13 @@ if ( $lastmodified > $firstdate ) // valid blog age found ?
 else
 	$age_weight = $month_weight / 2629744 ; // if not ? malus per month (that's a month in seconds)
 
-if ( !have_posts() || $post_type == 'page' || $post_type == 'any' || ( is_array($post_type) && in_array('page',$post_type) ) ) {
-?>
-	<url>
-		<loc><?php 
-			// hook for filter 'xml_sitemap_url' provides a string here and MUST get a string returned
-			$url = apply_filters( 'xml_sitemap_url', trailingslashit(home_url()) );
-			if ( is_string($url) ) 
-				echo esc_url( $url ); 
-			else 
-				echo esc_url( trailingslashit(home_url()) ); ?></loc>
-		<lastmod><?php echo mysql2date('Y-m-d\TH:i:s+00:00', $lastmodified_gmt, false); ?></lastmod>
-		<changefreq>hourly</changefreq>
-		<priority>1.0</priority>
-	</url>
-<?php
+$exclude = array();
+if ( $post_type == 'page' ) {
+	$exclude[] = get_option('page_on_front');
+	if ( !empty($exclude) && function_exists('pll_get_post') )
+		foreach ( $xmlsf->get_languages() as $lang ) 
+			$exclude[] = pll_get_post( $exclude[0], $lang );
+// TODO : find a better way to exclude all Polylang language front pages : is_front_page() in any language !
 }
 
 // loop away!
@@ -106,9 +98,8 @@ if ( have_posts() ) :
 	the_post();
 
 	// check if we are not dealing with an external URL :: Thanks to Francois Deschenes :)
-	// or if page is frontpage
-	if ( !preg_match('/^' . preg_quote(home_url(), '/') . '/i', get_permalink()) 
-	     || $post->ID == get_option('page_on_front')) 
+	// or if page is in the exclusion list (like front pages)
+	if ( !preg_match('/^' . preg_quote(home_url(), '/') . '/i', get_permalink()) || ( $post_type == 'page' && in_array($post->ID, $exclude) ) )
 		continue;
 	
 	$thispostmodified_gmt = $post->post_modified_gmt; // post GMT timestamp
@@ -128,7 +119,10 @@ if ( have_posts() ) :
 			$thispostmodified_gmt = $lastcomment[0]->comment_date_gmt; // and replace modified GMT timestamp
 		}
 		
-		$priority = ( $post->comment_count / ( ( $_totalcommentcount->approved / 2 ) - $average_commentcount ) ) + $firstcomment_bonus;
+		if ($_totalcommentcount->approved > 0)
+			$priority = ( $post->comment_count / ( ( $_totalcommentcount->approved / 2 ) - $average_commentcount ) ) + $firstcomment_bonus;
+		else
+			$priority = ( $min_priority + $max_priority ) / 2 ;
 		
 	}
 
@@ -165,8 +159,8 @@ if ( have_posts() ) :
 	<url>
 		<loc><?php the_permalink_rss(); ?></loc>
 <?php 
-// Google News tags
-if ( $xmlsitemapfeed->do_news_tags($post->post_type) && $post->post_date > date('Y-m-d H:i:s', strtotime('-49 hours') ) ) { ?>
+// Google News tags 
+if ( $news && $post->post_date > date('Y-m-d H:i:s', strtotime('-49 hours') ) ) { ?>
 		<news:news>
 			<news:publication>
 				<news:name><?php 
