@@ -43,11 +43,10 @@ Please read the FAQ's for info on how to get your articles listed on Google News
 
 = Translations =
 
-There is nothing to translate. The sitemap protocol is international, there is no options page nor any front-end or widget output. Nothing to see here, please move along ;)  
+- **Dutch** * Author: [R.A. van Hagen](http://status301.net) (version 4.0)
+- **French** * Author: [R.A. van Hagen](http://status301.net) (version 4.0)
 
-= Plugin developers =
-
-Since 3.8.5, there is a FILTER hook `xml_sitemap_url` available that lets you filter the URL for the sitemap reference in the generated robots.txt and the home URL in the sitemap. It sends both string (for single url) and array (for multiple urls) and should receive the same. See pre-packaged examples of it's use in xml-sitemap.php for the qTranslate and xLanguage plugins.  
+New transtations will be accepted and listed here. See instructions under [Other Notes](http://wordpress.org/extend/plugins/xml-sitemap-feed/other_notes).
 
 = Credits =
 
@@ -189,7 +188,7 @@ The sitemap is dynamically generated just like a feed. There is no actual file c
 
 = I see a sitemap.xml file in site root but it does not seem to get updated! =
 
-You are most likely looking at a sitemap.xml file that has been created by another XML Sitemap plugin before you started using this plugin. Just remove it and let the plugin dynamically generate it just like a feed. There is no actual file created.
+You are most likely looking at a sitemap.xml file that has been created by another XML Sitemap plugin before you started using this one. Remove that file and let the plugin dynamically generate it just like a feed. There will not be any actual files created.
 
 If that's not the case, you are probably using a caching plugin or your browser does not update to the latest feed output. Please verify.
 
@@ -198,6 +197,8 @@ If that's not the case, you are probably using a caching plugin or your browser 
 Some caching plugins have the option to switch on/off caching of feeds. Make sure it is turned on. 
 
 Frederick Townes, developer of **W3 Total Cache**, says: "There's a checkbox option on the page cache settings tab to cache feeds. They will expire according to the expires field value on the browser cache setting for HTML."
+
+The Google News sitemap is designed to NOT be cached.
 
 = I get an ERROR when opening the sitemap or robots.txt! = 
 
@@ -242,6 +243,29 @@ You might be experiencing an issue with your servers PHP memory limit. The plugi
 Read more on [Increasing memory allocated to PHP](http://codex.wordpress.org/Editing_wp-config.php#Increasing_memory_allocated_to_PHP) (try a value higher than 256M) or ask your hosting provider what you can do.
 
 
+== Translation ==
+
+1. Install PoEdit on your computer.
+
+2. Open the template translation database xml-sitemap-xx_XX.po in this plugins /languages/ directory with PoEdit.
+
+3. Go to Edit > Preferences and on the tab Editor check the option to compile a .mo database on save automatically. Close with OK.
+
+4. Go to Catalog > Settings and set your name, e-mail address, language and country. Close with OK.
+
+5. Go to Catalog > Update from POT-file and select the main xml-sitemap-feed.pot file. Then accept all new and removed translation strings with OK.
+
+6. Now go ahead and start translating all the texts listed in PoEdit.
+
+7. When done, go to File > Save as... and replace the xx_XX in the file name with the appropriate language and country code for your translation. Leave the rest of the file name the same and Save.
+
+8. Upload the automatically created xml-sitemap-feed-xx_XX.mo database file (where xx_XX should now be your language and country code) to the plugins /languages/ directory on your WordPress site.
+
+9. After verifying the translations work on your site, send the .mo file to ravanhagen@gmail.com and don't forget to tell me how and with what link you would like to be mentioned in the credits!
+
+Thanks for sharing your translation :)
+
+
 == Screenshots ==
 
 1. XML Sitemap feed viewed in a normal browser. For human eyes only ;)
@@ -256,12 +280,18 @@ New admin options to select which sitemaps, post types and taxonomies..
 
 == Changelog ==
 
+= 4.0.1 =
+* NEW: Dutch and French translations
+* BUGFIX: Invalid argument supplied for foreach() when all post types are off
+* BUGFIX: Wrong translation dir
+
 = 4.0.0 =
 * Moved to sitemap index and seperated post/page sitemaps
 * NEW: options to dswitch off sitemap and news sitemap
 * NEW: select which post types to include
 * NEW: select which taxonomies to include
 * NEW: set additional robots.txt rules
+* NEW: Translation POT catalogue
 * Improved Polylang support
 * Dropped xLanguage support
 * qTranslate currently untested

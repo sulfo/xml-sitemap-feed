@@ -4,7 +4,7 @@ Plugin Name: XML Sitemap & Google News Sitemap Feeds
 Plugin URI: http://status301.net/wordpress-plugins/xml-sitemap-feed/
 Description: Creates a feed that complies with the XML Sitemap protocol ready for indexing by Google, Yahoo, Bing, Ask and others. Happy with it? Please leave me a <strong><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravanhagen%40gmail%2ecom&item_name=XML%20Sitemap%20Feed&item_number=4%2e0&no_shipping=0&tax=0&bn=PP%2dDonationsBF&charset=UTF%2d8&lc=us">Tip</a></strong> for development and support time. Thanks :)
 Text Domain: xml-sitemap-feed
-Version: 4.0
+Version: 4.0.1
 Author: RavanH
 Author URI: http://status301.net/
 */
@@ -42,18 +42,11 @@ Author URI: http://status301.net/
  */
 
 if(!empty($_SERVER['SCRIPT_FILENAME']) && 'xml-sitemap.php' == basename($_SERVER['SCRIPT_FILENAME']))
-	die('You can not access this page directly!');
+	die('You may not access this file directly!');
 
 /* --------------------
  *      CONSTANTS
  * -------------------- */
-
-	define('XMLSF_VERSION', '3.9.9.33');
-
-if ( file_exists ( dirname(__FILE__).'/xml-sitemap-feed' ) )
-	define('XMLSF_PLUGIN_DIR', dirname(__FILE__) . '/xml-sitemap-feed');
-else
-	define('XMLSF_PLUGIN_DIR', dirname(__FILE__));
 
 /* The following constants can be used to change plugin defaults by defining them in wp-config.php */
 
@@ -78,10 +71,14 @@ if ( !defined('XMLSF_NAME') )
 /* 
  * XMLSF_POST_TYPE_NEWS_TAGS 
  * 
- * Post types to append sitemap news tags to in regular sitemaps
+ * Post types to append sitemap news tags to in regular sitemaps.
+ * Does not have effect when News sitemap is switched of in site settings.
+ * default: 'post'
+ *
  * example:
- * define('XMLSF_POST_TYPE_NEWS_TAGS', 'post');
+ * define('XMLSF_POST_TYPE_NEWS_TAGS', 'post,mycustomtype');
  */
+
 
 /* 
  * XMLSF_NEWS_NAME 
@@ -105,6 +102,17 @@ if ( !defined('XMLSF_NEWS_POST_TYPE') )
  * Google News name, if different than site name
  * TODO
  */
+
+
+/* The following constants should not be changed */
+
+	define('XMLSF_VERSION', '4.0.1');
+
+if ( file_exists ( dirname(__FILE__).'/xml-sitemap-feed' ) )
+	define('XMLSF_PLUGIN_DIR', dirname(__FILE__) . '/xml-sitemap-feed');
+else
+	define('XMLSF_PLUGIN_DIR', dirname(__FILE__));
+
 
 /* -------------------------------------
  *      MISSING WORDPRESS FUNCTIONS

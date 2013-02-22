@@ -246,7 +246,7 @@ class XMLSitemapFeed {
 		remove_action('generate_rewrite_rules', array($this, 'rewrite_rules') );
 		$wp_rewrite->flush_rules();
 		delete_option('xmlsf_version');
-		foreach ( $this->defaults as $option => $settings )
+		foreach ( $this->defaults() as $option => $settings )
 			delete_option('xmlsf_'.$option);
 	}
 
@@ -347,7 +347,7 @@ class XMLSitemapFeed {
 			}
 
 			if ( strpos($request['feed'],'sitemap-posttype') == 0 ) {
-				foreach ( get_option('xmlsf_post_types', $this->defaults('post_types') ) as $post_type ) {
+				foreach ( $this->get_post_types() as $post_type ) {
 					if ( $request['feed'] == 'sitemap-posttype_'.$post_type['name'] ) {
 						// setup actions and filters
 						add_action('do_feed_sitemap-posttype_'.$post_type['name'], array($this, 'load_template'), 10, 1);
@@ -470,7 +470,7 @@ class XMLSitemapFeed {
 		// TEXT DOMAIN
 		
 		if ( is_admin() ) // text domain on plugins_loaded even if it is for admin only
-			load_plugin_textdomain('xml-sitemap-feed', false, dirname(plugin_basename( __FILE__ )) . '/languages' );
+			load_plugin_textdomain('xml-sitemap-feed', false, dirname(dirname(plugin_basename( __FILE__ ))) . '/languages' );
 		
 		// LANGUAGE PLUGINS
 
@@ -495,6 +495,7 @@ class XMLSitemapFeed {
 		}		
 
 		if (get_option('xmlsf_version') != XMLSF_VERSION) {
+			// rewrite rules not available on plugins_loaded 
 			// don't flush rules from init as Polylang chokes on that
 			// just remove the rules and let WP renew them when ready...
 			delete_option('rewrite_rules');
