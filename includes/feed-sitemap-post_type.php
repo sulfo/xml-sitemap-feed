@@ -220,9 +220,3 @@ $priority = $max_priority;
     endwhile; 
 endif; 
 ?></urlset>
-<?php
-	echo '<!-- Queries executed '.get_num_queries().' | Posts total '.($_post_count->publish + $_page_count->publish);
-	if(function_exists('memory_get_usage'))
-		echo ' | Peak memory usage '.round(memory_get_peak_usage()/1024/1024,2).'M';
-	echo ' -->';
-?>

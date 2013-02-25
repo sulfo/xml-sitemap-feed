@@ -13,7 +13,10 @@ echo '<?xml version="1.0" encoding="'.get_bloginfo('charset').'"?><?xml-styleshe
 <!-- generator="XML & Google News Sitemap Feed plugin for WordPress" -->
 <!-- generator-url="http://status301.net/wordpress-plugins/xml-sitemap-feed/" -->
 <!-- generator-version="'.XMLSF_VERSION.'" -->
-<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 
+		http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd">
 ';
 
 global $xmlsf;
