@@ -48,7 +48,7 @@ foreach ( $xmlsf->get_post_types() as $post_type ) {
 			else 
 				echo esc_url( trailingslashit(home_url()) );		
 			if (''==get_option('permalink_structure'))
-				echo '?feed='.$xmlsf->base_name.'_'.$post_type['name'];
+				echo '?feed='.$xmlsf->base_name.'-posttype_'.$post_type['name'];
 			else
 				echo $xmlsf->base_name.'-posttype-'.$post_type['name'].'.'.$xmlsf->extension; ?></loc>
 		<lastmod><?php echo mysql2date('Y-m-d\TH:i:s+00:00', get_lastdate( 'gmt', $post_type['name'] ), false); ?></lastmod>
