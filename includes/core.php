@@ -54,11 +54,7 @@ class XMLSitemapFeed {
 		}
 
 		// taxonomies
-		$this->defaults['taxonomies'] = array(
-					'category',
-					'post_tag'
-					) 
-					+ get_taxonomies(array('public'=>true,'_builtin'=>false),'names');
+		$this->defaults['taxonomies'] = array();
 
 		// robots
 		$this->defaults['robots'] = '';

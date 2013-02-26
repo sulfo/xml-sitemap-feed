@@ -1,7 +1,7 @@
-=== XML Sitemap & Google News Sitemap Feeds ===
+=== XML Sitemap & Google News Feeds ===
 Contributors: RavanH
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravanhagen%40gmail%2ecom&item_name=XML%20Sitemap%20Feed&item_number=3%2e8&no_shipping=0&tax=0&bn=PP%2dDonationsBF&charset=UTF%2d8&lc=us
-Tags: xml sitemap, news sitemap, sitemap.xml, Google, Google News, Yahoo, Bing, Live, MSN, seo, wpmu, feed, qtranslate, xlanguage
+Tags: xml sitemap, news sitemap, sitemap.xml, multisite, Google, Google News, Yahoo, Bing, Live, MSN, seo, wpmu, feed
 Requires at least: 3.1
 Tested up to: 3.5.1
 Stable tag: 4.0.1
@@ -10,7 +10,7 @@ Feeds that comply with the XML Sitemap and Google News protocol for fast indexin
 
 == Description ==
 
-This plugin dynamically creates feeds that comply with the **XML Sitemap** and the **Google News Sitemap** protocol. It is Multi-Site and **qTranslate / Polylang** compatible and there are no files created. Some new options under the Privacy settings on **Settings > Reading** allow control over the sitemaps, which post and taxonomy types are included and any additional robots.txt rules.
+This plugin dynamically creates feeds that comply with the **XML Sitemap** and the **Google News Sitemap** protocol. It is Multi-Site and **Polylang** compatible and there are no files created. Some new options under the Privacy settings on **Settings > Reading** allow control over the sitemaps, which post and taxonomy types are included and any additional robots.txt rules.
 
 You or site owners on your Multi-site network will not be bothered with complicated settings like other XML Sitemap plugins. XML sitemap values like ChangeFreq and URL Priority are auto-calculated based on post age and comment activity.
 
@@ -32,7 +32,7 @@ Please read the FAQ's for info on how to get your articles listed on Google News
 * Completely **automatic** post URL _priority_ and _change frequency_ calculation based on post age and comment and trackback activity.
 * Works out-of-the-box, even on **multi-site / shared codebase / multi-blog setups** like WordPress MU, WP 3.0 in MultiSite (WPMS) mode and others. 
 * Also works upon **Network Activate** or placed in **/mu-plugins/** on WP 3.0 in MS mode and WPMU and even takes care to exclude any tags blogs to avoid malus points for link spamming.
-* Compatible with multi-lingual sites using **qTranslate** or **Polylang** to allow all languages to be indexed equally.
+* Compatible with multi-lingual sites using **Polylang** to allow all languages to be indexed equally.
 
 = Limitations =
 
