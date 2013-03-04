@@ -9,23 +9,51 @@ class XMLSitemapFeed {
 	* Plugin variables
 	*/
 	
+	// Pretty permalinks base name
 	public $base_name = 'sitemap';
 
+	// Pretty permalinks extension
 	public $extension = 'xml';
 	
+	// database options prefix
+	private $prefix = 'xmlsf_';
+	
+	// we have flushed flag
 	private $yes_mother = false;
 
 	private $defaults = array();
+	
+	public static $archives = array(
+				'post' => array('yearly','monthly'),
+				//'page' => array() // top level page ?
+				);
 						
-	private function build_defaults() {
-
+	private function build_defaults() 
+	{
 		// sitemaps
-		if ( '1' == get_option('blog_public') ) 
+		if ( '1' == get_option('blog_public') )
 			$this->defaults['sitemaps'] = array(
-					'sitemap' => XMLSF_NAME,
+					'sitemap' => XMLSF_NAME
 					);
 		else
 			$this->defaults['sitemaps'] = array();
+
+		$this->defaults['ping'] = array(
+					'google' => array (
+						'active' => '1',
+						'url' => 'http://www.google.com/webmasters/tools/ping?sitemap=',
+						'name' => __('Google','xml-sitemap-feed'),
+						'timestamp' => '',
+						'status' => ''
+						),
+					'bing' => array (
+						'active' => '1',
+						'url' => 'http://www.bing.com/ping?sitemap=',
+						'name' => __('Bing','xml-sitemap-feed'),
+						'timestamp' => '',
+						'status' => ''
+						),
+					);
 
 		// post_types
 		if ( defined('XMLSF_POST_TYPE') && XMLSF_POST_TYPE != 'any' ) {
@@ -36,7 +64,7 @@ class XMLSitemapFeed {
 								'active' => '1',
 								'name' => 'post',
 								//'tags' => array('news','image','video'),
-								//'split_by' => 'year'
+								'archive' => 'yearly'
 								),
 							'page' => array(
 								'active' => '1',
@@ -44,99 +72,163 @@ class XMLSitemapFeed {
 								//'tags' => array('image','video')
 								)
 							);
-			foreach ( get_post_types(array('public'=>true,'_builtin'=>false),'names') as $custom ) 
-				$this->defaults['post_types'][$custom] = array(
+			foreach ( get_post_types(array('public'=>true,'_builtin'=>false),'names') as $name ) {
+				$this->defaults['post_types'][$name] = array(
 								'active' => '1',
-								'name' => $custom,
+								'name' => $name,
 								//'tags' => array('image','video')
-							);			
+							);
+				$this->archives[$name] = array('yearly','monthly'); 
+			}		
 					
 		}
 
 		// taxonomies
-		$this->defaults['taxonomies'] = array(
-					'category',
-					'post_tag'
-					) 
-					+ get_taxonomies(array('public'=>true,'_builtin'=>false),'names');
+		$this->defaults['taxonomies'] = array();// by default do not include any taxonomies
+							//+ get_taxonomies(array('public'=>true,'_builtin'=>false),'names')
 
 		// robots
-		$this->defaults['robots'] = '';
+		$this->defaults['robots'] = "Disallow: /xmlrpc.php\nDisallow: /wp-\nDisallow: /trackback/\nDisallow: ?wptheme=\nDisallow: ?comments=\nDisallow: ?replytocom\nDisallow: /comment-page-\nDisallow: /?s=\nDisallow: /wp-admin/\nDisallow: /wp-content/\nDisallow: /wp-includes/\n\nAllow: /wp-content/uploads/\n";
 	}
 
 
-	public function defaults($key = false) {
-
+	public function defaults($key = false) 
+	{
 		if (empty($this->defaults))
 			$this->build_defaults();
 
 		if (!$key) 
-			return apply_filters( 'xmlsf_defaults', $this->defaults, false );
+			$return = $this->defaults;
 		else
-			return apply_filters( 'xmlsf_defaults', $this->defaults[$key], $key );
-
+			$return = $this->defaults[$key];
+			
+		return apply_filters( 'xmlsf_defaults', $return, $key );
 	}
 	
-	public function get_sitemaps() {		
-
-		if (empty($this->defaults))
-			$this->build_defaults();
-
-		$return = get_option('xmlsf_sitemaps', $this->defaults['sitemaps']);
-
-		return (empty($return)) ? array() : $return;
+	public function get_option($option) 
+	{
+		return get_option($this->prefix.$option, $this->defaults($option));
 	}
 		
-	public function get_post_types() {		
-
-		if (empty($this->defaults))
-			$this->build_defaults();
-
-		$return = get_option('xmlsf_post_types', $this->defaults['post_types']);
-
-		return (empty($return)) ? array() : $return;
+	public function get_sitemaps() 
+	{		
+		$return = $this->get_option('sitemaps');
+		
+		// make sure it's an array we are returning
+		return (!empty($return)) ? $return : array();
 	}
 		
-	public function get_taxonomies() {
-
-		if (empty($this->defaults))
-			$this->build_defaults();
-
-		$return = get_option('xmlsf_taxonomies', $this->defaults['taxonomies']);
-
-		return (empty($return)) ? array() : $return;
-	}
-
-	public function get_robots() {
-
-		if (empty($this->defaults))
-			$this->build_defaults();
-
-		return get_option('xmlsf_robots', $this->defaults['robots']);
-	}
-
-	public function get_do_tags( $type = 'post' ) {
-	
-		// just return empty array for now...	
-		return array();
+	public function get_ping() 
+	{		
+		$return = $this->get_option('ping');
 		
-		$sitemaps = get_option('xmlsf_sitemaps', $this->defaults('sitemaps'));
-		$return = get_option('xmlsf_post_types', $this->defaults('post_types'));
+		// make sure it's an array we are returning
+		return (!empty($return)) ? $return : array();
+	}
+		
+	public function get_post_types() 
+	{		
+		$return = $this->get_option('post_types');
 
-		// unset news tags if news sitemap is switched off
-		if ( isset($return[$type]['tags']['news']) && !isset($sitemaps['sitemap-news']) )
-			unset($return[$type]['tags']['news']);
+		// make sure it's an array we are returning
+		return (!empty($return)) ? (array)$return : array();
+	}
 
-		return $return[$type]['tags'];
+	public function have_post_types() 
+	{		
+		$post_types = $this->get_option('post_types');
+		$return = array();
+		
+		foreach ( $post_types as $type => $values ) {
+			if(isset($values['active'])) {
+				if (false) {
+				
+				} else {
+					$count = wp_count_posts( $values['name'] );
+					if ($count->publish > 0) {
+						$values['count'] = $count->publish;
+					
+						$return[$type] = $values;				
+					}
+				}					
+			}
+		}
+
+		// make sure it's an array we are returning
+		return (!empty($return)) ? (array)$return : array();
+	}
+		
+	public function get_taxonomies() 
+	{
+		$return = $this->get_option('taxonomies');
+
+		// make sure it's an array we are returning
+		return (!empty($return)) ? (array)$return : array();
+	}
+
+	public function get_archives($post_type = 'post', $type = '') 
+	{
+		global $wpdb;
+		$return = array();
+		if ( 'monthly' == $type ) {
+			$query = "SELECT YEAR(post_date) AS `year`, MONTH(post_date) AS `month`, count(ID) as posts FROM $wpdb->posts WHERE post_type = '$post_type' AND post_status = 'publish' GROUP BY YEAR(post_date), MONTH(post_date) ORDER BY post_date DESC";
+			$key = md5($query);
+			$cache = wp_cache_get( 'xmlsf_get_archives' , 'general');
+			if ( !isset( $cache[ $key ] ) ) {
+				$arcresults = $wpdb->get_results($query);
+				$cache[ $key ] = $arcresults;
+				wp_cache_set( 'xmlsf_get_archives', $cache, 'general' );
+			} else {
+				$arcresults = $cache[ $key ];
+			}
+			if ( $arcresults ) {
+				foreach ( (array) $arcresults as $arcresult ) {
+					$return[$arcresult->year.$arcresult->month] = $this->get_index_url( 'posttype', $post_type, $arcresult->year . $arcresult->month );
+				}
+			}
+		} elseif ('yearly' == $type) {
+			$query = "SELECT YEAR(post_date) AS `year`, count(ID) as posts FROM $wpdb->posts WHERE post_type = '$post_type' AND post_status = 'publish' GROUP BY YEAR(post_date) ORDER BY post_date DESC";
+			$key = md5($query);
+			$cache = wp_cache_get( 'xmlsf_get_archives' , 'general');
+			if ( !isset( $cache[ $key ] ) ) {
+				$arcresults = $wpdb->get_results($query);
+				$cache[ $key ] = $arcresults;
+				wp_cache_set( 'xmlsf_get_archives', $cache, 'general' );
+			} else {
+				$arcresults = $cache[ $key ];
+			}
+			if ($arcresults) {
+				foreach ( (array) $arcresults as $arcresult) {
+					$return[$arcresult->year] = $this->get_index_url( 'posttype', $post_type, $arcresult->year );
+				}
+			}
+		} else {
+			$return[] = $this->get_index_url('posttype', $post_type); // $sitemap = 'home', $type = false, $param = false
+		}
+		return $return;
+	}
+
+	public function get_robots() 
+	{
+		return ( $robots = $this->get_option('robots') ) ? $robots : '';
+	}
+
+	public function get_do_tags( $type = 'post' ) 
+	{
+		$return = $this->get_option('post_types');
+
+		// make sure it's an array we are returning
+		return (!empty($return[$type]['tags'])) ? (array)$return[$type]['tags'] : array();
 	}
 	
 		
 	/**
-	* MULTI-LANGUAGE PLUGIN FUNCTIONS
+	* TEMPLATE FUNCTIONS
 	*/
-
-	public function get_languages() {
-		/* Only Polylang compatibility for now, rest is rudimentary */
+	
+	public function get_languages() 
+	{
+		/* Only Polylang compatibility for now */
 		global $polylang;
 		if ( isset($polylang) ) {
 			$langs = array();
@@ -146,15 +238,11 @@ class XMLSitemapFeed {
 			return $langs;
 		}
 		
-		global $q_config;
-		if (isset($q_config)) 
-			return $q_config['enabled_languages'];
-			// or return only current language in the array??
-
 		return array();
 	}
 
-	public function get_home_urls() {
+	public function get_home_urls() 
+	{
 		$urls = array();
 		
 		global $polylang,$q_config;
@@ -162,85 +250,79 @@ class XMLSitemapFeed {
 		if ( isset($polylang) )			
 			foreach ($polylang->get_languages_list() as $term)
 		    		$urls[] = $polylang->get_home_url($term);
-		elseif ( isset($q_config) ) 
-			foreach($q_config['enabled_languages'] as $language)
-				$urls[] = qtrans_convertURL($url,$language);
 		else
-			$urls[] = esc_url( trailingslashit( home_url()) );
+			$urls[] = home_url();
 		
 		return $urls;
 	}
 
-	/**
-	* MULTI-LANGUAGE PLUGIN FILTERS
-	*/
-
-	// Polylang
-	public function polylang($input) {
+	public function get_excluded($post_type) 
+	{
 		global $polylang;
-		$options = get_option('polylang');
-
-		if (is_array($input)) { // got an array? return one!
-			if ('1' == $options['force_lang'] )
-				foreach ( $input as $url )
-					foreach($polylang->get_languages_list() as $language)
-						$return[] = $polylang->add_language_to_link($url,$language);
-			else
-				foreach ( $input as $url )
-					foreach($polylang->get_languages_list() as $language)
-						$return[] = add_query_arg('lang', $language->slug, $url);
-		} else { // not an array? do nothing, Polylang does all the work :)
-			$return = $input;
+		$exclude = array();
+		
+		if ( $post_type == 'page' && $id = get_option('page_on_front') ) {
+			$exclude[] = $id;
+			if ( isset($polylang) )
+				$exclude = $polylang->get_translations('post', $id);
 		}
-
-		return $return;
+		
+		return $exclude;
 	}
 
-	// qTranslate
-	public function qtranslate($input) {
-		global $q_config;
+	public function get_index_url( $sitemap = 'home', $type = false, $param = false ) 
+	{
+		$root =  esc_url( trailingslashit(home_url()) );		
+		$name = $this->base_name.'-'.$sitemap;
+				
+		if ( $type )
+			$name .= '-'.$type;			
 
-		if (is_array($input)) // got an array? return one!
-			foreach ( $input as $url )
-				foreach($q_config['enabled_languages'] as $language)
-					$return[] = qtrans_convertURL($url,$language);
-		else // not an array? just convert the string.
-			$return = qtrans_convertURL($input);
-
-		return $return;
+		if ( '' == get_option('permalink_structure') || '1' != get_option('blog_public')) {
+			$name = '?feed='.$name;
+			$name .= $param ? '&m='.$param : '';
+		} else {
+			$name .= $param ? '.'.$param : '';
+			$name .= '.'.$this->extension;
+		}
+		
+		return $root . $name;
 	}
-
+	
 
 	/**
 	* ROBOTSTXT 
 	*/
 
 	// add sitemap location in robots.txt generated by WP
-	public function robots($output) {
-			
-		$sitemaps = get_option('xmlsf_sitemaps', $this->defaults('sitemaps'));
+	public function robots($output) 
+	{		
+		echo "\n# XML Sitemap & Google News Feeds version ".XMLSF_VERSION." - http://status301.net/wordpress-plugins/xml-sitemap-feed/";
 
-		echo "\n# XML & Google News Sitemap Feeds - version ".XMLSF_VERSION." (http://status301.net/wordpress-plugins/xml-sitemap-feed/)";
-
-		if (!empty($sitemaps))
-			foreach ( $sitemaps as $pretty )
+		if ( '1' != get_option('blog_public') ) {
+			echo "\n# XML Sitemaps are disabled. Please see Site Visibility on Settings > Reading.";
+		} else {
+			foreach ( $this->get_sitemaps() as $pretty ) 
 				echo "\nSitemap: " . trailingslashit(get_bloginfo('url')) . $pretty;
-		else
-			echo "\n# Warning: XML Sitemaps are disabled. Please see your sites XML Sitemap and Privacy settings.";
-		
+
+			if ( empty($pretty) )
+				echo "\n# No XML Sitemaps are enabled. Please see XML Sitemaps on Settings > Reading.";
+		}
 		echo "\n\n";
 	}
 	
 	// add robots.txt rules
-	public function robots_txt($output) {
-		return $output . get_option('xmlsf_robots') ;
+	public function robots_txt($output) 
+	{
+		return $output . $this->get_option('robots') ;
 	}
 	
 	/**
 	* DE-ACTIVATION
 	*/
 
-	public function deactivate() {
+	public function deactivate() 
+	{
 		global $wp_rewrite;
 		remove_action('generate_rewrite_rules', array($this, 'rewrite_rules') );
 		$wp_rewrite->flush_rules();
@@ -260,7 +342,8 @@ class XMLSitemapFeed {
 	 * @param string $request
 	 */
 	 
-	public function trailingslash($request) {
+	public function trailingslash($request) 
+	{
 		if (pathinfo($request, PATHINFO_EXTENSION)) {
 			return untrailingslashit($request);
 		}
@@ -273,8 +356,8 @@ class XMLSitemapFeed {
 	 * @param string $wp_rewrite
 	 */
 	 
-	public function rewrite_rules($wp_rewrite) {
-
+	public function rewrite_rules($wp_rewrite) 
+	{
 		$xmlsf_rules = array();
 		$sitemaps = $this->get_sitemaps();
 
@@ -284,19 +367,15 @@ class XMLSitemapFeed {
 		if (!empty($sitemaps['sitemap'])) {
 			// home urls
 			$xmlsf_rules[ $this->base_name . '-home\.' . $this->extension . '$' ] = $wp_rewrite->index . '?feed=sitemap-home';
-			// all urls (still works but redundant)
-			//$xmlsf_rules[ $this->base_name . '-posttype-any\.' . $this->extension . '$' ] = $wp_rewrite->index . '?feed=sitemap-any';
-			// rule catch posts split by category (unsupported)
-			//$xmlsf_rules[ $this->base_name . '\.([a-z0-9_-]+)?\.' . $this->extension . '$' ] = $wp_rewrite->index . '?feed=sitemap_post&category_name=$matches[1]';			
 		
 			// add rules for post types (can be split by month or year)
 			foreach ( $this->get_post_types() as $post_type ) {
-				$xmlsf_rules[ $this->base_name . '-posttype-' . $post_type['name'] . '\.([0-9]+)?\.?' . $this->extension . '$' ] = $wp_rewrite->index . '?feed=sitemap-posttype_' . $post_type['name'] . '&m=$matches[1]';
+				$xmlsf_rules[ $this->base_name . '-posttype-' . $post_type['name'] . '\.([0-9]+)?\.?' . $this->extension . '$' ] = $wp_rewrite->index . '?feed=sitemap-posttype-' . $post_type['name'] . '&m=$matches[1]';
 			}
 		
 			// add rules for taxonomies
 			foreach ( $this->get_taxonomies() as $taxonomy ) {
-				$xmlsf_rules[ $this->base_name . '-taxonomy-' . $taxonomy . '\.' . $this->extension . '$' ] = $wp_rewrite->index . '?feed=sitemap-taxonomy&taxonomy=' . $taxonomy;
+				$xmlsf_rules[ $this->base_name . '-taxonomy-' . $taxonomy . '\.' . $this->extension . '$' ] = $wp_rewrite->index . '?feed=sitemap-taxonomy-' . $taxonomy; //&taxonomy=
 			}
 		}
 		
@@ -307,7 +386,8 @@ class XMLSitemapFeed {
 	* REQUEST FILTER
 	*/
 
-	public function filter_request( $request ) {
+	public function filter_request( $request ) 
+	{
 		if ( isset($request['feed']) && strpos($request['feed'],'sitemap') == 0 ) {
 
 			if ( $request['feed'] == 'sitemap' ) {
@@ -347,16 +427,15 @@ class XMLSitemapFeed {
 
 			if ( strpos($request['feed'],'sitemap-posttype') == 0 ) {
 				foreach ( $this->get_post_types() as $post_type ) {
-					if ( $request['feed'] == 'sitemap-posttype_'.$post_type['name'] ) {
+					if ( $request['feed'] == 'sitemap-posttype-'.$post_type['name'] ) {
 						// setup actions and filters
-						add_action('do_feed_sitemap-posttype_'.$post_type['name'], array($this, 'load_template'), 10, 1);
+						add_action('do_feed_sitemap-posttype-'.$post_type['name'], array($this, 'load_template'), 10, 1);
 						add_filter( 'post_limits', array($this, 'filter_limits') );
 
 						// modify request parameters
 						$request['post_type'] = $post_type['name'];
 						$request['orderby'] = 'modified';
 						//$request['lang'] = implode( ',', $this->get_languages() );
-							// TODO test this with qTranslate !!
 						$request['no_found_rows'] = true;
 						$request['update_post_meta_cache'] = false;
 						$request['update_post_term_cache'] = false;
@@ -366,40 +445,25 @@ class XMLSitemapFeed {
 				}
 			}
 
-			if ( $request['feed'] == 'sitemap-taxonomy' ) {
-				// setup actions and filters
-				add_action('do_feed_sitemap-taxonomy', array($this, 'load_template_taxonomy'), 10, 1);
-//				add_filter( 'post_limits', array( $this, 'filter_limits_taxonomy' ) );
+			if ( strpos($request['feed'],'sitemap-taxonomy') == 0 ) {
+				foreach ( $this->get_taxonomies() as $taxonomy ) {
+					if ( $request['feed'] == 'sitemap-taxonomy-'.$taxonomy ) {
+						// setup actions and filters
+						add_action('do_feed_sitemap-taxonomy-'.$taxonomy, array($this, 'load_template_taxonomy'), 10, 1);
 
-				// modify request parameters
-				$request['lang'] = implode( ',', $this->get_languages() );
-					// TODO test this with qTranslate !!
+						// modify request parameters
+						$request['taxonomy'] = $taxonomy;
+						//$request['lang'] = implode( ',', $this->get_languages() );
+							// TODO test if we need this !!
+						$request['no_found_rows'] = true;
+						$request['update_post_meta_cache'] = false;
+						$request['update_post_term_cache'] = false;
+						$request['post_status'] = 'publish';
 
-				$request['no_found_rows'] = true;
-				$request['update_post_meta_cache'] = false;
-				$request['update_post_term_cache'] = false;
-				$request['post_status'] = 'publish';
-
-				return $request;
+						return $request;
+					}
+				}
 			}
-
-/* Still works, but redundant
-			if ( $request['feed'] == 'sitemap-any' ) {
-				// setup actions and filters
-				add_action('do_feed_sitemap-any', array($this, 'load_template'), 10, 1);
-				add_filter('post_limits', array($this, 'filter_limits'));
-
-				// modify request parameters
-				$request['post_type'] = 'any';
-				$request['orderby'] = 'modified';
-
-				$request['no_found_rows'] = true;
-				$request['update_post_meta_cache'] = false;
-				$request['update_post_term_cache'] = false;
-
-				return $request;
-			}*/
-
 		}
 
 		return $request;
@@ -410,92 +474,121 @@ class XMLSitemapFeed {
 	*/
 
 	// set up the sitemap index template
-	public function load_template_index() {
+	public function load_template_index() 
+	{
 		load_template( XMLSF_PLUGIN_DIR . '/includes/feed-sitemap.php' );
 	}
 
 	// set up the sitemap home page(s) template
-	public function load_template_base() {
+	public function load_template_base() 
+	{
 		load_template( XMLSF_PLUGIN_DIR . '/includes/feed-sitemap-home.php' );
 	}
 
 	// set up the post types sitemap template
-	public function load_template() {
+	public function load_template() 
+	{
 		load_template( XMLSF_PLUGIN_DIR . '/includes/feed-sitemap-post_type.php' );
 	}
 
 	// set up the taxonomy sitemap template
-	public function load_template_taxonomy() {
+	public function load_template_taxonomy() 
+	{
 		load_template( XMLSF_PLUGIN_DIR . '/includes/feed-sitemap-taxonomy.php' );
 	}
 
 	// set up the news sitemap template
-	public function load_template_news() {
+	public function load_template_news() 
+	{
 		load_template( XMLSF_PLUGIN_DIR . '/includes/feed-sitemap-news.php' );
 	}
 
 	/**
-	* LIMITES
+	* LIMITS
 	*/
 
 	// override default feed limit
-	public function filter_limits( $limits ) {
+	public function filter_limits( $limits ) 
+	{
 		return 'LIMIT 0, 50000';
 	}
 
 	// override default feed limit for taxonomy sitemaps
-	public function filter_limits_taxonomy( $limits ) {
+	public function filter_limits_taxonomy( $limits ) 
+	{
 		return 'LIMIT 0, 1';
 	}
 
 	// override default feed limit for GN
-	public function filter_news_limits( $limits ) {
+	public function filter_news_limits( $limits ) 
+	{
 		return 'LIMIT 0, 1000';
 	}
 
 	// Create a new filtering function that will add a where clause to the query,
 	// used for the Google News Sitemap
-	public function filter_news_where( $where = '' ) {
+	public function filter_news_where( $where = '' ) 
+	{
 		// only posts from the last 2 days
 		return $where . " AND post_date > '" . date('Y-m-d H:i:s', strtotime('-49 hours')) . "'";
 	}
 		
+
+	/**
+	* PINGING
+	*/
+
+	public function ping($url, $timeout = 3) 
+	{
+		// steps:
+		// 1. ping url
+		// 2. update settings with last ping timestamp and succes status
+	
+		$options = array();
+		//if ( (int)$timeout <= 1 )
+		//	$options['timeout'] = 1;
+		//elseif ( (int)$timeout > 10 )
+		//	$options['timeout'] = 10;
+		//else
+		$options['timeout'] = $timeout;
+
+		$response = wp_remote_request( $url, $options );
+
+		if ( '200' == wp_remote_retrieve_response_code(&$response) )
+			$succes = true;
+		else
+			$succes = false;	
+
+		//update_option() here?
+		return $succes;
+	}
+
+	public function do_pings($post_ID) 
+	{		
+		$sitemaps = $this->get_sitemaps();
+		foreach ($this->get_ping() as $se => $data) {
+			foreach ( $sitemaps as $pretty ) {
+				$this->ping( $data['url'].urlencode(trailingslashit(get_bloginfo('url')) . $pretty) );	
+			}
+		}
+
+		return $post_ID;
+	}
+
 	/**
 	* INITIALISATION
 	*/
 
-	public function plugins_loaded() {
-
+	public function plugins_loaded() 
+	{
 		// TEXT DOMAIN
 		
 		if ( is_admin() ) // text domain on plugins_loaded even if it is for admin only
 			load_plugin_textdomain('xml-sitemap-feed', false, dirname(dirname(plugin_basename( __FILE__ ))) . '/languages' );
-		
-		// LANGUAGE PLUGINS
-
-		// check for Polylang and add filter
-		global $polylang;
-		if (isset($polylang))
-			add_filter('xml_sitemap_url', array($this, 'polylang'), 99);
-
-		// check for qTranslate and add filter
-		elseif (defined('QT_LANGUAGE'))
-			add_filter('xml_sitemap_url', array($this, 'qtranslate'), 99);
-
-		// some upgrade stuffs, to be removed next version
-		if (delete_option('xml-sitemap-feed-version')) { 
-			delete_option('XMLSitemapFeed_option1');
-			delete_option('XMLSitemapFeed_option2');
-
-		}
-		if (get_option('XMLSitemapFeed_robots')) { 
-			update_option('xmlsf_robots', get_option('XMLSitemapFeed_robots'));
-			delete_option('XMLSitemapFeed_robots');
-		}		
 
 		if (get_option('xmlsf_version') != XMLSF_VERSION) {
 			// rewrite rules not available on plugins_loaded 
-			// don't flush rules from init as Polylang chokes on that
+			// and don't flush rules from init as Polylang chokes on that
 			// just remove the rules and let WP renew them when ready...
 			delete_option('rewrite_rules');
 
@@ -506,27 +599,27 @@ class XMLSitemapFeed {
 		
 	}
 
-	private function flush_rules($hard = false) {
-		// don't need hard flush by default
-		
+	private function flush_rules($hard = false) 
+	{		
 		if ($this->yes_mother)
 			return;
 
 		global $wp_rewrite;
+		// don't need hard flush by default
 		$wp_rewrite->flush_rules($hard); 
 
 		$this->yes_mother = true;
 	}
 	
-	public function admin_init() {
-
-		// UPGRADE RULES after plugin upgrade
-		// CATCH TRANSIENT for flushing rewrite rules after the sitemaps setting has changed
+	public function admin_init() 
+	{
+		// UPGRADE RULES after plugin upgrade (is this needed since we do this on plugins_loaded too?)
 		if (get_option('xmlsf_version') != XMLSF_VERSION) {
 			$this->flush_rules();
 			update_option('xmlsf_version', XMLSF_VERSION);
-		} else
+		}
 		
+		// CATCH TRANSIENT for flushing rewrite rules after the sitemaps setting has changed
 		if (delete_transient('xmlsf_flush_rewrite_rules')) {
 			$this->flush_rules();
 		}
@@ -536,17 +629,29 @@ class XMLSitemapFeed {
 
 	}
 
+	// for debugging
+	public function _e_usage() 
+	{
+		if (defined('WP_DEBUG') && WP_DEBUG == true) {
+			echo '<!-- Queries executed '.get_num_queries();
+			if(function_exists('memory_get_peak_usage'))
+				echo ' | Peak memory usage '.round(memory_get_peak_usage()/1024/1024,2).'M';
+			echo ' -->';
+		}
+	}
+
 	/**
 	* CONSTRUCTOR
 	*/
 
-	function XMLSitemapFeed() {
+	function XMLSitemapFeed() 
+	{
 		//constructor in php4
 		$this->__construct(); // just call the php5 one.
 	}
 	
-	function __construct() {
-		
+	function __construct() 
+	{	
 		// REQUEST main filtering function
 		add_filter('request', array($this, 'filter_request'), 1 );
 		
@@ -563,6 +668,9 @@ class XMLSitemapFeed {
 		// ROBOTSTXT
 		add_action('do_robotstxt', array($this, 'robots'), 0 );
 		add_filter('robots_txt', array($this, 'robots_txt'), 0 );
+		
+		// PINGING
+		add_action('publish_post', array($this, 'do_pings'));
 
 		// DE-ACTIVATION
 		register_deactivation_hook( XMLSF_PLUGIN_DIR . '/xml-sitemap.php', array($this, 'deactivate') );

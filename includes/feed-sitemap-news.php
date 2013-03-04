@@ -4,12 +4,12 @@
  *
  * @package XML Sitemap Feed plugin for WordPress
  */
-
+global $xmlsf;
 status_header('200'); // force header('HTTP/1.1 200 OK') for sites without posts
 header('Content-Type: text/xml; charset=' . get_bloginfo('charset'), true);
 
 echo '<?xml version="1.0" encoding="'.get_bloginfo('charset').'"?>
-<?xml-stylesheet type="text/xsl" href="' . plugins_url('xsl/sitemap.xsl.php',__FILE__) . '?ver=' . XMLSF_VERSION . '"?>
+<?xml-stylesheet type="text/xsl" href="' . plugins_url('xsl/sitemap-news.xsl.php',__FILE__) . '?ver=' . XMLSF_VERSION . '"?>
 <!-- generated-on="'.date('Y-m-d\TH:i:s+00:00').'" -->
 <!-- generator="XML & Google News Sitemap Feed plugin for WordPress" -->
 <!-- generator-url="http://status301.net/wordpress-plugins/xml-sitemap-feed/" -->
@@ -114,6 +114,8 @@ if ( have_posts() ) :
 <?php 
     endwhile;
 else :
+// TODO replace link to home with the last post even if it's older than 2 days...
+
 	$lastmodified_gmt = get_lastmodified('GMT'); // last posts or page modified date
 ?>
 	<url>
@@ -141,3 +143,4 @@ endif;
 	// http://www.google.com/support/news_pub/bin/answer.py?hl=nl&answer=74289
 
 ?></urlset>
+<?php $xmlsf->_e_usage(); ?>

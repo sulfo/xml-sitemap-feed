@@ -5,6 +5,8 @@
  * @package XML Sitemap Feed plugin for WordPress
  */
 
+global $xmlsf;
+
 status_header('200'); // force header('HTTP/1.1 200 OK') for sites without posts
 // TODO test if we can do without it
 header('Content-Type: text/xml; charset=' . get_bloginfo('charset', 'UTF-8'), true);
@@ -36,6 +38,7 @@ $taxonomy = get_query_var('taxonomy');
 $lang = get_query_var('lang');
 echo "<!-- taxonomy: $taxonomy -->";
 $tax_obj = get_taxonomy($taxonomy);
+$postcount = 0;
 foreach ( $tax_obj->object_type as $post_type) {
 	echo "<!-- taxonomy post type: $post_type -->
 ";
@@ -45,9 +48,6 @@ foreach ( $tax_obj->object_type as $post_type) {
 
 //$_terms_count = wp_count_terms(get_query_var('taxonomy'));
 //$average_count = $_post_count->publish / $_terms_count;
-
-// Polylang solution on http://wordpress.org/support/topic/query-all-language-terms?replies=6#post-3415389
-//global $xmlsf;
 
 $terms = get_terms( $taxonomy, array(
 					'orderby' => 'count',
@@ -104,18 +104,7 @@ if ( $terms ) :
 	</url>
 <?php 
     endforeach;
-else : 
-?>
-	<url>
-		<loc><?php echo esc_url( trailingslashit(home_url()) ); ?></loc>
-	</url>
-<?php
 endif; 
 
 ?></urlset>
-<?php
-	echo '<!-- Queries executed '.get_num_queries().' | Posts total '.($_post_count->publish + $_page_count->publish);
-	if(function_exists('memory_get_peak_usage'))
-		echo ' | Peak memory usage '.round(memory_get_peak_usage()/1024/1024,2).'M';
-	echo ' -->';
-?>
+<?php $xmlsf->_e_usage(); ?>

@@ -10,7 +10,7 @@ header('Content-Type: text/xml; charset=' . get_bloginfo('charset'), true);
 
 global $xmlsf;
 $post_type = get_query_var('post_type');
-foreach ( (array)$xmlsf->get_do_tags($post_type) as $tag )
+foreach ( $xmlsf->get_do_tags($post_type) as $tag )
 	$$tag = true;
 
 echo '<?xml version="1.0" encoding="' . get_bloginfo('charset') . '"?>
@@ -20,15 +20,15 @@ echo '<?xml version="1.0" encoding="' . get_bloginfo('charset') . '"?>
 <!-- generator-url="http://status301.net/wordpress-plugins/xml-sitemap-feed/" -->
 <!-- generator-version="' . XMLSF_VERSION . '" -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" ';
-echo $do_news ? '
+echo !empty($news) ? '
 	xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" ' : '';
 echo '
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 
-		http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd ';
-echo $do_news ? '
+		http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd';
+echo !empty($news) ? '
 		http://www.google.com/schemas/sitemap-news/0.9 
-		http://www.google.com/schemas/sitemap-news/0.9/sitemap-news.xsd ' : '';
+		http://www.google.com/schemas/sitemap-news/0.9/sitemap-news.xsd' : '';
 echo '">
 ';
 
@@ -50,9 +50,9 @@ $firstcomment_bonus = 0.1;
 // EDITING below here is NOT ADVISED!
 
 // setup site variables
-$_post_count = wp_count_posts('post');
-$_page_count = wp_count_posts('page');
-$_totalcommentcount = wp_count_comments();
+$_post_count = wp_count_posts($post_type);
+//$_page_count = wp_count_posts('page');
+$_totalcommentcount = wp_count_comments($post_type);
 
 $lastmodified_gmt = get_lastmodified('GMT'); // last posts or page modified date
 $lastmodified = mysql2date('U',$lastmodified_gmt); // last posts or page modified date in Unix seconds
@@ -60,37 +60,23 @@ $firstdate = mysql2date('U',get_firstdate('GMT')); // uses new get_firstdate() f
 
 // calculated presets
 if ($_totalcommentcount->approved > 0) {
-	$average_commentcount = $_totalcommentcount->approved/($_post_count->publish + $_page_count->publish);
+	$average_commentcount = $_totalcommentcount->approved/($_post_count->publish);
 	//$comment_weight =  $average_commentcount / $_totalcommentcount->approved;
 } else {
 	//$comment_weight = 0;
 	$average_commentcount = 0;
 }
 
-if ( $_post_count->publish > $_page_count->publish ) { // emphasis on posts (blog)
-	$blogbonus = 0.4;
-	$sitebonus = 0;
-} elseif ( $_post_count->publish==0 ) { // only pages (you're kidding... really?? old style site)
-	$blogbonus = 0;
-	$sitebonus = 0.4;
-} else { // emphasis on pages (site)
-	$blogbonus = 0;
-	$sitebonus = 0.2;
-}
+$blogbonus = 0.4;
+$sitebonus = 0;
 
 if ( $lastmodified > $firstdate ) // valid blog age found ?
 	$age_weight = ($blogbonus - $min_priority) / ($firstdate - $lastmodified); // calculate relative age weight
 else
 	$age_weight = $month_weight / 2629744 ; // if not ? malus per month (that's a month in seconds)
 
-$exclude = array();
-if ( $post_type == 'page' ) {
-	$exclude[] = get_option('page_on_front');
-	if ( !empty($exclude) && function_exists('pll_get_post') )
-		foreach ( $xmlsf->get_languages() as $lang ) 
-			$exclude[] = pll_get_post( $exclude[0], $lang );
-// TODO : find a better way to exclude all Polylang language front pages : is_front_page() in any language !
-}
+// any ID's we need to exclude?
+$excluded = $xmlsf->get_excluded($post_type);
 
 // loop away!
 if ( have_posts() ) :
@@ -99,13 +85,13 @@ if ( have_posts() ) :
 
 	// check if we are not dealing with an external URL :: Thanks to Francois Deschenes :)
 	// or if page is in the exclusion list (like front pages)
-	if ( !preg_match('/^' . preg_quote(home_url(), '/') . '/i', get_permalink()) || ( $post_type == 'page' && in_array($post->ID, $exclude) ) )
+	if ( !preg_match('/^' . preg_quote(home_url(), '/') . '/i', get_permalink()) || in_array($post->ID, $excluded) )
 		continue;
 	
 	$thispostmodified_gmt = $post->post_modified_gmt; // post GMT timestamp
 	$thispostmodified = mysql2date('U',$thispostmodified_gmt); // post Unix timestamp
 	$lastcomment = array();
-	$priority = 0;
+	$priority = 0.5;
 
 	if ($post->comment_count && $post->comment_count > 0) {
 		$lastcomment = get_comments( array(
@@ -120,7 +106,7 @@ if ( have_posts() ) :
 		}
 		
 		if ($_totalcommentcount->approved > 0)
-			$priority = ( $post->comment_count / ( ( $_totalcommentcount->approved / 2 ) - $average_commentcount ) ) + $firstcomment_bonus;
+			$priority = ( $post->comment_count - $average_commentcount / 1 + ( $_totalcommentcount->approved - $average_commentcount ) ) + $firstcomment_bonus;
 		else
 			$priority = ( $min_priority + $max_priority ) / 2 ;
 		
@@ -160,7 +146,7 @@ if ( have_posts() ) :
 		<loc><?php the_permalink_rss(); ?></loc>
 <?php 
 // Google News tags 
-if ( $news && $post->post_date > date('Y-m-d H:i:s', strtotime('-49 hours') ) ) { ?>
+if ( !empty($news) && $post->post_date > date('Y-m-d H:i:s', strtotime('-49 hours') ) ) { ?>
 		<news:news>
 			<news:publication>
 				<news:name><?php 
@@ -220,9 +206,4 @@ $priority = $max_priority;
     endwhile; 
 endif; 
 ?></urlset>
-<?php
-	echo '<!-- Queries executed '.get_num_queries().' | Posts total '.($_post_count->publish + $_page_count->publish);
-	if(function_exists('memory_get_usage'))
-		echo ' | Peak memory usage '.round(memory_get_peak_usage()/1024/1024,2).'M';
-	echo ' -->';
-?>
+<?php $xmlsf->_e_usage(); ?>

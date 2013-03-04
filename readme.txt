@@ -1,4 +1,4 @@
-=== XML Sitemap & Google News Sitemap Feeds ===
+=== XML Sitemap & Google News Feeds ===
 Contributors: RavanH
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravanhagen%40gmail%2ecom&item_name=XML%20Sitemap%20Feed&item_number=3%2e8&no_shipping=0&tax=0&bn=PP%2dDonationsBF&charset=UTF%2d8&lc=us
 Tags: xml sitemap, news sitemap, sitemap.xml, Google, Google News, Yahoo, Bing, Live, MSN, seo, wpmu, feed, qtranslate, xlanguage
@@ -6,19 +6,19 @@ Requires at least: 3.1
 Tested up to: 3.5.1
 Stable tag: 4.0.1
 
-Feeds that comply with the XML Sitemap and Google News protocol for fast indexing by Google, Yahoo, Bing, Ask and others. Multi-Site and Multi-Lingual compatible!
+Feeds that comply with the XML Sitemap and Google News protocol for the hungry spiders. Multisite and multilingual compatible.
 
 == Description ==
 
-This plugin dynamically creates feeds that comply with the **XML Sitemap** and the **Google News Sitemap** protocol. It is Multi-Site and **qTranslate / Polylang** compatible and there are no files created. Some new options under the Privacy settings on **Settings > Reading** allow control over the sitemaps, which post and taxonomy types are included and any additional robots.txt rules.
+This plugin dynamically creates feeds that comply with the **XML Sitemap** and the **Google News Sitemap** protocol. It is **Multisite** and **Polylang** compatible and there are no files created. Options can be found on **Settings > Reading** to control which sitemaps, which post and taxonomy types are included and any additional robots.txt rules.
 
-You or site owners on your Multi-site network will not be bothered with complicated settings like other XML Sitemap plugins. XML sitemap values like ChangeFreq and URL Priority are auto-calculated based on post age and comment activity.
+You or site owners on your Multisite network will not be bothered with complicated settings like other XML Sitemap plugins. XML sitemap values like ChangeFreq and URL Priority are auto-calculated based on post age and comment activity.
 
-The feeds become instantly available: One XML Sitemap on yourblogurl.tld/sitemap.xml (or yourblogurl.tld/?feed=sitemap), ready for indexing by search engines like Google, Yahoo, MSN, Ask.com and others. And one Google News Sitemap on yourblogurl.tld/sitemap-news.xml (or yourblogurl.tld/?feed=sitemap-news), ready for indexing by Google News. Both are automatically referenced in the dynamically created **robots.txt** on yourblogurl.tld/robots.txt to tell search engines where to find your XML Sitemaps.
+The feeds become instantly available: One XML Sitemap on yourblog.url/sitemap.xml (or yourblog.url/?feed=sitemap), ready for indexing by search engines like Google, Yahoo, MSN, Ask.com and others. And one Google News Sitemap on yourblog.url/sitemap-news.xml (or yourblog.url/?feed=sitemap-news), ready for indexing by Google News. Both are automatically referenced in the dynamically created **robots.txt** on yourblog.url/robots.txt to tell search engines where to find your XML Sitemaps.
 
 Please read the FAQ's for info on how to get your articles listed on Google News.
 
-**Compatible with caching plugins** like WP Super Cache, W3 Total Cache and Quick Cache that cache feeds, allowing a faster serving to the hungry, impatient (!) spider.
+**Compatible with caching plugins** like WP Super Cache, W3 Total Cache and Quick Cache that cache feeds, allowing a faster serving to the impatient (aren't we all when hungry?) spider.
 
 **NOTES:** 
 
@@ -32,7 +32,7 @@ Please read the FAQ's for info on how to get your articles listed on Google News
 * Completely **automatic** post URL _priority_ and _change frequency_ calculation based on post age and comment and trackback activity.
 * Works out-of-the-box, even on **multi-site / shared codebase / multi-blog setups** like WordPress MU, WP 3.0 in MultiSite (WPMS) mode and others. 
 * Also works upon **Network Activate** or placed in **/mu-plugins/** on WP 3.0 in MS mode and WPMU and even takes care to exclude any tags blogs to avoid malus points for link spamming.
-* Compatible with multi-lingual sites using **qTranslate** or **Polylang** to allow all languages to be indexed equally.
+* Compatible with multi-lingual sites using **Polylang** to allow all languages to be indexed equally.
 
 = Limitations =
 
@@ -106,7 +106,7 @@ You will also want to add the sitemap to your [Google Webmasters Tools account](
 
 = My Google News Sitemap is empty! =
 
-The rules of the Google News game are that you do not feed the cookie monster any stale food. Older than 2 days is bad. You need to bake him some fresh bread ;)
+The rules of the Google News Game are that you do not feed the monster any stale food. Older than 2 days is bad. You need to bake him some fresh bread ;)
 
 = How are the values for priority and changefreq calculated? =
 
@@ -131,7 +131,7 @@ If you cannot live with these rules, edit the values `$min_priority`, `$max_prio
 No. In normal circumstances, your site will be indexed by the major search engines before you know it. The search engines will be looking for a robots.txt file and (with this plugin activated) find a pointer in it to the XML Sitemap on your blog. The search engines will return on a regular basis to see if your site has updates. 
 ( Read more about _Ping-O-Matic_ under **Does this plugin ping search engines** (below) to make sure your site is under _normal circumstances_ ;) )
 
-**But** if you have a server _without rewrite rules_, use your blog _without fancy URLs_ (meaning, you have WordPress Permalinks set to the old Default value) or have it installed in a _subdirectory_, read **Do I need to change my robots.txt** for more instructions.
+**But** if you have a server _without rewrite rules_, use your blog _without fancy URLs_ (meaning, you have WordPress Permalinks set to the old default value) or have it installed in a _subdirectory_, then read **Do I need to change my robots.txt** for more instructions.
 
 = Does this plugin ping search engines? =
 
@@ -163,9 +163,9 @@ If you already have a robots.txt file with another Sitemap reference like it, ju
 
 No. While I would advise you to use any one of the nicer Permalink structures for better indexing, you might not be able to (or don't want to) do that. If so, you can still use this plugin: 
 
-Check to see if the URL yourblogurl.tld/?feed=sitemap does produce a feed. Now manually upload your own robots.txt file to your website root containing: 
+Check to see if the URL yourblog.url/?feed=sitemap does produce a feed. Now manually upload your own robots.txt file to your website root containing: 
 `
-Sitemap: http://yourblogurl.tld/?feed=sitemap
+Sitemap: http://yourblog.url/?feed=sitemap
 
 User-agent: *
 Allow: /
@@ -174,7 +174,7 @@ You can also choose to notify major search engines of your new XML sitemap manua
 
 = Can I change the sitemap name/URL? =
 
-No. If you have fancy URL's turned ON in WordPress (Permalinks), the sitemap url that you manually submit to Google (if you are impatient) should be `yourblogurl.tld/sitemap.xml` but if you have the Permalinks' Default option set the feed is only available via `yourblogurl.tld/?feed=sitemap`.
+No. If you have fancy URL's turned ON in WordPress (Permalinks), the sitemap url that you manually submit to Google (if you are impatient) should be `yourblogurl.tld/sitemap.xml` but if you have the Permalinks' Default option set the feed is only available via `yourblog.url/?feed=sitemap`.
 
 = Where can I customize the xml output? =
 
@@ -225,7 +225,7 @@ There is a know issue with WordPress (at least up to 2.8) not generating a robot
 
 To get around this, you might either at least write one post and give it _Private_ status or alternatively create your own robots.txt file containing:
 `
-Sitemap: http://yourblogurl.tld/sitemap.xml
+Sitemap: http://yourblog.url/sitemap.xml
 
 User-agent: *
 Allow: /
@@ -246,22 +246,14 @@ Read more on [Increasing memory allocated to PHP](http://codex.wordpress.org/Edi
 == Translation ==
 
 1. Install PoEdit on your computer.
-
-2. Open the template translation database xml-sitemap-xx_XX.po in this plugins /languages/ directory with PoEdit.
-
-3. Go to Edit > Preferences and on the tab Editor check the option to compile a .mo database on save automatically. Close with OK.
-
-4. Go to Catalog > Settings and set your name, e-mail address, language and country. Close with OK.
-
-5. Go to Catalog > Update from POT-file and select the main xml-sitemap-feed.pot file. Then accept all new and removed translation strings with OK.
-
-6. Now go ahead and start translating all the texts listed in PoEdit.
-
-7. When done, go to File > Save as... and replace the xx_XX in the file name with the appropriate language and country code for your translation. Leave the rest of the file name the same and Save.
-
-8. Upload the automatically created xml-sitemap-feed-xx_XX.mo database file (where xx_XX should now be your language and country code) to the plugins /languages/ directory on your WordPress site.
-
-9. After verifying the translations work on your site, send the .mo file to ravanhagen@gmail.com and don't forget to tell me how and with what link you would like to be mentioned in the credits!
+1. Open the template translation database xml-sitemap-xx_XX.po in this plugins /languages/ directory with PoEdit.
+1. Go to Edit > Preferences and on the tab Editor check the option to compile a .mo database on save automatically. Close with OK.
+1. Go to Catalog > Settings and set your name, e-mail address, language and country. Close with OK.
+1. Go to Catalog > Update from POT-file and select the main xml-sitemap-feed.pot file. Then accept all new and removed translation strings with OK.
+1. Now go ahead and start translating all the texts listed in PoEdit.
+1. When done, go to File > Save as... and replace the xx_XX in the file name with the appropriate language and country code for your translation. Leave the rest of the file name the same and Save.
+1. Upload the automatically created xml-sitemap-feed-xx_XX.mo database file (where xx_XX should now be your language and country code) to the plugins /languages/ directory on your WordPress site.
+1. After verifying the translations work on your site, send the .mo file to ravanhagen@gmail.com and don't forget to tell me how and with what link you would like to be mentioned in the credits!
 
 Thanks for sharing your translation :)
 
@@ -274,11 +266,17 @@ Thanks for sharing your translation :)
 
 == Upgrade Notice ==
 
-= 4.0.1 =
-Bugfix release.
+= 4.1 =
+New option: split posts by year to improve generate speed.
 
 
 == Changelog ==
+
+= 4.1 =
+* NEW: Option to split posts by year or month for faster generation of each sitemap
+* Core class improvements
+* Dropped qTranslate support
+* BUGFIX: removed several PHP notices
 
 = 4.0.1 =
 * NEW: Dutch and French translations

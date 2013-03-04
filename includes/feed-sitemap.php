@@ -13,68 +13,42 @@ echo '<?xml version="1.0" encoding="'.get_bloginfo('charset').'"?><?xml-styleshe
 <!-- generator="XML & Google News Sitemap Feed plugin for WordPress" -->
 <!-- generator-url="http://status301.net/wordpress-plugins/xml-sitemap-feed/" -->
 <!-- generator-version="'.XMLSF_VERSION.'" -->
-<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 
+		http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd">
 ';
 
 global $xmlsf;
 ?>
 <!-- home page(s) -->
 	<sitemap>
-		<loc><?php 
-			// hook for filter 'xml_sitemap_url' provides a string here and MUST get a string returned
-			$url = apply_filters( 'xml_sitemap_url', trailingslashit(home_url()) );
-			if ( is_string($url) ) 
-				echo esc_url( $url ); 
-			else 
-				echo esc_url( trailingslashit(home_url()) );		
-			if (''==get_option('permalink_structure'))
-				echo '?feed='.$xmlsf->base_name.'-home';
-			else
-				echo $xmlsf->base_name.'-home.'.$xmlsf->extension; ?></loc>
+		<loc><?php echo $xmlsf->get_index_url('home'); ?></loc>
 	</sitemap>
 <!-- post types -->
 <?php
 // add rules for custom public post types
-foreach ( $xmlsf->get_post_types() as $post_type ) {
-	$count = wp_count_posts( $post_type['name'] );
-	if ( $count->publish > 0 && isset($post_type['active']) ) {
+foreach ( $xmlsf->have_post_types() as $post_type ) {
+	if (!empty($post_type['archive'])) $archive = $post_type['archive']; 
+	else $archive = '';
+	foreach ( $xmlsf->get_archives($post_type['name'],$archive) as $date => $url ) {
 ?>
 	<sitemap>
-		<loc><?php 
-			// hook for filter 'xml_sitemap_url' provides a string here and MUST get a string returned
-			$url = apply_filters( 'xml_sitemap_url', trailingslashit(home_url()) );
-			if ( is_string($url) ) 
-				echo esc_url( $url ); 
-			else 
-				echo esc_url( trailingslashit(home_url()) );		
-			if (''==get_option('permalink_structure'))
-				echo '?feed='.$xmlsf->base_name.'_'.$post_type['name'];
-			else
-				echo $xmlsf->base_name.'-posttype-'.$post_type['name'].'.'.$xmlsf->extension; ?></loc>
+		<loc><?php echo $url; ?></loc>
 		<lastmod><?php echo mysql2date('Y-m-d\TH:i:s+00:00', get_lastdate( 'gmt', $post_type['name'] ), false); ?></lastmod>
 	</sitemap>
 <?php 
 	}
 }
 ?>
-<!-- taxonomy types -->
+<!-- taxonomies -->
 <?php
 	// add rules for custom public post taxonomies
 foreach ( $xmlsf->get_taxonomies() as $taxonomy ) {
 	if ( wp_count_terms( $taxonomy ) > 0 ) {
 ?>
 	<sitemap>
-		<loc><?php 
-			// hook for filter 'xml_sitemap_url' provides a string here and MUST get a string returned
-			$url = apply_filters( 'xml_sitemap_url', trailingslashit(home_url()) );
-			if ( is_string($url) ) 
-				echo esc_url( $url ); 
-			else 
-				echo esc_url( trailingslashit(home_url()) );
-			if (''==get_option('permalink_structure'))
-				echo '?feed='.$xmlsf->base_name.'-taxonomy&amp;taxonomy='.$taxonomy;
-			else
-				echo $xmlsf->base_name.'-taxonomy-'.$taxonomy.'.'.$xmlsf->extension; ?></loc>
+		<loc><?php echo $xmlsf->get_index_url('taxonomy', $taxonomy); ?></loc>
 	</sitemap>
 <?php 
 // TODO add lastmod ?
@@ -82,3 +56,4 @@ foreach ( $xmlsf->get_taxonomies() as $taxonomy ) {
 }
 
 ?></sitemapindex>
+<?php $xmlsf->_e_usage(); ?>
