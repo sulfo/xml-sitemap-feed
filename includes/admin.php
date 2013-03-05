@@ -157,7 +157,7 @@
 		}
 
 		echo '
-		<p class="description">' . __('Note:','xml-sitemap-feed').' '.__('Including taxonomy pages is generally not recommended, unless they have intrinsic value. For example, when you use category descriptions with information that is not present elsewhere on your site. Or if taxonomy pages list posts with an excerpt that is different from, but complementary to the post content. In these cases you might consider including certain taxonomies. Otherwise, I might even consider disallowing search engine access to them by adding specific robots.txt rules below.','xml-sitemap-feed');
+		<p class="description">' . __('Note:','xml-sitemap-feed').' '.__('Including taxonomy pages is generally not recommended, unless they have intrinsic value. For example, when you use category descriptions with information that is not present elsewhere on your site. Or if taxonomy pages list posts with an excerpt that is different from, but complementary to the post content. In these cases you might consider including certain taxonomies. Otherwise, you might even consider disallowing search engine access to them by adding specific robots.txt rules below.','xml-sitemap-feed');
 		echo '</p>
 		</div>';
 	}
