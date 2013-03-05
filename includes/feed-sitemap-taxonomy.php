@@ -26,13 +26,11 @@ echo '<?xml version="1.0" encoding="'.get_bloginfo('charset', 'UTF-8').'"?>
 
 // PRESETS are changable -- please read comments:
 
-$max_priority = 0.7;	// Maximum priority value for any URL in the sitemap; set to any other value between 0 and 1.
-$min_priority = 0.2;	// Minimum priority value for any URL in the sitemap; set to any other value between 0 and 1.
+$max_priority = 0.4;	// Maximum priority value for any URL in the sitemap; set to any other value between 0 and 1.
+$min_priority = 0.0;	// Minimum priority value for any URL in the sitemap; set to any other value between 0 and 1.
 			// NOTE: Changing these values will influence each URL's priority. Priority values are taken by 
 			// search engines to represent RELATIVE priority within the site domain. Forcing all URLs
 			// to a priority of above 0.5 or even fixing them all to 1.0 - for example - is useless.
-
-$level_weight = 0.1;	// TODO Makes a sub-term gain or loose priority for each level; set to any other value between 0 and 1.
 
 $taxonomy = get_query_var('taxonomy');
 $lang = get_query_var('lang');
@@ -64,8 +62,7 @@ if ( $terms ) :
     // calculate priority based on number of posts
     // or maybe take child taxonomy terms into account.?
 
-	$priority = $min_priority + ( $term->count / ( $postcount / 2 ) );
-	$priority = ($priority > $max_priority) ? $max_priority : $priority;
+	$priority = $min_priority + ( $max_priority * $term->count / $postcount );
 	
 	// get the latest post in this taxonomy item, to use its post_date as lastmod
 	$posts = get_posts ( array(

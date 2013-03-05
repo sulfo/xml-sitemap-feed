@@ -38,54 +38,45 @@ class XMLSitemapFeed {
 		else
 			$this->defaults['sitemaps'] = array();
 
-		$this->defaults['ping'] = array(
-					'google' => array (
-						'active' => '1',
-						'url' => 'http://www.google.com/webmasters/tools/ping?sitemap=',
-						'name' => __('Google','xml-sitemap-feed'),
-						'timestamp' => '',
-						'status' => ''
-						),
-					'bing' => array (
-						'active' => '1',
-						'url' => 'http://www.bing.com/ping?sitemap=',
-						'name' => __('Bing','xml-sitemap-feed'),
-						'timestamp' => '',
-						'status' => ''
-						),
-					);
-
 		// post_types
-		if ( defined('XMLSF_POST_TYPE') && XMLSF_POST_TYPE != 'any' ) {
-			$this->defaults['post_types'] = array_map('trim',explode(',',XMLSF_POST_TYPE));
-		} else {
-			$this->defaults['post_types'] = array(
-							'post' => array(
-								'active' => '1',
-								'name' => 'post',
-								//'tags' => array('news','image','video'),
-								'archive' => 'yearly'
-								),
-							'page' => array(
-								'active' => '1',
-								'name' => 'page',
-								//'tags' => array('image','video')
-								)
-							);
-			foreach ( get_post_types(array('public'=>true,'_builtin'=>false),'names') as $name ) {
-				$this->defaults['post_types'][$name] = array(
-								'active' => '1',
-								'name' => $name,
-								//'tags' => array('image','video')
-							);
-				$this->archives[$name] = array('yearly','monthly'); 
-			}		
-					
+		$this->defaults['post_types'] = array();
+		foreach ( get_post_types(array('public'=>true),'names') as $name ) {
+			$this->defaults['post_types'][$name] = array(
+							'name' => $name,
+							//'tags' => array('image','video')
+						);
+		}		
+
+		if ( defined('XMLSF_POST_TYPE') && XMLSF_POST_TYPE != 'any' )
+			$active_arr = array_map('trim',explode(',',XMLSF_POST_TYPE));
+		else 
+			$active_arr = array('post','page');
+			
+		foreach($active_arr as $name ) {
+			if (isset($this->defaults['post_types'][$name]))
+				$this->defaults['post_types'][$name]['active'] = '1';
 		}
+		
+		if (isset($this->defaults['post_types']['post']))
+			$this->defaults['post_types']['post']['archive'] = 'yearly';//'tags' => array('news','image','video'),
 
 		// taxonomies
 		$this->defaults['taxonomies'] = array();// by default do not include any taxonomies
 							//+ get_taxonomies(array('public'=>true,'_builtin'=>false),'names')
+
+		// ping search engines
+		$this->defaults['ping'] = array(
+					'google' => array (
+						'active' => '1',
+						'uri' => 'http://www.google.com/webmasters/tools/ping?sitemap=',
+						),
+					'bing' => array (
+						'active' => '1',
+						'uri' => 'http://www.bing.com/ping?sitemap=',
+						),
+					);
+
+		$this->defaults['pings'] = array(); // for storing last ping timestamps and status
 
 		// robots
 		$this->defaults['robots'] = "Disallow: /xmlrpc.php\nDisallow: /wp-\nDisallow: /trackback/\nDisallow: ?wptheme=\nDisallow: ?comments=\nDisallow: ?replytocom\nDisallow: /comment-page-\nDisallow: /?s=\nDisallow: /wp-admin/\nDisallow: /wp-content/\nDisallow: /wp-includes/\n\nAllow: /wp-content/uploads/\n";
@@ -115,7 +106,7 @@ class XMLSitemapFeed {
 		$return = $this->get_option('sitemaps');
 		
 		// make sure it's an array we are returning
-		return (!empty($return)) ? $return : array();
+		return (is_array($return)) ? (array)$return : array();
 	}
 		
 	public function get_ping() 
@@ -123,7 +114,15 @@ class XMLSitemapFeed {
 		$return = $this->get_option('ping');
 		
 		// make sure it's an array we are returning
-		return (!empty($return)) ? $return : array();
+		return (!empty($return)) ? (array)$return : array();
+	}
+		
+	public function get_pings() 
+	{		
+		$return = $this->get_option('pings');
+		
+		// make sure it's an array we are returning
+		return (!empty($return)) ? (array)$return : array();
 	}
 		
 	public function get_post_types() 
@@ -538,7 +537,7 @@ class XMLSitemapFeed {
 	* PINGING
 	*/
 
-	public function ping($url, $timeout = 3) 
+	public function ping($uri, $timeout = 3) 
 	{
 		// steps:
 		// 1. ping url
@@ -552,14 +551,13 @@ class XMLSitemapFeed {
 		//else
 		$options['timeout'] = $timeout;
 
-		$response = wp_remote_request( $url, $options );
+		$response = wp_remote_request( $uri, $options );
 
 		if ( '200' == wp_remote_retrieve_response_code(&$response) )
 			$succes = true;
 		else
 			$succes = false;	
 
-		//update_option() here?
 		return $succes;
 	}
 
@@ -567,8 +565,14 @@ class XMLSitemapFeed {
 	{		
 		$sitemaps = $this->get_sitemaps();
 		foreach ($this->get_ping() as $se => $data) {
+			if(empty($data['active']) || '1' != $data['active']) continue;
+				
 			foreach ( $sitemaps as $pretty ) {
-				$this->ping( $data['url'].urlencode(trailingslashit(get_bloginfo('url')) . $pretty) );	
+				if ( $this->ping( $data['uri'].urlencode(trailingslashit(get_bloginfo('url')) . $pretty) ) ) {
+					$pings = $this->get_pings();
+					$pings[$se][$pretty] = mysql2date('Y-m-d H:i:s', 'now', false);
+					update_option($this->prefix.'pings',$pings);
+				}		
 			}
 		}
 

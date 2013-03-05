@@ -106,7 +106,7 @@ if ( !defined('XMLSF_NEWS_POST_TYPE') )
 
 /* The following constants should not be changed */
 
-	define('XMLSF_VERSION', '4.0.80');
+	define('XMLSF_VERSION', '4.0.83');
 
 if ( file_exists ( dirname(__FILE__).'/xml-sitemap-feed' ) )
 	define('XMLSF_PLUGIN_DIR', dirname(__FILE__) . '/xml-sitemap-feed');
