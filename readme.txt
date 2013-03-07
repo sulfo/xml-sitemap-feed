@@ -45,8 +45,9 @@ Please read the FAQ's for info on how to get your articles listed on Google News
 
 - **Dutch** * Author: [R.A. van Hagen](http://status301.net) (version 4.0)
 - **French** * Author: [R.A. van Hagen](http://status301.net) (version 4.0)
+- **Ukrainian** * Author: [Cmd Software](http://www.cmd-soft.com/) (version 4.0) 
 
-New transtations will be accepted and listed here. See instructions under [Other Notes](http://wordpress.org/extend/plugins/xml-sitemap-feed/other_notes).
+New transtations will be accepted and listed here. See translation instructions under [Other Notes](http://wordpress.org/extend/plugins/xml-sitemap-feed/other_notes).
 
 = Credits =
 
