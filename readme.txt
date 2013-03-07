@@ -1,7 +1,7 @@
 === XML Sitemap & Google News Feeds ===
 Contributors: RavanH
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravanhagen%40gmail%2ecom&item_name=XML%20Sitemap%20Feed&item_number=3%2e8&no_shipping=0&tax=0&bn=PP%2dDonationsBF&charset=UTF%2d8&lc=us
-Tags: xml sitemap, news sitemap, sitemap.xml, Google, Google News, Yahoo, Bing, Live, MSN, seo, wpmu, feed, qtranslate, xlanguage
+Tags: xml sitemap, news sitemap, sitemap.xml, robots.txt, Google, Google News, Yahoo, Bing, Live, MSN, seo, wpmu, feed, qtranslate, xlanguage
 Requires at least: 3.1
 Tested up to: 3.5.1
 Stable tag: 4.0.1
@@ -28,16 +28,16 @@ Please read the FAQ's for info on how to get your articles listed on Google News
 
 = Advantages = 
 
-* The main advantage of this plugin over other XML Sitemap plugins is **simplicity**. No need to change file or folder permissions, move files or spend time on a difficult plugin options page. In fact, there are no options at all!
+* The main advantage of this plugin over other XML Sitemap plugins is **simplicity**. No need to change file or folder permissions, move files or spend time tweaking difficult plugin options.
 * Completely **automatic** post URL _priority_ and _change frequency_ calculation based on post age and comment and trackback activity.
 * Works out-of-the-box, even on **multi-site / shared codebase / multi-blog setups** like WordPress MU, WP 3.0 in MultiSite (WPMS) mode and others. 
 * Also works upon **Network Activate** or placed in **/mu-plugins/** on WP 3.0 in MS mode and WPMU and even takes care to exclude any tags blogs to avoid malus points for link spamming.
 * Compatible with multi-lingual sites using **Polylang** to allow all languages to be indexed equally.
+* Besides some basic options about what to include in your sitempaps, there is now the possibility to add new robots.txt rules. These can be used to further control (read: limit) the indexation of various parts of your site and subsequent spread of pagerank accross your sites pages.
 
 = Limitations =
 
 * Except by _re-saving_ older posts from time to time (keeping the lastmod date fairly recent) there is no way to manually control the priority of individual posts/pages in the sitemap. See the Faq's for more.
-* This plugin does not ping any search engines. But then, WordPress does this by default already via the Ping-o-Matic service so why bother? See the Faq's for more.
 * Because the feed is dynamically created, on _very_ large sites the creation process might take a while. Search engines are said to have a short fuse about waiting for a sitemap, so you may want to consider using a cache plugin that also (pre)caches feeds. If you are unfamiliar with caching and server setup start with an easy caching plugin such as **Quick Cache**. For more options (and better performance) you might find solace in **WP Super Cache** or **W3 Total Cache**.
 * On **VERY** large sites (read: over 10.000 posts) with limited memory assigned to PHP, the generation of the sitemap might cause a problem when the process runs out of memory. See the FAQ's for tips to increase the PHP memory limit on your server.
 
@@ -45,12 +45,13 @@ Please read the FAQ's for info on how to get your articles listed on Google News
 
 - **Dutch** * Author: [R.A. van Hagen](http://status301.net) (version 4.0)
 - **French** * Author: [R.A. van Hagen](http://status301.net) (version 4.0)
+- **Ukrainian** * Author: [Cmd Software](http://www.cmd-soft.com/) (version 4.0) 
 
-New transtations will be accepted and listed here. See instructions under [Other Notes](http://wordpress.org/extend/plugins/xml-sitemap-feed/other_notes).
+New transtations will be accepted and listed here. See translation instructions under [Other Notes](http://wordpress.org/extend/plugins/xml-sitemap-feed/other_notes).
 
 = Credits =
 
-XML Sitemap Feed was originally based on the discontinued plugin Standard XML Sitemap Generator by Patrick Chia. Many thanks! Since then, it has been completely rewritten and extended in many ways.
+XML Sitemap Feed was originally based on the discontinued plugin Standard XML Sitemap Generator by Patrick Chia. Since then, it has been completely rewritten and extended in many ways.
 
 
 == Installation ==
@@ -71,7 +72,7 @@ Follow these steps:
 
 2. Upload the zip file via the Plugins > Add New > Upload page &hellip; OR &hellip; unpack and upload with your favourite FTP client to the /plugins/ folder.
 
-3. Activate the plugin on the Plug-ins page.
+3. Activate the plugin on the Plugins page.
 
 4. If you have been using another XML Sitemap plugin before, check your site root and remove any created sitemap.xml file that remained there.
 
@@ -129,18 +130,14 @@ If you cannot live with these rules, edit the values `$min_priority`, `$max_prio
 = Do I need to submit the sitemap to search engines? =
 
 No. In normal circumstances, your site will be indexed by the major search engines before you know it. The search engines will be looking for a robots.txt file and (with this plugin activated) find a pointer in it to the XML Sitemap on your blog. The search engines will return on a regular basis to see if your site has updates. 
-( Read more about _Ping-O-Matic_ under **Does this plugin ping search engines** (below) to make sure your site is under _normal circumstances_ ;) )
 
-**But** if you have a server _without rewrite rules_, use your blog _without fancy URLs_ (meaning, you have WordPress Permalinks set to the old default value) or have it installed in a _subdirectory_, then read **Do I need to change my robots.txt** for more instructions.
+Besides that, Google and Bing are pinged upon each new publication.
+
+**NOTE:** If you have a server _without rewrite rules_, use your blog _without fancy URLs_ (meaning, you have WordPress Permalinks set to the old default value) or have it installed in a _subdirectory_, then read **Do I need to change my robots.txt** for more instructions.
 
 = Does this plugin ping search engines? =
 
-No. While other XML Sitemap plugins provide pinging to some search engines upon each post edit or publication, this plugin does not. There are two reasons for that:
-
-1. WordPress has a built-in pinging feature. Go in your WP Admin section to Settings > Writing and make sure that the text area under **Update services** contains at least `http://rpc.pingomatic.com`. Read more on [Ping-O-Matic](http://pingomatic.com) about what excellent service you are actually getting _for free with every WordPress blog_ installation!
-1. For the average website, in my experience, pinging Google or others after each little change does not benefit anything except a theoretical smaller delay in re-indexation of your website. This is only theoretical because if your site is popular and active, major search engines will likely be crawling your site on a very regular basis anyway. And if, on the other hand, your site is not high on the agenda of the major search engines, they will likely give no priority to your pings at all.
-
-You can always take a [Google Webmasters Tools account](https://www.google.com/webmasters/tools/) which will tell you many interesting things about your website, sitemap downloads, search terms and your visitors. Try it!
+Yes, Google and Bing are pinged upon each new publication.
 
 = Do I need to change my robots.txt? =
 
