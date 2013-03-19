@@ -1,20 +1,20 @@
 === XML Sitemap & Google News Feeds ===
 Contributors: RavanH
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravanhagen%40gmail%2ecom&item_name=XML%20Sitemap%20Feed&item_number=3%2e8&no_shipping=0&tax=0&bn=PP%2dDonationsBF&charset=UTF%2d8&lc=us
-Tags: xml sitemap, news sitemap, sitemap.xml, robots.txt, Google, Google News, Yahoo, Bing, Live, MSN, seo, wpmu, feed, qtranslate, xlanguage
-Requires at least: 3.1
+Tags: sitemap, xml sitemap, news sitemap, sitemap.xml, robots.txt, Google, Google News, Yahoo, Bing, seo, feed, polylang
+Requires at least: 3.2
 Tested up to: 3.5.1
 Stable tag: 4.0.1
 
-Feeds that comply with the XML Sitemap and Google News protocol for the hungry spiders. Multisite and multilingual compatible.
+Feeds that comply with the XML Sitemap and Google News protocol for the hungry spiders. Multisite compatible.
 
 == Description ==
 
-This plugin dynamically creates feeds that comply with the **XML Sitemap** and the **Google News Sitemap** protocol. It is **Multisite** and **Polylang** compatible and there are no files created. Options can be found on **Settings > Reading** to control which sitemaps, which post and taxonomy types are included and any additional robots.txt rules.
+This plugin dynamically creates feeds that comply with the **XML Sitemap** and the **Google News Sitemap** protocol. **Multisite** and **Polylang** compatible and there are no files created. Options can be found on **Settings > Reading** to control which sitemaps, which post and taxonomy types are included, how priority is calculated, who to ping and set additional robots.txt rules.
 
-You or site owners on your Multisite network will not be bothered with complicated settings like other XML Sitemap plugins. XML sitemap values like ChangeFreq and URL Priority are auto-calculated based on post age and comment activity.
+You or site owners on your Multisite network will not be bothered with complicated settings like most other XML Sitemap plugins. The default settings will suffice in most cases and XML sitemap values like ChangeFreq and URL Priority are auto-calculated based on post age and comment activity.
 
-The feeds become instantly available: One XML Sitemap on yourblog.url/sitemap.xml (or yourblog.url/?feed=sitemap), ready for indexing by search engines like Google, Yahoo, MSN, Ask.com and others. And one Google News Sitemap on yourblog.url/sitemap-news.xml (or yourblog.url/?feed=sitemap-news), ready for indexing by Google News. Both are automatically referenced in the dynamically created **robots.txt** on yourblog.url/robots.txt to tell search engines where to find your XML Sitemaps.
+The XML Sitemap becomes instantly available on yourblog.url/sitemap.xml (or yourblog.url/?feed=sitemap), ready for indexing by search engines like Google, Yahoo, MSN, Ask.com and others. When the Google News Sitemap is activated, it will become available on yourblog.url/sitemap-news.xml (or yourblog.url/?feed=sitemap-news), ready for indexing by Google News. Both are automatically referenced in the dynamically created **robots.txt** on yourblog.url/robots.txt to tell search engines where to find your XML Sitemaps. And both are sent by ping to Google and Bing on each new publication.
 
 Please read the FAQ's for info on how to get your articles listed on Google News.
 
@@ -43,7 +43,7 @@ Please read the FAQ's for info on how to get your articles listed on Google News
 
 = Translations =
 
-- **Dutch** * Author: [R.A. van Hagen](http://status301.net) (version 4.0)
+- **Dutch** * Author: [R.A. van Hagen](http://status301.net) (version 4.1)
 - **French** * Author: [R.A. van Hagen](http://status301.net) (version 4.0)
 - **Ukrainian** * Author: [Cmd Software](http://www.cmd-soft.com/) (version 4.0) 
 
@@ -137,7 +137,7 @@ Besides that, Google and Bing are pinged upon each new publication.
 
 = Does this plugin ping search engines? =
 
-Yes, Google and Bing are pinged upon each new publication.
+Yes, Google and Bing are pinged upon each new publication. Unless you disable this feature on **Settings > Reading**.
 
 = Do I need to change my robots.txt? =
 
@@ -264,13 +264,17 @@ Thanks for sharing your translation :)
 == Upgrade Notice ==
 
 = 4.1 =
-New option: split posts by year to improve generate speed.
+New: Split posts by year to improve generate speed and priority settings.
 
 
 == Changelog ==
 
 = 4.1 =
+* NEW: Ping Google and Bing on new publications
+* NEW: Priority calculation options 
 * NEW: Option to split posts by year or month for faster generation of each sitemap
+* Reduced queries to increase performance
+* Improved Lastmod and Changefreq calculations
 * Core class improvements
 * Dropped qTranslate support
 * BUGFIX: removed several PHP notices

@@ -87,120 +87,12 @@ if ( have_posts() ) :
 	// or if page is in the exclusion list (like front pages)
 	if ( !preg_match('/^' . preg_quote(home_url(), '/') . '/i', get_permalink()) || in_array($post->ID, $excluded) )
 		continue;
-	
-	$thispostmodified_gmt = $post->post_modified_gmt; // post GMT timestamp
-	$thispostmodified = mysql2date('U',$thispostmodified_gmt); // post Unix timestamp
-	$lastcomment = array();
-	$priority = 0.5;
-
-	if ($post->comment_count && $post->comment_count > 0) {
-		$lastcomment = get_comments( array(
-						'status' => 'approve',
-						'$number' => 1,
-						'post_id' => $post->ID,
-						) );
-		$lastcommentsdate = mysql2date('U',$lastcomment[0]->comment_date_gmt); // last comment timestamp
-		if ( $lastcommentsdate > $thispostmodified ) {
-			$thispostmodified = $lastcommentsdate; // replace post with comment Unix timestamp
-			$thispostmodified_gmt = $lastcomment[0]->comment_date_gmt; // and replace modified GMT timestamp
-		}
-		
-		if ($_totalcommentcount->approved > 0)
-			$priority = ( $post->comment_count - $average_commentcount / 1 + ( $_totalcommentcount->approved - $average_commentcount ) ) + $firstcomment_bonus;
-		else
-			$priority = ( $min_priority + $max_priority ) / 2 ;
-		
-	}
-
-	if($post->post_type == "page") {
-	
-		if (!isset($post->ancestors)) { 
-			// could use get_post_ancestors($post) but that creates an 
-			// extra db query per sub-page so better do it ourselves... 
-			$page_obj = $post;
-			$ancestors = array();
-			while($page_obj->post_parent!=0) {
-				$page_obj = get_page($page_obj->post_parent);
-				$ancestors[] = $page_obj->ID;
-			}
-		} else {
-			$ancestors = $post->ancestors;
-		}
-
-		$priority += (count($ancestors) * $level_weight) + $sitebonus;
-	} else {
-		if(is_sticky($post->ID))
-			$priority = $max_priority;
-		else
-			$priority += (($lastmodified - $thispostmodified) * $age_weight) + $blogbonus;
-	}
-
-
-	$lastactivityage = (gmdate('U') - $thispostmodified); // post age
-	
-	// trim priority
-	$priority = ($priority > $max_priority) ? $max_priority : $priority;
-	$priority = ($priority < $min_priority) ? $min_priority : $priority; 
 ?>
 	<url>
 		<loc><?php the_permalink_rss(); ?></loc>
-<?php 
-// Google News tags 
-if ( !empty($news) && $post->post_date > date('Y-m-d H:i:s', strtotime('-49 hours') ) ) { ?>
-		<news:news>
-			<news:publication>
-				<news:name><?php 
-					echo ( defined('XMLSF_GOOGLE_NEWS_TITLE') ) ? apply_filters('the_title_rss', XMLSF_GOOGLE_NEWS_TITLE) : bloginfo_rss('name'); ?></news:name>
-				<news:language><?php 
-					$lang = reset(get_the_terms($post->ID,'language'));
-					// bloginfo_rss('language') returns improper format
-					// so using explode but that breaks chinese :°(
-					echo ( is_object($lang) ) ? $lang->slug : reset(explode('-', get_bloginfo_rss('language')));  ?></news:language>
-			</news:publication>
-			<news:publication_date><?php 
-				echo mysql2date('Y-m-d\TH:i:s+00:00', $post->post_date_gmt, false); ?></news:publication_date>
-			<news:title><?php the_title_rss() ?></news:title>
-			<news:keywords><?php 
-				$do_comma = false; 
-				$keys_arr = get_the_category(); 
-				foreach($keys_arr as $key) { 
-					echo ( $do_comma ) ? ', ' : '' ; 
-					echo apply_filters('the_title_rss', $key->name); 
-					$do_comma = true; 
-				} ?></news:keywords>
-<?php 
-		// TODO: create the new taxonomy "Google News Genre" with some genres preset
-		if ( taxonomy_exists('gn_genre') && get_the_terms($post->ID,'gn_genre') ) { 
-		?>
-			<news:genres><?php 
-				$do_comma = false; 
-				foreach(get_the_terms($post->ID,'gn_genre') as $key) { 
-					echo ( $do_comma ) ? ', ' : '' ; 
-					echo apply_filters('the_title_rss', $key->name); 
-					$do_comma = true; 
-				} ?></news:genres>
-		<?php
-		}
-?>
-		</news:news>
-<?php 
-// and lastly, set the priority to news priority level
-$priority = $max_priority;
-} ?>
-		<lastmod><?php echo mysql2date('Y-m-d\TH:i:s+00:00', $thispostmodified_gmt, false); ?></lastmod>
-		<changefreq><?php
-		 	if(($lastactivityage/86400) < 1) { // last activity less than 1 day old 
-		 		echo 'hourly';
-		 	} else if(($lastactivityage/86400) < 7) { // last activity less than 1 week old 
-		 		echo 'daily';
-		 	} else if(($lastactivityage/86400) < 30) { // last activity between 1 week and one month old 
-		 		echo 'weekly';
-		 	} else if(($lastactivityage/86400) < 365) { // last activity between 1 month and 1 year old 
-		 		echo 'monthly';
-		 	} else {
-		 		echo 'yearly'; // never
-		 	} ?></changefreq>
-	 	<priority><?php echo number_format($priority,1) ?></priority>
+		<lastmod><?php echo $xmlsf->get_lastmod(); ?></lastmod>
+		<changefreq><?php echo $xmlsf->get_changefreq(); ?></changefreq>
+	 	<priority><?php echo $xmlsf->get_priority(); ?></priority>
  	</url>
 <?php 
     endwhile; 

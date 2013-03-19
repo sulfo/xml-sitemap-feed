@@ -30,13 +30,15 @@ global $xmlsf;
 <?php
 // add rules for custom public post types
 foreach ( $xmlsf->have_post_types() as $post_type ) {
-	if (!empty($post_type['archive'])) $archive = $post_type['archive']; 
-	else $archive = '';
-	foreach ( $xmlsf->get_archives($post_type['name'],$archive) as $date => $url ) {
+	if (!empty($post_type['archive'])) 
+		$archive = $post_type['archive']; 
+	else 
+		$archive = '';
+	foreach ( $xmlsf->get_archives($post_type['name'],$archive) as $m => $url ) {
 ?>
 	<sitemap>
 		<loc><?php echo $url; ?></loc>
-		<lastmod><?php echo mysql2date('Y-m-d\TH:i:s+00:00', get_lastdate( 'gmt', $post_type['name'] ), false); ?></lastmod>
+		<lastmod><?php echo mysql2date('Y-m-d\TH:i:s+00:00', get_lastmodified( 'gmt', $post_type['name'], $m ), false); ?></lastmod>
 	</sitemap>
 <?php 
 	}

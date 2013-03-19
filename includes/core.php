@@ -15,18 +15,19 @@ class XMLSitemapFeed {
 	// Pretty permalinks extension
 	public $extension = 'xml';
 	
-	// database options prefix
+	// Database options prefix
 	private $prefix = 'xmlsf_';
 	
-	// we have flushed flag
+	// Flushed flag
 	private $yes_mother = false;
 
 	private $defaults = array();
 	
-	public static $archives = array(
-				'post' => array('yearly','monthly'),
-				//'page' => array() // top level page ?
-				);
+	// Global values used for priority and changefreq calculation
+	private $firstdate;
+	private $lastmodified;
+	private $commentcount;
+	private $postmodified;
 						
 	private function build_defaults() 
 	{
@@ -42,9 +43,13 @@ class XMLSitemapFeed {
 		$this->defaults['post_types'] = array();
 		foreach ( get_post_types(array('public'=>true),'names') as $name ) {
 			$this->defaults['post_types'][$name] = array(
-							'name' => $name,
-							//'tags' => array('image','video')
-						);
+								'name' => $name,
+								'active' => '',
+								'priority' => array (
+									'calculation' => 'static',
+									'value' => '0.5',
+									)
+								);
 		}		
 
 		if ( defined('XMLSF_POST_TYPE') && XMLSF_POST_TYPE != 'any' )
@@ -52,13 +57,21 @@ class XMLSitemapFeed {
 		else 
 			$active_arr = array('post','page');
 			
-		foreach($active_arr as $name ) {
+		foreach($active_arr as $name )
 			if (isset($this->defaults['post_types'][$name]))
 				$this->defaults['post_types'][$name]['active'] = '1';
-		}
 		
-		if (isset($this->defaults['post_types']['post']))
-			$this->defaults['post_types']['post']['archive'] = 'yearly';//'tags' => array('news','image','video'),
+		if (isset($this->defaults['post_types']['post'])) {
+			$this->defaults['post_types']['post']['archive'] = 'yearly';
+			//$this->defaults['post_types']['post']['tags'] => array('news','image','video');
+			$this->defaults['post_types']['post']['priority']['calculation'] = 'dynamic';
+			$this->defaults['post_types']['post']['priority']['value'] = '0.7';
+		}
+
+		if (isset($this->defaults['post_types']['page'])) {
+			//$this->defaults['post_types']['page']['tags'] => array('image','video');
+			$this->defaults['post_types']['page']['priority']['value'] = '0.3';
+		}
 
 		// taxonomies
 		$this->defaults['taxonomies'] = array();// by default do not include any taxonomies
@@ -79,7 +92,7 @@ class XMLSitemapFeed {
 		$this->defaults['pings'] = array(); // for storing last ping timestamps and status
 
 		// robots
-		$this->defaults['robots'] = "Disallow: /xmlrpc.php\nDisallow: /wp-\nDisallow: /trackback/\nDisallow: ?wptheme=\nDisallow: ?comments=\nDisallow: ?replytocom\nDisallow: /comment-page-\nDisallow: /?s=\nDisallow: /wp-admin/\nDisallow: /wp-content/\nDisallow: /wp-includes/\n\nAllow: /wp-content/uploads/\n";
+		$this->defaults['robots'] = "Disallow: /xmlrpc.php\nDisallow: /wp-\nDisallow: /trackback/\nDisallow: ?wptheme=\nDisallow: ?comments=\nDisallow: ?replytocom\nDisallow: /comment-page-\nDisallow: /?s=\nDisallow: /wp-content/\nAllow: /wp-content/uploads/\n";
 	}
 
 
@@ -202,7 +215,7 @@ class XMLSitemapFeed {
 				}
 			}
 		} else {
-			$return[] = $this->get_index_url('posttype', $post_type); // $sitemap = 'home', $type = false, $param = false
+			$return[0] = $this->get_index_url('posttype', $post_type); // $sitemap = 'home', $type = false, $param = false
 		}
 		return $return;
 	}
@@ -238,6 +251,98 @@ class XMLSitemapFeed {
 		}
 		
 		return array();
+	}
+
+	public function get_postmodified($id) 
+	{
+		$postmodified = get_post_modified_time( 'Y-m-d H:i:s', true, $id );
+		$lastcomment = get_comments( array(
+						'status' => 'approve',
+						'number' => 1,
+						'post_id' => $id,
+						) );
+
+		if ( isset($lastcomment[0]->comment_date_gmt) )
+			if ( mysql2date( 'U', $lastcomment[0]->comment_date_gmt ) > mysql2date( 'U', $postmodified ) )
+				$postmodified = $lastcomment[0]->comment_date_gmt;
+		
+		$this->postmodified = array( $id => $postmodified );
+	}
+
+	public function get_lastmod() 
+	{
+		global $post;
+		if ( empty($this->postmodified[$post->ID]) )
+			$this->get_postmodified( $post->ID );
+		
+		return mysql2date('Y-m-d\TH:i:s+00:00', $this->postmodified[$post->ID], false);
+
+	}
+
+	public function get_changefreq() 
+	{
+		global $post;
+		if ( empty($this->postmodified[$post->ID]) )
+			$this->get_postmodified( $post->ID );
+		
+		$lastactivityage = ( gmdate('U') - mysql2date( 'U', $this->postmodified[$post->ID] ) ); // post age
+	 	
+	 	if ( ($lastactivityage/86400) < 1 ) { // last activity less than 1 day old 
+	 		$changefreq = 'hourly';
+	 	} else if ( ($lastactivityage/86400) < 7 ) { // last activity less than 1 week old 
+	 		$changefreq = 'daily';
+	 	} else if ( ($lastactivityage/86400) < 30 ) { // last activity less than one month old 
+	 		$changefreq = 'weekly';
+	 	} else if ( ($lastactivityage/86400) < 365 ) { // last activity less than 1 year old 
+	 		$changefreq = 'monthly';
+	 	} else {
+	 		$changefreq = 'yearly'; // over a year old...
+	 	} 
+
+	 	return $changefreq;
+	}
+
+	public function get_priority() 
+	{
+		$options = $this->get_option('post_types');
+		$defaults = $this->defaults('post_types');
+		global $post;
+		
+		// first check if we're dealing with a fixed priority
+		if ( isset($options[$post->post_type]['priority']['calculation']) && 'static' == $options[$post->post_type]['priority']['calculation'] )
+			return ( isset($options[$post->post_type]['priority']['value']) ) ? number_format($options[$post->post_type]['priority']['value'],1) : '0.5';
+		
+		// still here? then let's start calculating...
+		
+		$post_modified = mysql2date('U',$post->post_modified_gmt);
+		
+		if (empty($this->lastmodified))
+			$this->lastmodified = mysql2date('U',get_lastmodified('GMT',$post->post_type)); 
+			// last posts or page modified date in Unix seconds 
+			// uses get_lastmodified() function defined in xml-sitemap/hacks.php !
+			
+		if (empty($this->firstdate))
+			$this->firstdate = mysql2date('U',get_firstdate('GMT',$post->post_type)); 
+			// uses get_firstdate() function defined in xml-sitemap/hacks.php !
+
+		if (empty($this->commentcount))
+			$this->commentcount = wp_count_comments($post->post_type);
+			
+		if(is_sticky($post->ID))
+			$priority_value = 1;
+		elseif ( isset($options[$post->post_type]['priority']['value']) )
+			$priority_value = $options[$post->post_type]['priority']['value'];
+		elseif ( isset($defaults[$post->post_type]['priority']['value']) )
+			$priority_value = $defaults[$post->post_type]['priority']['value'];
+		else
+			$priority_value = 0.5;
+		
+		$priority = ( $this->lastmodified > $this->firstdate ) ? $priority_value - $priority_value * ( $this->lastmodified - $post_modified ) / ( $this->lastmodified - $this->firstdate ) : $priority_value;
+		
+		if (  $post->comment_count > 0 )
+			$priority = $priority + 0.1 + ( 0.9 - $priority ) * $post->comment_count / $this->commentcount->approved;
+
+		return number_format($priority,1);
 	}
 
 	public function get_home_urls() 
@@ -317,20 +422,6 @@ class XMLSitemapFeed {
 	}
 	
 	/**
-	* DE-ACTIVATION
-	*/
-
-	public function deactivate() 
-	{
-		global $wp_rewrite;
-		remove_action('generate_rewrite_rules', array($this, 'rewrite_rules') );
-		$wp_rewrite->flush_rules();
-		delete_option('xmlsf_version');
-		foreach ( $this->defaults() as $option => $settings )
-			delete_option('xmlsf_'.$option);
-	}
-
-	/**
 	* REWRITES
 	*/
 
@@ -368,14 +459,14 @@ class XMLSitemapFeed {
 			$xmlsf_rules[ $this->base_name . '-home\.' . $this->extension . '$' ] = $wp_rewrite->index . '?feed=sitemap-home';
 		
 			// add rules for post types (can be split by month or year)
-			foreach ( $this->get_post_types() as $post_type ) {
-				$xmlsf_rules[ $this->base_name . '-posttype-' . $post_type['name'] . '\.([0-9]+)?\.?' . $this->extension . '$' ] = $wp_rewrite->index . '?feed=sitemap-posttype-' . $post_type['name'] . '&m=$matches[1]';
-			}
+			foreach ( $this->get_post_types() as $post_type )
+				if ( isset($post_type['active']) && '1' == $post_type['active'] )
+					$xmlsf_rules[ $this->base_name . '-posttype-' . $post_type['name'] . '\.([0-9]+)?\.?' . $this->extension . '$' ] = $wp_rewrite->index . '?feed=sitemap-posttype-' . $post_type['name'] . '&m=$matches[1]';
 		
 			// add rules for taxonomies
-			foreach ( $this->get_taxonomies() as $taxonomy ) {
+			foreach ( $this->get_taxonomies() as $taxonomy )
 				$xmlsf_rules[ $this->base_name . '-taxonomy-' . $taxonomy . '\.' . $this->extension . '$' ] = $wp_rewrite->index . '?feed=sitemap-taxonomy-' . $taxonomy; //&taxonomy=
-			}
+
 		}
 		
 		$wp_rewrite->rules = $xmlsf_rules + $wp_rewrite->rules;
@@ -580,6 +671,21 @@ class XMLSitemapFeed {
 	}
 
 	/**
+	* DE-ACTIVATION
+	*/
+
+	public function clear_settings() 
+	{
+		delete_option('xmlsf_version');
+		foreach ( $this->defaults() as $option => $settings )
+			delete_option('xmlsf_'.$option);
+
+		remove_action('generate_rewrite_rules', array($this, 'rewrite_rules') );
+		global $wp_rewrite;
+		$wp_rewrite->flush_rules();
+	}
+
+	/**
 	* INITIALISATION
 	*/
 
@@ -622,11 +728,14 @@ class XMLSitemapFeed {
 			$this->flush_rules();
 			update_option('xmlsf_version', XMLSF_VERSION);
 		}
+
+		// CATCH TRANSIENT for reset
+		if (delete_transient('xmlsf_clear_settings'))
+			$this->clear_settings();
 		
 		// CATCH TRANSIENT for flushing rewrite rules after the sitemaps setting has changed
-		if (delete_transient('xmlsf_flush_rewrite_rules')) {
+		if (delete_transient('xmlsf_flush_rewrite_rules'))
 			$this->flush_rules();
-		}
 		
 		// Include the admin class file
 		include_once( XMLSF_PLUGIN_DIR . '/includes/admin.php' );
@@ -677,7 +786,7 @@ class XMLSitemapFeed {
 		add_action('publish_post', array($this, 'do_pings'));
 
 		// DE-ACTIVATION
-		register_deactivation_hook( XMLSF_PLUGIN_DIR . '/xml-sitemap.php', array($this, 'deactivate') );
+		register_deactivation_hook( XMLSF_PLUGIN_DIR . '/xml-sitemap.php', array($this, 'clear_settings') );
 	}
 
 }
