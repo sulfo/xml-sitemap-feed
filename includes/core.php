@@ -341,7 +341,7 @@ class XMLSitemapFeed {
 				
 		} else {
 		
-			$priority = ( isset($options[$post->post_type]['priority']) ) ? $options[$post->post_type]['priority'] : $defaults[$post->post_type]['priority'];
+			$priority = ( isset($options[$post->post_type]['priority']) && is_numeric($options[$post->post_type]['priority']) ) ? $options[$post->post_type]['priority'] : $defaults[$post->post_type]['priority'];
 		
 		}
 
