@@ -103,8 +103,8 @@
 				
 				if ( isset($defaults[$post_type->name]['archive']) ) {
 					$archives = array (
-								'yearly' => __('year'),
-								'monthly' => __('month') 
+								'yearly' => __('year','xml-sitemap-feed'),
+								'monthly' => __('month','xml-sitemap-feed') 
 								);
 					$archive = !empty($options[$post_type->name]['archive']) ? $options[$post_type->name]['archive'] : $defaults[$post_type->name]['archive'];
 					echo ' 
