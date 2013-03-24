@@ -26,8 +26,7 @@ class XMLSitemapFeed {
 	// Global values used for priority and changefreq calculation
 	private $firstdate;
 	private $lastmodified;
-	private $commentcount;
-	private $postmodified;
+	private $postmodified = array();
 						
 	private function build_defaults() 
 	{
@@ -45,10 +44,8 @@ class XMLSitemapFeed {
 			$this->defaults['post_types'][$name] = array(
 								'name' => $name,
 								'active' => '',
-								'priority' => array (
-									'calculation' => 'static',
-									'value' => '0.5',
-									)
+								'priority' => '0.5',
+								'dynamic_priority' => '',
 								);
 		}		
 
@@ -57,20 +54,23 @@ class XMLSitemapFeed {
 		else 
 			$active_arr = array('post','page');
 			
-		foreach($active_arr as $name )
-			if (isset($this->defaults['post_types'][$name]))
+		foreach ( $active_arr as $name )
+			if ( isset($this->defaults['post_types'][$name]) )
 				$this->defaults['post_types'][$name]['active'] = '1';
 		
-		if (isset($this->defaults['post_types']['post'])) {
-			$this->defaults['post_types']['post']['archive'] = '';
+		if ( isset($this->defaults['post_types']['post']) ) {
+			if (wp_count_posts('post')->publish > 500)
+				$this->defaults['post_types']['post']['archive'] = 'yearly';
+			else
+				$this->defaults['post_types']['post']['archive'] = '';
 			//$this->defaults['post_types']['post']['tags'] => array('news','image','video');
-			$this->defaults['post_types']['post']['priority']['calculation'] = 'dynamic';
-			$this->defaults['post_types']['post']['priority']['value'] = '0.7';
+			$this->defaults['post_types']['post']['priority'] = '0.7';
+			$this->defaults['post_types']['post']['dynamic_priority'] = '1';
 		}
 
-		if (isset($this->defaults['post_types']['page'])) {
+		if ( isset($this->defaults['post_types']['page']) ) {
 			//$this->defaults['post_types']['page']['tags'] => array('image','video');
-			$this->defaults['post_types']['page']['priority']['value'] = '0.3';
+			$this->defaults['post_types']['page']['priority'] = '0.3';
 		}
 
 		// taxonomies
@@ -253,39 +253,40 @@ class XMLSitemapFeed {
 		return array();
 	}
 
-	public function get_postmodified($id) 
+	public function postmodified() 
 	{
-		$postmodified = get_post_modified_time( 'Y-m-d H:i:s', true, $id );
-		$lastcomment = get_comments( array(
-						'status' => 'approve',
-						'number' => 1,
-						'post_id' => $id,
-						) );
+		global $post;
 
-		if ( isset($lastcomment[0]->comment_date_gmt) )
-			if ( mysql2date( 'U', $lastcomment[0]->comment_date_gmt ) > mysql2date( 'U', $postmodified ) )
-				$postmodified = $lastcomment[0]->comment_date_gmt;
+		if ( empty($this->postmodified[$post->ID]) ) {
+			$postmodified = get_post_modified_time( 'Y-m-d H:i:s', true, $post->ID );
+			$options = $this->get_option('post_types');
+
+			if( !empty($options[$post->post_type]['update_lastmod_on_comments']) )
+				$lastcomment = get_comments( array(
+							'status' => 'approve',
+							'number' => 1,
+							'post_id' => $post->ID,
+							) );
+
+			if ( isset($lastcomment[0]->comment_date_gmt) )
+				if ( mysql2date( 'U', $lastcomment[0]->comment_date_gmt ) > mysql2date( 'U', $postmodified ) )
+					$postmodified = $lastcomment[0]->comment_date_gmt;
 		
-		$this->postmodified = array( $id => $postmodified );
+			$this->postmodified[$post->ID] = $postmodified;
+		}
+		
+		return $this->postmodified[$post->ID];
 	}
 
 	public function get_lastmod() 
 	{
-		global $post;
-		if ( empty($this->postmodified[$post->ID]) )
-			$this->get_postmodified( $post->ID );
-		
-		return mysql2date('Y-m-d\TH:i:s+00:00', $this->postmodified[$post->ID], false);
+		return mysql2date('Y-m-d\TH:i:s+00:00', $this->postmodified(), false);
 
 	}
 
 	public function get_changefreq() 
 	{
-		global $post;
-		if ( empty($this->postmodified[$post->ID]) )
-			$this->get_postmodified( $post->ID );
-		
-		$lastactivityage = ( gmdate('U') - mysql2date( 'U', $this->postmodified[$post->ID] ) ); // post age
+		$lastactivityage = ( gmdate('U') - mysql2date( 'U', $this->postmodified() ) ); // post age
 	 	
 	 	if ( ($lastactivityage/86400) < 1 ) { // last activity less than 1 day old 
 	 		$changefreq = 'hourly';
@@ -304,43 +305,40 @@ class XMLSitemapFeed {
 
 	public function get_priority() 
 	{
+		global $post;
 		$options = $this->get_option('post_types');
 		$defaults = $this->defaults('post_types');
-		global $post;
 		
-		// first check if we're dealing with a fixed priority
-		if ( isset($options[$post->post_type]['priority']['calculation']) && 'static' == $options[$post->post_type]['priority']['calculation'] )
-			return ( isset($options[$post->post_type]['priority']['value']) ) ? number_format($options[$post->post_type]['priority']['value'],1) : '0.5';
+		if ( !empty($options[$post->post_type]['dynamic_priority']) ) {
 		
-		// still here? then let's start calculating...
+			$post_modified = mysql2date('U',$post->post_modified_gmt);
 		
-		$post_modified = mysql2date('U',$post->post_modified_gmt);
-		
-		if (empty($this->lastmodified))
-			$this->lastmodified = mysql2date('U',get_lastmodified('GMT',$post->post_type)); 
-			// last posts or page modified date in Unix seconds 
-			// uses get_lastmodified() function defined in xml-sitemap/hacks.php !
+			if ( empty($this->lastmodified) )
+				$this->lastmodified = mysql2date('U',get_lastmodified('GMT',$post->post_type)); 
+				// last posts or page modified date in Unix seconds 
+				// uses get_lastmodified() function defined in xml-sitemap/hacks.php !
 			
-		if (empty($this->firstdate))
-			$this->firstdate = mysql2date('U',get_firstdate('GMT',$post->post_type)); 
-			// uses get_firstdate() function defined in xml-sitemap/hacks.php !
-
-		if (empty($this->commentcount))
-			$this->commentcount = wp_count_comments($post->post_type);
+			if ( empty($this->firstdate) )
+				$this->firstdate = mysql2date('U',get_firstdate('GMT',$post->post_type)); 
+				// uses get_firstdate() function defined in xml-sitemap/hacks.php !
 			
-		if(is_sticky($post->ID))
-			$priority_value = 1;
-		elseif ( isset($options[$post->post_type]['priority']['value']) )
-			$priority_value = $options[$post->post_type]['priority']['value'];
-		elseif ( isset($defaults[$post->post_type]['priority']['value']) )
-			$priority_value = $defaults[$post->post_type]['priority']['value'];
-		else
-			$priority_value = 0.5;
+			if ( is_sticky($post->ID) )
+				$priority_value = 1;
+			elseif ( isset($options[$post->post_type]['priority']) )
+				$priority_value = $options[$post->post_type]['priority'];
+			else
+				$priority_value = $defaults[$post->post_type]['priority'];
 		
-		$priority = ( $this->lastmodified > $this->firstdate ) ? $priority_value - $priority_value * ( $this->lastmodified - $post_modified ) / ( $this->lastmodified - $this->firstdate ) : $priority_value;
+			$priority = ( $this->lastmodified > $this->firstdate ) ? $priority_value - $priority_value * ( $this->lastmodified - $post_modified ) / ( $this->lastmodified - $this->firstdate ) : $priority_value;
 		
-		if (  $post->comment_count > 0 )
-			$priority = $priority + 0.1 + ( 0.9 - $priority ) * $post->comment_count / $this->commentcount->approved;
+			if (  $post->comment_count > 0 )
+				$priority = $priority + 0.1 + ( 0.9 - $priority ) * $post->comment_count / wp_count_comments($post->post_type)->approved;
+				
+		} else {
+		
+			$priority = ( isset($options[$post->post_type]['priority']) ) ? $options[$post->post_type]['priority'] : $defaults[$post->post_type]['priority'];
+		
+		}
 
 		return number_format($priority,1);
 	}

@@ -37,18 +37,18 @@
 		$options = parent::get_sitemaps();
 		$disabled = ('1' == get_option('blog_public')) ? false : true;
 
-		echo '<div id="xmlsf_sitemaps">
-			<label><input type="checkbox" name="xmlsf_sitemaps[sitemap]" id="xmlsf_sitemaps_index" value="'.XMLSF_NAME.'" '.checked(isset($options['sitemap']), true, false).' '.disabled($disabled, true, false).' /> '.__('Regular XML Sitemaps','xml-sitemap-feed').'</label>';
+		echo '<fieldset id="xmlsf_sitemaps"><legend class="screen-reader-text">'.__('XML Sitemaps','xml-sitemap-feed').'</legend>
+			<p><label><input type="checkbox" name="xmlsf_sitemaps[sitemap]" id="xmlsf_sitemaps_index" value="'.XMLSF_NAME.'" '.checked(isset($options['sitemap']), true, false).' '.disabled($disabled, true, false).' /> '.__('Regular XML Sitemaps','xml-sitemap-feed').'</label>';
 		if (isset($options['sitemap']))
 			echo '<span class="description">&nbsp; &ndash; &nbsp;<a href="'.trailingslashit(get_bloginfo('url')). ( ('' == get_option('permalink_structure')) ? '?feed=sitemap' : $options['sitemap'] ) .'" target="_blank">'.__('View').'</a></span>';
-		//<a href="#">'.__('Settings').'</a> | <a href="#">'.__('Advanced').'</a> | <a href="#">'.__('Advanced Settings').'</a> | ...
+
 		//__('Note: if you do not include any post or taxonomy types below, the sitemap will only contain your sites root url.','xml-sitemap-feed')
-		echo '<br />
-			<label><input type="checkbox" name="xmlsf_sitemaps[sitemap-news]" id="xmlsf_sitemaps_news" value="'.XMLSF_NEWS_NAME.'" '.checked(isset($options['sitemap-news']), true, false).' '.disabled($disabled, true, false).' /> '.__('Google News Sitemap','xml-sitemap-feed').'</label>';
+		echo '</p>
+			<p><label><input type="checkbox" name="xmlsf_sitemaps[sitemap-news]" id="xmlsf_sitemaps_news" value="'.XMLSF_NEWS_NAME.'" '.checked(isset($options['sitemap-news']), true, false).' '.disabled($disabled, true, false).' /> '.__('Google News Sitemap','xml-sitemap-feed').'</label>';
 		if (isset($options['sitemap-news']))
 			echo '<span class="description">&nbsp; &ndash; &nbsp;<a href="'.trailingslashit(get_bloginfo('url')). ( ('' == get_option('permalink_structure')) ? '?feed=sitemap-news' : $options['sitemap-news'] ) .'" target="_blank">'.__('View').'</a></span>';
-		echo '
-		</div>';
+		echo '</p>
+		</fieldset>';
 	}
 
 	public function post_types_settings_field() {
@@ -56,20 +56,20 @@
 		$defaults = parent::defaults('post_types');
 		$do_note = false;
 
-		echo '<div id="xmlsf_post_types">
+		echo '<fieldset id="xmlsf_post_types"><legend class="screen-reader-text">'.__('Include post types','xml-sitemap-feed').'</legend>
 			';
 		foreach ( get_post_types(array('public'=>true),'objects') as $post_type ) {
 			$count = wp_count_posts( $post_type->name );
 				
 			echo '
-				<input type="hidden" name="xmlsf_post_types['.
+				<p><input type="hidden" name="xmlsf_post_types['.
 				$post_type->name.'][name]" value="'.
 				$post_type->name.'" />';
 
 			echo '
 				<label><input type="checkbox" name="xmlsf_post_types['.
 				$post_type->name.'][active]" id="xmlsf_post_types_'.
-				$post_type->name.'" value="1"'.
+				$post_type->name.'" value="1" '.
 				checked( !empty($options[$post_type->name]["active"]), true, false).' /> '.
 				$post_type->label.'</label> ('.
 				$count->publish.')';
@@ -88,6 +88,19 @@
 						<input type="hidden" name="xmlsf_post_types['.
 						$post_type->name.'][tags][]" value="video" />';*/
 				
+				echo ' &nbsp;&ndash;&nbsp; <span class="description"><a id="xmlsf_post_types_'.$post_type->name.'_link" href="#xmlsf_post_types_'.$post_type->name.'_settings">'.__('Settings').'</a></span></p>
+    <script type="text/javascript">
+        jQuery( document ).ready( function() {
+            jQuery("#xmlsf_post_types_'.$post_type->name.'_settings").hide();
+            jQuery("#xmlsf_post_types_'.$post_type->name.'_link").click( function(event) {
+            		event.preventDefault();
+			jQuery("#xmlsf_post_types_'.$post_type->name.'_settings").toggle("slow");
+	    });
+        });
+    </script>
+    				<ul style="margin-left:18px" id="xmlsf_post_types_'.$post_type->name.'_settings">';
+
+				
 				if ( isset($defaults[$post_type->name]['archive']) ) {
 					$archives = array (
 								'yearly' => __('year'),
@@ -95,7 +108,7 @@
 								);
 					$archive = !empty($options[$post_type->name]['archive']) ? $options[$post_type->name]['archive'] : $defaults[$post_type->name]['archive'];
 					echo ' 
-					<label>'.__('devided by','xml-sitemap-feed').' <select name="xmlsf_post_types['.
+					<li><label>'.__('Divide by','xml-sitemap-feed').' <select name="xmlsf_post_types['.
 						$post_type->name.'][archive]" id="xmlsf_post_types_'.
 						$post_type->name.'_archive">
 						<option value=""></option>';
@@ -105,41 +118,35 @@
 						selected( $archive == $value, true, false).
 						'>'.$translation.'</option>';
 					echo '</select>
-					</label>
-					';
+					</label> <span class="description"> '.__('Set division by year if you experience slow or blank sitemaps. In very rare cases, division by month is needed.','xml-sitemap-feed').'</span></li>';
 				}
-				
-				if ( isset($defaults[$post_type->name]['priority'])) {
-					$priority_calc = !empty($options[$post_type->name]['priority']['calculation']) ? $options[$post_type->name]['priority']['calculation'] : $defaults[$post_type->name]['priority']['calculation'];
-					echo '&nbsp; &ndash;&nbsp; 
-						<label>'.sprintf(__('Use a %s priority','xml-sitemap-feed'),'<select name="xmlsf_post_types['.
-						$post_type->name.'][priority][calculation]" id="xmlsf_post_types_'.
-						$post_type->name.'_priority_calculation">
-							<option value="dynamic" '
-							. selected( $priority_calc == 'dynamic', true, false)
-							.'>'.__('dynamic','xml-sitemap-feed').'</option>
-							<option value="static" '
-							. selected( $priority_calc == 'static', true, false)
-							.'>'.__('static','xml-sitemap-feed').'</option>
-						</select>').'</label>';
 
-					$priority_val = !empty($options[$post_type->name]['priority']['value']) ? $options[$post_type->name]['priority']['value'] : $defaults[$post_type->name]['priority']['value'];
-					echo ' 
-						<label>'.sprintf(__('with initial value %s','xml-sitemap-feed'),'<input type="number" step="0.1" min="0.1" max="0.9" name="xmlsf_post_types['.
-						$post_type->name.'][priority][value]" id="xmlsf_post_types_'.
-						$post_type->name.'_priority_value" value="'.$priority_val.'" class="small-text">').'</label>';
-					$do_note = true;
-				}
+				$priority_val = !empty($options[$post_type->name]['priority']) ? $options[$post_type->name]['priority'] : $defaults[$post_type->name]['priority'];
+				echo ' 
+					<li><label>'.__('Priority','xml-sitemap-feed').' <input type="number" step="0.1" min="0.1" max="0.9" name="xmlsf_post_types['.
+					$post_type->name.'][priority]" id="xmlsf_post_types_'.
+					$post_type->name.'_priority" value="'.$priority_val.'" class="small-text"></label> <span class="description">'.__('Note:','xml-sitemap-feed').' '.__('Maximum priority is reserved for sticky posts and the front page.','xml-sitemap-feed').'</span></li>';
+
+				echo '
+					<li><label><input type="checkbox" name="xmlsf_post_types['.
+					$post_type->name.'][dynamic_priority]" value="1" '.
+					checked( !empty($options[$post_type->name]['dynamic_priority']), true, false).' /> '.__('Automatically adjusts priority according to relative age and comment count.','xml-sitemap-feed').'</label></li>';
+					
+				echo '
+					<li><label><input type="checkbox" name="xmlsf_post_types['.
+					$post_type->name.'][update_lastmod_on_comments]" value="1" '.
+					checked( !empty($options[$post_type->name]["update_lastmod_on_comments"]), true, false).' /> '.__('Update lastmod and changefreq on comments.','xml-sitemap-feed').'</label> <span class="description">'.__('Set this if discussion on your site warrants reindexation upon each new comment.','xml-sitemap-feed').'</li>
+					</ul>';
+			} else {
+				echo '</p>';
 			}
 
-			echo '
-				<br />';
 		}
 
-		if ($do_note) echo '
-		<p class="description">'.__('Dynamic priority is calculated by the initial value ajusted according to the relative last modification age and comment count. Sticky posts always get the maximum initial priority value of 1. A different priority can be set on a post by post basis.','xml-sitemap-feed').' '.__('Note:','xml-sitemap-feed').' '.__('Priority does not affect ranking in search results in any way. It is only meant to suggest search engines which URLs to index first. Once a URL has been indexed, its priority becomes meaningless untill the post content is modified.','xml-sitemap-feed').'</p>';
 		echo '
-		</div>';
+		<p class="description">'.__('Note:','xml-sitemap-feed').' '.__('Priority settings do not affect ranking in search results in any way. They only meant to suggest search engines which URLs to index first. Once a URL has been indexed, its priority becomes meaningless until its lastmod is updated.','xml-sitemap-feed').'</p>';
+		echo '
+		</fieldset>';
 	}
 
 	public function taxonomies_settings_field() {
@@ -147,7 +154,7 @@
 		$active = parent::get_option('post_types');
 		$skipped_all = true;
 
-		echo '<div id="xmlsf_taxonomies">
+		echo '<fieldset id="xmlsf_taxonomies"><legend class="screen-reader-text">'.__('Include taxonomies','xml-sitemap-feed').'</legend>
 			';
 		foreach ( get_taxonomies(array('public'=>true),'objects') as $taxonomy ) {
 
@@ -176,7 +183,7 @@
 		echo '
 		<p class="description">' . __('Note:','xml-sitemap-feed').' '.__('It is generally not recommended to include taxonomy pages, unless their content brings added value. For example, when you use category descriptions with information that is not present elsewhere on your site or if taxonomy pages list posts with an excerpt that is different from, but complementary to the post content. In these cases you might consider including certain taxonomies. Otherwise, you might even consider disallowing indexation by adding specific robots.txt rules below.','xml-sitemap-feed');
 		echo '</p>
-		</div>';
+		</fieldset>';
 	}
 
 	public function ping_settings_field() {
@@ -189,7 +196,7 @@
 			);
 
 		echo '
-		<div id="xmlsf_ping">
+		<fieldset id="xmlsf_ping"><legend class="screen-reader-text">'.__('Ping on Publish','xml-sitemap-feed').'</legend>
 			';
 		foreach ( $options as $name => $values ) {
 
@@ -213,11 +220,12 @@
 		}
 
 		echo '
-		</div>';
+		</fieldset>';
 	}
 
 	public function robots_settings_field() {
-		echo '<label for="xmlsf_robots">'.sprintf(__('Rules to append to %s generated by WordPress.','xml-sitemap-feed'),'<a href="'.trailingslashit(get_bloginfo('url')).'robots.txt" target="_blank">robots.txt</a>').'</label> <span style="color: red" class="error">'.__('Only add rules here when you know what you are doing, otherwise you might break search engine access to your site.','xml-sitemap-feed').'</span><br /><textarea name="xmlsf_robots" id="xmlsf_robots" class="large-text" cols="50" rows="5" />'.esc_attr( parent::get_robots() ).'</textarea><p class="description">'.__('Note:','xml-sitemap-feed').' '.__('These rules will not have effect when you are using a static robots.txt file.','xml-sitemap-feed').'</p>';
+		echo '<label>'.sprintf(__('Rules to append to the %s generated by WordPress.','xml-sitemap-feed'),'<a href="'.trailingslashit(get_bloginfo('url')).'robots.txt" target="_blank">robots.txt</a>').'<br /><textarea name="xmlsf_robots" id="xmlsf_robots" class="large-text" cols="50" rows="5" />'.esc_attr( parent::get_robots() ).'</textarea></label>
+		<p class="description"><span style="color: red" class="error">'.__('Only add rules here when you know what you are doing, otherwise you might break search engine access to your site.','xml-sitemap-feed').'</span><br />'.__('Note:','xml-sitemap-feed').' '.__('These rules will not have effect when you are using a static robots.txt file.','xml-sitemap-feed').'</p>';
 	}
 
 	public function reset_settings_field() {
@@ -248,29 +256,27 @@
 		$old = parent::get_post_types();
 		$defaults = parent::defaults('post_types');
 		$sanitized = $new;
+		$flush = false;
 		
 		foreach ($new as $post_type => $settings) {
 
 			// when post types are (de)activated, set transient to flush rewrite rules
-			if ( ( !empty($old[$post_type]['active']) && empty($settings['active']) ) || ( empty($old[$post_type]['active']) && !empty($settings['active']) ) )	
-				set_transient('xmlsf_flush_rewrite_rules','');
-			
-			if ( isset($settings['priority']) && is_array($settings['priority']) ) {
-				if ( empty($settings['priority']['calculation']) 
-					|| !in_array( $settings['priority']['calculation'], array('dynamic','static') ) ) 
-					$sanitized[$post_type]['priority']['calculation'] = $defaults[$post_type]['priority']['calculation'];
-				if (is_numeric($settings['priority']['value'])) {
-					if ($settings['priority']['value'] <= 0)
-						$sanitized[$post_type]['priority']['value'] = '0.1';
-					elseif ($settings['priority']['value'] >= 1)
-						$sanitized[$post_type]['priority']['value'] = '0.9';
-				} else {
-					$sanitized[$post_type]['priority']['value'] = $defaults[$post_type]['priority']['value'];
-				}
+			if ( ( !empty($old[$post_type]['active']) && empty($settings['active']) ) || ( empty($old[$post_type]['active']) && !empty($settings['active']) ) )
+				$flush = true;
+
+			if ( isset($settings['priority']) && is_numeric($settings['priority']) ) {
+				if ($settings['priority'] <= 0)
+					$sanitized[$post_type]['priority'] = '0.1';
+				elseif ($settings['priority'] >= 1)
+					$sanitized[$post_type]['priority'] = '0.9';
 			} else {
 				$sanitized[$post_type]['priority'] = $defaults[$post_type]['priority'];
 			}
 		}
+		
+		if ($flush)
+			set_transient('xmlsf_flush_rewrite_rules','');
+
 		return $sanitized;
 	}
 

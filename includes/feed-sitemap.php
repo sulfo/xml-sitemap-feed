@@ -21,12 +21,10 @@ echo '<?xml version="1.0" encoding="'.get_bloginfo('charset').'"?><?xml-styleshe
 
 global $xmlsf;
 ?>
-<!-- home page(s) -->
 	<sitemap>
 		<loc><?php echo $xmlsf->get_index_url('home'); ?></loc>
 		<lastmod><?php echo mysql2date('Y-m-d\TH:i:s+00:00', get_lastdate( 'gmt' ), false); ?></lastmod>
 	</sitemap>
-<!-- post types -->
 <?php
 // add rules for custom public post types
 foreach ( $xmlsf->have_post_types() as $post_type ) {
@@ -44,7 +42,6 @@ foreach ( $xmlsf->have_post_types() as $post_type ) {
 	}
 }
 ?>
-<!-- taxonomies -->
 <?php
 	// add rules for custom public post taxonomies
 foreach ( $xmlsf->get_taxonomies() as $taxonomy ) {
