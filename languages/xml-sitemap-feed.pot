@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: XML Sitemap and Google News feeds/4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-24 18:11+0100\n"
-"PO-Revision-Date: 2013-03-24 18:11+0100\n"
+"POT-Creation-Date: 2013-03-24 18:44+0100\n"
+"PO-Revision-Date: 2013-03-24 18:44+0100\n"
 "Last-Translator: RavanH <ravanhagen@gmail.com>\n"
 "Language-Team:  <ravanhagen@gmail.com>\n"
 "Language: \n"
@@ -115,11 +115,11 @@ msgid "Default priority can be overridden on a post by post basis."
 msgstr ""
 
 #: ../includes/admin.php:133
-msgid "Automatically adjusts priority according to relative age and comment count."
+msgid "Automatically adjusts Priority according to relative age and comment count."
 msgstr ""
 
 #: ../includes/admin.php:138
-msgid "Update lastmod and changefreq on comments."
+msgid "Update Lastmod and Changefreq on comments."
 msgstr ""
 
 #: ../includes/admin.php:138
@@ -127,7 +127,7 @@ msgid "Set this if discussion on your site warrants reindexation upon each new c
 msgstr ""
 
 #: ../includes/admin.php:147
-msgid "Priority settings do not affect ranking in search results in any way. They are only meant to suggest search engines which URLs to index first. Once a URL has been indexed, its priority becomes meaningless until its lastmod is updated."
+msgid "Priority settings do not affect ranking in search results in any way. They are only meant to suggest search engines which URLs to index first. Once a URL has been indexed, its Priority becomes meaningless until its Lastmod is updated."
 msgstr ""
 
 #: ../includes/admin.php:157
@@ -189,7 +189,7 @@ msgstr ""
 
 #: ../includes/admin.php:329
 #, php-format
-msgid "Leave empty for automatic priority as configured on %1$s > %2$s."
+msgid "Leave empty for automatic Priority as configured on %1$s > %2$s."
 msgstr ""
 
 #: ../includes/admin.php:329

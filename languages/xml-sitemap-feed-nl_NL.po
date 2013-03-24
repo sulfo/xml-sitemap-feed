@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: XML Sitemap and Google News feeds/4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-24 18:11+0100\n"
-"PO-Revision-Date: 2013-03-24 18:17+0100\n"
+"POT-Creation-Date: 2013-03-24 18:44+0100\n"
+"PO-Revision-Date: 2013-03-24 18:48+0100\n"
 "Last-Translator: RavanH <ravanhagen@gmail.com>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -115,20 +115,20 @@ msgid "Default priority can be overridden on a post by post basis."
 msgstr "De standaard prioriteit kan per post worden aangepast."
 
 #: ../includes/admin.php:133
-msgid "Automatically adjusts priority according to relative age and comment count."
-msgstr "Pas prioriteit automatisch aan naar relatieve leeftijd en aantal commentaren."
+msgid "Automatically adjusts Priority according to relative age and comment count."
+msgstr "Pas de Priority automatisch aan naar relatieve leeftijd en aantal commentaren."
 
 #: ../includes/admin.php:138
-msgid "Update lastmod and changefreq on comments."
-msgstr "Pas lastmod en changefreq aan bij commentaren."
+msgid "Update Lastmod and Changefreq on comments."
+msgstr "Pas de Lastmod en Changefreq aan bij commentaren."
 
 #: ../includes/admin.php:138
 msgid "Set this if discussion on your site warrants reindexation upon each new comment."
 msgstr "Activeer dit als discussies op je site het waard zijn om na ieder commentaar opnieuw geïndexeerd te worden."
 
 #: ../includes/admin.php:147
-msgid "Priority settings do not affect ranking in search results in any way. They are only meant to suggest search engines which URLs to index first. Once a URL has been indexed, its priority becomes meaningless until its lastmod is updated."
-msgstr "Prioriteit beïnvloed de positie in zoekresultaten op geen enkele wijze. Het is slechts bedoeld om aan te geven welke URLs het eerst geïndexeerd dienen te worden. Zodra een URL geïndexeerd is, wordt de prioriteit betekenisloos totdat de lastmod is veranderd."
+msgid "Priority settings do not affect ranking in search results in any way. They are only meant to suggest search engines which URLs to index first. Once a URL has been indexed, its Priority becomes meaningless until its Lastmod is updated."
+msgstr "Priority beïnvloed de positie in zoekresultaten op geen enkele wijze. Het is slechts bedoeld om aan te geven welke URLs het eerst geïndexeerd dienen te worden. Zodra een URL geïndexeerd is, wordt de prioriteit betekenisloos totdat de Lastmod is veranderd."
 
 #: ../includes/admin.php:157
 #: ../includes/admin.php:372
@@ -189,8 +189,8 @@ msgstr "XML Sitemap"
 
 #: ../includes/admin.php:329
 #, php-format
-msgid "Leave empty for automatic priority as configured on %1$s > %2$s."
-msgstr "Laat leeg voor automatische prioriteit zoals geconfigureerd op %1$s > %2$s."
+msgid "Leave empty for automatic Priority as configured on %1$s > %2$s."
+msgstr "Laat leeg voor automatische Priority zoals geconfigureerd op %1$s > %2$s."
 
 #: ../includes/admin.php:329
 msgid "Reading"

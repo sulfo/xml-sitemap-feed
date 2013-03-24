@@ -130,12 +130,12 @@
 				echo '
 					<li><label><input type="checkbox" name="xmlsf_post_types['.
 					$post_type->name.'][dynamic_priority]" value="1" '.
-					checked( !empty($options[$post_type->name]['dynamic_priority']), true, false).' /> '.__('Automatically adjusts priority according to relative age and comment count.','xml-sitemap-feed').'</label></li>';
+					checked( !empty($options[$post_type->name]['dynamic_priority']), true, false).' /> '.__('Automatically adjusts Priority according to relative age and comment count.','xml-sitemap-feed').'</label></li>';
 					
 				echo '
 					<li><label><input type="checkbox" name="xmlsf_post_types['.
 					$post_type->name.'][update_lastmod_on_comments]" value="1" '.
-					checked( !empty($options[$post_type->name]["update_lastmod_on_comments"]), true, false).' /> '.__('Update lastmod and changefreq on comments.','xml-sitemap-feed').'</label> <span class="description">'.__('Set this if discussion on your site warrants reindexation upon each new comment.','xml-sitemap-feed').'</li>
+					checked( !empty($options[$post_type->name]["update_lastmod_on_comments"]), true, false).' /> '.__('Update Lastmod and Changefreq on comments.','xml-sitemap-feed').'</label> <span class="description">'.__('Set this if discussion on your site warrants reindexation upon each new comment.','xml-sitemap-feed').'</li>
 					</ul>';
 			} else {
 				echo '</p>';
@@ -144,7 +144,7 @@
 		}
 
 		echo '
-		<p class="description">'.__('Note:','xml-sitemap-feed').' '.__('Priority settings do not affect ranking in search results in any way. They are only meant to suggest search engines which URLs to index first. Once a URL has been indexed, its priority becomes meaningless until its lastmod is updated.','xml-sitemap-feed').'</p>';
+		<p class="description">'.__('Note:','xml-sitemap-feed').' '.__('Priority settings do not affect ranking in search results in any way. They are only meant to suggest search engines which URLs to index first. Once a URL has been indexed, its Priority becomes meaningless until its Lastmod is updated.','xml-sitemap-feed').'</p>';
 		echo '
 		</fieldset>';
 	}
@@ -326,7 +326,7 @@
 		$value = get_post_meta( $post->ID, '_xmlsf_priority', true );
 		echo '<p><label>';
 		_e('Priority','xml-sitemap-feed');
-		echo ' <input type="number" step="0.1" min="0" max="1" name="xmlsf_priority" id="xmlsf_priority" value="'.$value.'" class="small-text"></label> <span class="description">'.sprintf(__('Leave empty for automatic priority as configured on %1$s > %2$s.','xml-sitemap-feed'),__('Settings'),__('Reading')).'</span></p>';
+		echo ' <input type="number" step="0.1" min="0" max="1" name="xmlsf_priority" id="xmlsf_priority" value="'.$value.'" class="small-text"></label> <span class="description">'.sprintf(__('Leave empty for automatic Priority as configured on %1$s > %2$s.','xml-sitemap-feed'),__('Settings'),__('Reading')).'</span></p>';
 	}
   
 	/* When the post is saved, save our meta data */

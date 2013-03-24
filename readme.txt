@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravan
 Tags: sitemap, xml sitemap, news sitemap, sitemap.xml, robots.txt, Google, Google News, Yahoo, Bing, seo, feed, polylang
 Requires at least: 3.2
 Tested up to: 3.5.1
-Stable tag: 4.0.1
+Stable tag: 4.1
 
 Feeds that comply with the XML Sitemap and Google News protocol for the hungry spiders. Multisite compatible.
 
@@ -26,20 +26,18 @@ Please read the FAQ's for info on how to get your articles listed on Google News
 
 2. On large sites, it is advised to use a good caching plugin like **Quick Cache**, **WP Super Cache** or **W3 Total Cache** to improve your site _and_ sitemap performance.
 
-= Advantages = 
+= Features = 
 
 * The main advantage of this plugin over other XML Sitemap plugins is **simplicity**. No need to change file or folder permissions, move files or spend time tweaking difficult plugin options.
 * Completely **automatic** post URL _priority_ and _change frequency_ calculation based on post age and comment and trackback activity.
 * Works out-of-the-box, even on **multi-site / shared codebase / multi-blog setups** like WordPress MU, WP 3.0 in MultiSite (WPMS) mode and others. 
 * Also works upon **Network Activate** or placed in **/mu-plugins/** on WP 3.0 in MS mode and WPMU and even takes care to exclude any tags blogs to avoid malus points for link spamming.
 * Compatible with multi-lingual sites using **Polylang** to allow all languages to be indexed equally.
-* Besides some basic options about what to include in your sitempaps, there is now the possibility to add new robots.txt rules. These can be used to further control (read: limit) the indexation of various parts of your site and subsequent spread of pagerank accross your sites pages.
+* Pings Google and Bing on new post publication.
+* Options to define which post types and taxonomies get included in the sitemap and automatic priority calculation rules.
+* Set priority per post.
+* Option to add new robots.txt rules. These can be used to further control (read: limit) the indexation of various parts of your site and subsequent spread of pagerank accross your sites pages.
 
-= Limitations =
-
-* Except by _re-saving_ older posts from time to time (keeping the lastmod date fairly recent) there is no way to manually control the priority of individual posts/pages in the sitemap. See the Faq's for more.
-* Because the feed is dynamically created, on _very_ large sites the creation process might take a while. Search engines are said to have a short fuse about waiting for a sitemap, so you may want to consider using a cache plugin that also (pre)caches feeds. If you are unfamiliar with caching and server setup start with an easy caching plugin such as **Quick Cache**. For more options (and better performance) you might find solace in **WP Super Cache** or **W3 Total Cache**.
-* On **VERY** large sites (read: over 10.000 posts) with limited memory assigned to PHP, the generation of the sitemap might cause a problem when the process runs out of memory. See the FAQ's for tips to increase the PHP memory limit on your server.
 
 = Translations =
 
@@ -91,13 +89,9 @@ Installed alongside [WordPress MU Sitewide Tags Pages](http://wordpress.org/exte
 
 == Frequently Asked Questions ==
 
-= Can I run this on a WPMU / WP3+ Multi-Site setup? =
+= Where are the options? =
 
-Yes. In fact, it has been designed for it. Tested on WPMU 2.9.2 and WPMS 3.0.1 both with normal activation and with Network Activate / Site Wide Activate.
-
-= Can I run this plugin from /mu-plugins/ on WP3.0 MS or WPMU ? =
-
-Yes. Upload the complete /xml-sitemap-feed/ directory to /wp-content/mu-plugins/ and move the file xml-sitemap.php one dir up.
+See the XML Sitemaps section on **Settings > Reading**.
 
 = How do I get my latest articles listed on Google News? =
 
@@ -109,23 +103,9 @@ You will also want to add the sitemap to your [Google Webmasters Tools account](
 
 The rules of the Google News Game are that you do not feed the monster any stale food. Older than 2 days is bad. You need to bake him some fresh bread ;)
 
-= How are the values for priority and changefreq calculated? =
-
-The front page has a fixed priority of 100% (1.0). When your site has more posts than pages (you must be using WordPress for a blog), pages have a default priority of 40% (0.4) and posts  have a default priority of 80% (0.8). If your site has more pages than posts (you must be using WordPress as CMS), pages have a default priority of 80% (0.8) and posts have a default priority of 40% (0.4).
-
-Page and post priority can vary between 0% (0.0) and 100% (1.0). Page priority depends on the page level (decreasing 10% for each sub-level) and relative number of comments. Post priority depends on relative number of comments and relative last comment age or (when the post has no comments) last post modification age. 
-
-The changefreq of the front page is fixed to daily and calculated for pages and post to either daily, weekly, monthly or yearly depending on age and comment activity.
-
-Dynamic pages like category pages, tag pages and archive pages are not listed in the XML Sitemap.
-
 = Can I manipulate values for priority and changefreq? =
 
-Yes and No. This plugin has no options page so there is no way to manually set the priority of urls in the sitemap. But there is automatic post priority calculation based on _post modifaction date_ and _comment activity_, that can either make post priority go to 100% (1.0) for posts with many and recent comments or 0% (0) for the oldest posts with no comments. 
-
-This feature can be used to your advantage: by re-saving your most important older posts from time to time, keeping the **lastmod date** fairly recent, you can ensure a priority of at least 80% (0.8) for those URLs. And if you have enough comments on on those pages, the priority can even go up to 100% (1.0).
-
-If you cannot live with these rules, edit the values `$min_priority`, `$max_priority` and `$frontpage_priority` in xml-sitemap-feed/feed-sitemap.php but be careful to NOT do an automatic upgrade or it will overwrite your customisation.
+Yes. You can find default settings for priority, changefreq and lastmod on **Settings > Reading**. A fixed priority can be set on a post by post basis too.
 
 = Do I need to submit the sitemap to search engines? =
 
@@ -235,9 +215,19 @@ On some setups (usually using the WordPress MU Domain Mapping plugin) this error
 
 = I see only a BLANK (white) page when opening the sitemap =
 
-You might be experiencing an issue with your servers PHP memory limit. The plugin attempts to increase the memory limit to 256M by itself but in some rare cases that does not work. Or your site is just so big that that is not even enough... In those cases, you should see a messages like `PHP Fatal error: Allowed memory size of xxxxxx bytes exhausted.` in your server/account error log file.
+You might be experiencing an issue with your servers PHP memory limit. In those cases, you should see a messages like `PHP Fatal error: Allowed memory size of xxxxxx bytes exhausted.` in your server/account error log file.
+
+This can happen on large sites. To avoid these issues, there is an option to split posts over different sitemaps on Settings > Reading. Try different settings, each time revisiting the main sitemap index file and open different sitemaps listed there to check. 
 
 Read more on [Increasing memory allocated to PHP](http://codex.wordpress.org/Editing_wp-config.php#Increasing_memory_allocated_to_PHP) (try a value higher than 256M) or ask your hosting provider what you can do.
+
+= Can I run this on a WPMU / WP3+ Multi-Site setup? =
+
+Yes. In fact, it has been designed for it. Tested on WPMU 2.9.2 and WPMS 3.0.1 both with normal activation and with Network Activate / Site Wide Activate.
+
+= Can I run this plugin from /mu-plugins/ on WP3.0 MS or WPMU? =
+
+Yes. Upload the complete /xml-sitemap-feed/ directory to /wp-content/mu-plugins/ and move the file xml-sitemap.php one dir up.
 
 
 == Translation ==
@@ -264,19 +254,21 @@ Thanks for sharing your translation :)
 == Upgrade Notice ==
 
 = 4.1 =
-New: Split posts by year to improve generate speed and priority settings.
+New: Split posts by year to improve generate speed and priority settings. Many new options. Ping search engines.
 
 
 == Changelog ==
 
 = 4.1 =
 * NEW: Ping Google and Bing on new publications
+* NEW: Set priority per post
 * NEW: Priority calculation options 
 * NEW: Option to split posts by year or month for faster generation of each sitemap
 * Reduced queries to increase performance
 * Improved Lastmod and Changefreq calculations
 * Core class improvements
 * Dropped qTranslate support
+* Dropped PHP4 support
 * BUGFIX: removed several PHP notices
 
 = 4.0.1 =

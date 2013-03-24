@@ -760,12 +760,6 @@ class XMLSitemapFeed {
 	* CONSTRUCTOR
 	*/
 
-	function XMLSitemapFeed() 
-	{
-		//constructor in php4
-		$this->__construct(); // just call the php5 one.
-	}
-	
 	function __construct() 
 	{	
 		// REQUEST main filtering function
