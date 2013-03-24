@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: XML Sitemap and Google News feeds/4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-24 18:44+0100\n"
-"PO-Revision-Date: 2013-03-24 18:48+0100\n"
+"POT-Creation-Date: 2013-03-24 22:36+0100\n"
+"PO-Revision-Date: 2013-03-24 23:04+0100\n"
 "Last-Translator: RavanH <ravanhagen@gmail.com>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -107,16 +107,20 @@ msgid "Priority"
 msgstr "Prioriteit"
 
 #: ../includes/admin.php:128
-msgid "Maximum priority is reserved for sticky posts and the front page."
-msgstr "Maximale prioriteit is gereserveerd voor de homepagina en sticky posts."
+msgid "Priority can be overridden on individual posts."
+msgstr "De Priority kan per post worden aangepast."
 
 #: ../includes/admin.php:128
-msgid "Default priority can be overridden on a post by post basis."
-msgstr "De standaard prioriteit kan per post worden aangepast."
+msgid "Maximum Priority (1.0) is reserved for the front page, individual posts and, when allowed, posts with high comment count."
+msgstr "Maximum Priority (1.0) is gereserveerd voor de voorpagina, individuele posts en, indien toegestaan, posts met veel commentaren."
 
 #: ../includes/admin.php:133
 msgid "Automatically adjusts Priority according to relative age and comment count."
 msgstr "Pas de Priority automatisch aan naar relatieve leeftijd en aantal commentaren."
+
+#: ../includes/admin.php:133
+msgid "Sticky posts will not be subject to reduction by age. Individual posts with fixed Priority will always keep that value."
+msgstr "Sticky posts worden niet onderworpen aan een reductie naar leeftijd. Posts met een vastgezette Priority behouden deze."
 
 #: ../includes/admin.php:138
 msgid "Update Lastmod and Changefreq on comments."
@@ -207,6 +211,10 @@ msgstr "Aanvullende robots.txt regels"
 #: ../includes/admin.php:384
 msgid "Reset XML sitemaps"
 msgstr "XML sitemaps resetten"
+
+#~ msgid "Maximum priority is reserved for sticky posts and the front page."
+#~ msgstr ""
+#~ "Maximale prioriteit is gereserveerd voor de homepagina en sticky posts."
 
 #~ msgid "Use a %s priority"
 #~ msgstr "Gebruik een %s prioriteit"

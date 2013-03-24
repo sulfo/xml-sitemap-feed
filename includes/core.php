@@ -327,24 +327,30 @@ class XMLSitemapFeed {
 				$this->firstdate = mysql2date('U',get_firstdate('GMT',$post->post_type)); 
 				// uses get_firstdate() function defined in xml-sitemap/hacks.php !
 			
-			if ( is_sticky($post->ID) )
-				$priority_value = 1;
-			elseif ( isset($options[$post->post_type]['priority']) )
+			if ( isset($options[$post->post_type]['priority']) )
 				$priority_value = $options[$post->post_type]['priority'];
 			else
 				$priority_value = $defaults[$post->post_type]['priority'];
 		
-			$priority = ( $this->lastmodified > $this->firstdate ) ? $priority_value - $priority_value * ( $this->lastmodified - $post_modified ) / ( $this->lastmodified - $this->firstdate ) : $priority_value;
+			// reduce by age
+			if ( is_sticky($post->ID) )
+				$priority = $priority_value;
+			else
+				$priority = ( $this->lastmodified > $this->firstdate ) ? $priority_value - $priority_value * ( $this->lastmodified - $post_modified ) / ( $this->lastmodified - $this->firstdate ) : $priority_value;
 		
-			if (  $post->comment_count > 0 )
+			if ( $post->comment_count > 0 )
 				$priority = $priority + 0.1 + ( 0.9 - $priority ) * $post->comment_count / wp_count_comments($post->post_type)->approved;
-				
+
+			// and a final trim for cases where we end up above 1 (sticky posts with many comments)
+			if ($priority > 1) 
+				$priority = 1;
+
 		} else {
 		
 			$priority = ( isset($options[$post->post_type]['priority']) && is_numeric($options[$post->post_type]['priority']) ) ? $options[$post->post_type]['priority'] : $defaults[$post->post_type]['priority'];
 		
 		}
-
+		
 		return number_format($priority,1);
 	}
 

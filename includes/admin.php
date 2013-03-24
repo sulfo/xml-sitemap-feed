@@ -125,12 +125,12 @@
 				echo ' 
 					<li><label>'.__('Priority','xml-sitemap-feed').' <input type="number" step="0.1" min="0.1" max="0.9" name="xmlsf_post_types['.
 					$post_type->name.'][priority]" id="xmlsf_post_types_'.
-					$post_type->name.'_priority" value="'.$priority_val.'" class="small-text"></label> <span class="description">'.__('Maximum priority is reserved for sticky posts and the front page.','xml-sitemap-feed').' '.__('Default priority can be overridden on a post by post basis.','xml-sitemap-feed').'</span></li>';
+					$post_type->name.'_priority" value="'.$priority_val.'" class="small-text"></label> <span class="description">'.__('Priority can be overridden on individual posts.','xml-sitemap-feed').' '.__('Maximum Priority (1.0) is reserved for the front page, individual posts and, when allowed, posts with high comment count.','xml-sitemap-feed').'</span></li>';
 
 				echo '
 					<li><label><input type="checkbox" name="xmlsf_post_types['.
 					$post_type->name.'][dynamic_priority]" value="1" '.
-					checked( !empty($options[$post_type->name]['dynamic_priority']), true, false).' /> '.__('Automatically adjusts Priority according to relative age and comment count.','xml-sitemap-feed').'</label></li>';
+					checked( !empty($options[$post_type->name]['dynamic_priority']), true, false).' /> '.__('Automatically adjusts Priority according to relative age and comment count.','xml-sitemap-feed').'</label> <span class="description">'.__('Sticky posts will not be subject to reduction by age. Individual posts with fixed Priority will always keep that value.','xml-sitemap-feed').'</span></li>';
 					
 				echo '
 					<li><label><input type="checkbox" name="xmlsf_post_types['.

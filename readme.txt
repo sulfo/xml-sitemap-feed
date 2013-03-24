@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravan
 Tags: sitemap, xml sitemap, news sitemap, sitemap.xml, robots.txt, Google, Google News, Yahoo, Bing, seo, feed, polylang
 Requires at least: 3.2
 Tested up to: 3.5.1
-Stable tag: 4.1
+Stable tag: 4.1.1
 
 Feeds that comply with the XML Sitemap and Google News protocol for the hungry spiders. Multisite compatible.
 
@@ -42,7 +42,7 @@ Please read the FAQ's for info on how to get your articles listed on Google News
 = Translations =
 
 - **Dutch** * Author: [R.A. van Hagen](http://status301.net) (version 4.1)
-- **French** * Author: [R.A. van Hagen](http://status301.net) (version 4.0)
+- **French** * Author: [R.A. van Hagen](http://status301.net) (version 4.1)
 - **Ukrainian** * Author: [Cmd Software](http://www.cmd-soft.com/) (version 4.0) 
 
 New transtations will be accepted and listed here. See translation instructions under [Other Notes](http://wordpress.org/extend/plugins/xml-sitemap-feed/other_notes).
@@ -233,14 +233,16 @@ Yes. Upload the complete /xml-sitemap-feed/ directory to /wp-content/mu-plugins/
 == Translation ==
 
 1. Install PoEdit on your computer.
-1. Open the template translation database xml-sitemap-xx_XX.po in this plugins /languages/ directory with PoEdit.
+1. Go to this plugins /languages/ directory.
+1. If there is no .po file that corresponds with your language yet, rename the template translation database xml-sitemap-feed-xx_XX.po by replacing the xx with your language code and XX with your country code.
+1. Open the .po file of your language with PoEdit. 
 1. Go to Edit > Preferences and on the tab Editor check the option to compile a .mo database on save automatically. Close with OK.
 1. Go to Catalog > Settings and set your name, e-mail address, language and country. Close with OK.
 1. Go to Catalog > Update from POT-file and select the main xml-sitemap-feed.pot file. Then accept all new and removed translation strings with OK.
 1. Now go ahead and start translating all the texts listed in PoEdit.
-1. When done, go to File > Save as... and replace the xx_XX in the file name with the appropriate language and country code for your translation. Leave the rest of the file name the same and Save.
+1. When done, go to File > Save to Save.
 1. Upload the automatically created xml-sitemap-feed-xx_XX.mo database file (where xx_XX should now be your language and country code) to the plugins /languages/ directory on your WordPress site.
-1. After verifying the translations work on your site, send the .mo file to ravanhagen@gmail.com and don't forget to tell me how and with what link you would like to be mentioned in the credits!
+1. After verifying the translations work on your site, send the .mo file and, if you're willing to share it, your original .po file to ravanhagen@gmail.com and don't forget to tell me how and with what link you would like to be mentioned in the credits!
 
 Thanks for sharing your translation :)
 
@@ -253,11 +255,15 @@ Thanks for sharing your translation :)
 
 == Upgrade Notice ==
 
-= 4.1 =
-New: Split posts by year to improve generate speed and priority settings. Many new options. Ping search engines.
+= 4.1.1 =
+New: Split posts by year to improve generate speed and priority settings. Many new options. Ping search engines. Bugfix: priority higher than 100% in some cases.
 
 
 == Changelog ==
+
+= 4.1.1 =
+* BUGFIX: 1+ Priority for sticky posts with comments
+* Dutch and French translations updated
 
 = 4.1 =
 * NEW: Ping Google and Bing on new publications

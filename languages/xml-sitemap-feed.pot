@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: XML Sitemap and Google News feeds/4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-24 18:44+0100\n"
-"PO-Revision-Date: 2013-03-24 18:44+0100\n"
+"POT-Creation-Date: 2013-03-24 22:36+0100\n"
+"PO-Revision-Date: 2013-03-24 22:36+0100\n"
 "Last-Translator: RavanH <ravanhagen@gmail.com>\n"
 "Language-Team:  <ravanhagen@gmail.com>\n"
 "Language: \n"
@@ -107,15 +107,19 @@ msgid "Priority"
 msgstr ""
 
 #: ../includes/admin.php:128
-msgid "Maximum priority is reserved for sticky posts and the front page."
+msgid "Priority can be overridden on individual posts."
 msgstr ""
 
 #: ../includes/admin.php:128
-msgid "Default priority can be overridden on a post by post basis."
+msgid "Maximum Priority (1.0) is reserved for the front page, individual posts and, when allowed, posts with high comment count."
 msgstr ""
 
 #: ../includes/admin.php:133
 msgid "Automatically adjusts Priority according to relative age and comment count."
+msgstr ""
+
+#: ../includes/admin.php:133
+msgid "Sticky posts will not be subject to reduction by age. Individual posts with fixed Priority will always keep that value."
 msgstr ""
 
 #: ../includes/admin.php:138
