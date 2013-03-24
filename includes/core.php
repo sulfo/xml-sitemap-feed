@@ -308,8 +308,13 @@ class XMLSitemapFeed {
 		global $post;
 		$options = $this->get_option('post_types');
 		$defaults = $this->defaults('post_types');
+		$priority_meta = get_metadata('post', $post->ID, '_xmlsf_priority' , true);
 		
-		if ( !empty($options[$post->post_type]['dynamic_priority']) ) {
+		if ( !empty($priority_meta) ) {
+		
+			$priority = $priority_meta;
+			
+		} elseif ( !empty($options[$post->post_type]['dynamic_priority']) ) {
 		
 			$post_modified = mysql2date('U',$post->post_modified_gmt);
 		

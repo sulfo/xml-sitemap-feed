@@ -125,7 +125,7 @@
 				echo ' 
 					<li><label>'.__('Priority','xml-sitemap-feed').' <input type="number" step="0.1" min="0.1" max="0.9" name="xmlsf_post_types['.
 					$post_type->name.'][priority]" id="xmlsf_post_types_'.
-					$post_type->name.'_priority" value="'.$priority_val.'" class="small-text"></label> <span class="description">'.__('Note:','xml-sitemap-feed').' '.__('Maximum priority is reserved for sticky posts and the front page.','xml-sitemap-feed').'</span></li>';
+					$post_type->name.'_priority" value="'.$priority_val.'" class="small-text"></label> <span class="description">'.__('Maximum priority is reserved for sticky posts and the front page.','xml-sitemap-feed').' '.__('Default priority can be overridden on a post by post basis.','xml-sitemap-feed').'</span></li>';
 
 				echo '
 					<li><label><input type="checkbox" name="xmlsf_post_types['.
@@ -144,7 +144,7 @@
 		}
 
 		echo '
-		<p class="description">'.__('Note:','xml-sitemap-feed').' '.__('Priority settings do not affect ranking in search results in any way. They only meant to suggest search engines which URLs to index first. Once a URL has been indexed, its priority becomes meaningless until its lastmod is updated.','xml-sitemap-feed').'</p>';
+		<p class="description">'.__('Note:','xml-sitemap-feed').' '.__('Priority settings do not affect ranking in search results in any way. They are only meant to suggest search engines which URLs to index first. Once a URL has been indexed, its priority becomes meaningless until its lastmod is updated.','xml-sitemap-feed').'</p>';
 		echo '
 		</fieldset>';
 	}
@@ -291,21 +291,69 @@
 		return $new;
 	}
 	
-	function add_action_link( $links ) {
+	public function add_action_link( $links ) {
 		$settings_link = '<a href="' . admin_url('options-reading.php') . '#xmlsf">' . __('Settings') . '</a>';
 		array_unshift( $links, $settings_link ); 
 		return $links;
 	}
 
 	/**
+	* META BOX
+	*/
+
+	/* Adds a box to the side column */
+	public function add_meta_box() 
+	{
+		foreach (parent::get_post_types() as $post_type) 
+			if (isset($post_type["active"]))
+				add_meta_box(
+				    'xmlsf_section',
+				    __( 'XML Sitemap', 'xml-sitemap-feed' ),
+				    array($this,'meta_box'),
+				    $post_type['name'],
+				    'side'
+				);
+	}
+
+
+	public function meta_box($post) 
+	{
+		// Use nonce for verification
+		wp_nonce_field( plugin_basename( __FILE__ ), 'xmlsf_sitemap_nonce' );
+
+		// The actual fields for data entry
+		// Use get_post_meta to retrieve an existing value from the database and use the value for the form
+		$value = get_post_meta( $post->ID, '_xmlsf_priority', true );
+		echo '<p><label>';
+		_e('Priority','xml-sitemap-feed');
+		echo ' <input type="number" step="0.1" min="0" max="1" name="xmlsf_priority" id="xmlsf_priority" value="'.$value.'" class="small-text"></label> <span class="description">'.sprintf(__('Leave empty for automatic priority as configured on %1$s > %2$s.','xml-sitemap-feed'),__('Settings'),__('Reading')).'</span></p>';
+	}
+  
+	/* When the post is saved, save our meta data */
+	function save_metadata( $post_id ) 
+	{
+		if ( !isset($post_id) )
+			$post_id = (int)$_REQUEST['post_ID'];
+
+		if ( !current_user_can( 'edit_post', $post_id ) || !isset($_POST['xmlsf_sitemap_nonce']) || !wp_verify_nonce($_POST['xmlsf_sitemap_nonce'], plugin_basename( __FILE__ )) )
+			return;
+
+		if ( isset($_POST['xmlsf_priority']) && $_POST['xmlsf_priority'] != '' && is_numeric($_POST['xmlsf_priority']) ) {
+				if ($_POST['xmlsf_priority'] <= 0)
+					update_post_meta($post_id, 'priority', '0');
+				elseif ($_POST['xmlsf_priority'] >= 1)
+					update_post_meta($post_id, '_xmlsf_priority', '1');
+				else
+					update_post_meta($post_id, '_xmlsf_priority', $_POST['xmlsf_priority']);
+		} else {
+			delete_post_meta($post_id, '_xmlsf_priority');
+		}
+	}
+
+	/**
 	* CONSTRUCTOR
 	*/
 
-	function XMLSitemapFeed() {
-		//constructor in php4
-		$this->__construct(); // just call the php5 one.
-	}
-	
 	function __construct() {
 		
 		// SETTINGS
@@ -334,7 +382,12 @@
 		}
 
 		add_settings_field('xmlsf_reset', __('Reset XML sitemaps','xml-sitemap-feed'), array($this,'reset_settings_field'), 'reading', 'xmlsf_main_section');
+		
+		// POST META BOX
+		add_action( 'add_meta_boxes', array($this,'add_meta_box') );
+		add_action( 'save_post', array($this,'save_metadata') );
 	
+		// ACTION LINK
 		add_filter('plugin_action_links_' . XMLSF_PLUGIN_BASENAME, array($this, 'add_action_link') );
 	}
 
