@@ -75,7 +75,6 @@ class XMLSitemapFeed {
 
 		// taxonomies
 		$this->defaults['taxonomies'] = array();// by default do not include any taxonomies
-							//+ get_taxonomies(array('public'=>true,'_builtin'=>false),'names')
 
 		// ping search engines
 		$this->defaults['ping'] = array(
@@ -151,17 +150,14 @@ class XMLSitemapFeed {
 		$post_types = $this->get_option('post_types');
 		$return = array();
 		
+
 		foreach ( $post_types as $type => $values ) {
-			if(isset($values['active'])) {
-				if (false) {
+			if(!empty($values['active'])) {
+				$count = wp_count_posts( $values['name'] );
+				if ($count->publish > 0) {
+					$values['count'] = $count->publish;
 				
-				} else {
-					$count = wp_count_posts( $values['name'] );
-					if ($count->publish > 0) {
-						$values['count'] = $count->publish;
-					
-						$return[$type] = $values;				
-					}
+					$return[$type] = $values;				
 				}					
 			}
 		}

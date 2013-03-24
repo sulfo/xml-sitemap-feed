@@ -28,6 +28,7 @@ global $xmlsf;
 <?php
 // add rules for custom public post types
 foreach ( $xmlsf->have_post_types() as $post_type ) {
+
 	if (!empty($post_type['archive'])) 
 		$archive = $post_type['archive']; 
 	else 
@@ -45,6 +46,7 @@ foreach ( $xmlsf->have_post_types() as $post_type ) {
 <?php
 	// add rules for custom public post taxonomies
 foreach ( $xmlsf->get_taxonomies() as $taxonomy ) {
+
 	if ( wp_count_terms( $taxonomy ) > 0 ) {
 	$obj = get_taxonomy($taxonomy);
 ?>
