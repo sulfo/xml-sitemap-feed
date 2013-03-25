@@ -38,8 +38,6 @@ echo "<!-- taxonomy: $taxonomy -->";
 $tax_obj = get_taxonomy($taxonomy);
 $postcount = 0;
 foreach ( $tax_obj->object_type as $post_type) {
-	echo "<!-- taxonomy post type: $post_type -->
-";
 	$_post_count = wp_count_posts($post_type);
 	$postcount += $_post_count->publish;
 }
