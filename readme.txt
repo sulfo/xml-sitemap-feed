@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravan
 Tags: sitemap, xml sitemap, news sitemap, sitemap.xml, robots.txt, Google, Google News, Yahoo, Bing, seo, feed, polylang
 Requires at least: 3.2
 Tested up to: 3.5.1
-Stable tag: 4.1.2
+Stable tag: 4.1.3
 
 Feeds that comply with the XML Sitemap and Google News protocol for the hungry spiders. Multisite compatible.
 
@@ -14,7 +14,7 @@ This plugin dynamically creates feeds that comply with the **XML Sitemap** and t
 
 You or site owners on your Multisite network will not be bothered with complicated settings like most other XML Sitemap plugins. The default settings will suffice in most cases and XML sitemap values like ChangeFreq and URL Priority are auto-calculated based on post age and comment activity.
 
-The XML Sitemap becomes instantly available on yourblog.url/sitemap.xml (or yourblog.url/?feed=sitemap), ready for indexing by search engines like Google, Yahoo, MSN, Ask.com and others. When the Google News Sitemap is activated, it will become available on yourblog.url/sitemap-news.xml (or yourblog.url/?feed=sitemap-news), ready for indexing by Google News. Both are automatically referenced in the dynamically created **robots.txt** on yourblog.url/robots.txt to tell search engines where to find your XML Sitemaps. And both are sent by ping to Google and Bing on each new publication.
+The XML Sitemap Index becomes instantly available on yourblog.url/sitemap.xml (or yourblog.url/?feed=sitemap) containing references to posts and pages by default, ready for indexing by search engines like Google, Yahoo, MSN, Ask.com and others. When the Google News Sitemap is activated, it will become available on yourblog.url/sitemap-news.xml (or yourblog.url/?feed=sitemap-news), ready for indexing by Google News. Both are automatically referenced in the dynamically created **robots.txt** on yourblog.url/robots.txt to tell search engines where to find your XML Sitemaps. And both are sent by ping to Google and Bing on each new publication.
 
 Please read the FAQ's for info on how to get your articles listed on Google News.
 
@@ -255,13 +255,14 @@ Thanks for sharing your translation :)
 
 == Upgrade Notice ==
 
-= 4.1.2 =
-New: Split posts by year to improve generate speed and priority settings. Many new options. Ping search engines. Bugfix: priority higher than 100% in some cases.
+= 4.1.3 =
+New: Split posts by year to improve generate speed and priority settings. Many new options. Ping search engines. Bugfix: Polylang language code in pretty permalinks issue.
 
 
 == Changelog ==
 
-= 4.1.2 =
+= 4.1.3 =
+* BUGFIX: issue with Polylang language code in pretty permalinks setting
 * BUGFIX: unselected post types in sitemap
 * BUGFIX: 1+ Priority for sticky posts with comments
 * Dutch and French translations updated

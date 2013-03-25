@@ -234,21 +234,6 @@ class XMLSitemapFeed {
 	* TEMPLATE FUNCTIONS
 	*/
 	
-	public function get_languages() 
-	{
-		/* Only Polylang compatibility for now */
-		global $polylang;
-		if ( isset($polylang) ) {
-			$langs = array();
-			foreach ($polylang->get_languages_list() as $term)
-		    		$langs[] = $term->slug;
-		    	
-			return $langs;
-		}
-		
-		return array();
-	}
-
 	public function postmodified() 
 	{
 		global $post;
@@ -530,7 +515,7 @@ class XMLSitemapFeed {
 						// modify request parameters
 						$request['post_type'] = $post_type['name'];
 						$request['orderby'] = 'modified';
-						//$request['lang'] = implode( ',', $this->get_languages() );
+						$request['lang'] = '';
 						$request['no_found_rows'] = true;
 						$request['update_post_meta_cache'] = false;
 						$request['update_post_term_cache'] = false;
@@ -548,8 +533,7 @@ class XMLSitemapFeed {
 
 						// modify request parameters
 						$request['taxonomy'] = $taxonomy;
-						//$request['lang'] = implode( ',', $this->get_languages() );
-							// TODO test if we need this !!
+						$request['lang'] = '';
 						$request['no_found_rows'] = true;
 						$request['update_post_meta_cache'] = false;
 						$request['update_post_term_cache'] = false;
