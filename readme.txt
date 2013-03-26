@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravan
 Tags: sitemap, xml sitemap, news sitemap, sitemap.xml, robots.txt, Google, Google News, Yahoo, Bing, seo, feed, polylang
 Requires at least: 3.2
 Tested up to: 3.5.1
-Stable tag: 4.1.3
+Stable tag: 4.1.4
 
 Feeds that comply with the XML Sitemap and Google News protocol for the hungry spiders. Multisite compatible.
 
@@ -255,13 +255,14 @@ Thanks for sharing your translation :)
 
 == Upgrade Notice ==
 
-= 4.1.3 =
-New: Split posts by year to improve generate speed and priority settings. Many new options. Ping search engines. Bugfix: Polylang language code in pretty permalinks issue.
+= 4.1.4 =
+New: Split posts by year to improve generate speed and priority settings. Many new options. Ping search engines. Bugfixes.
 
 
 == Changelog ==
 
-= 4.1.3 =
+= 4.1.4 =
+* BUGFIX: Pass by reference fatal error in PHP 5.4
 * BUGFIX: issue with Polylang language code in pretty permalinks setting
 * BUGFIX: unselected post types in sitemap
 * BUGFIX: 1+ Priority for sticky posts with comments

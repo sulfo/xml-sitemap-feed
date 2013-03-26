@@ -619,21 +619,12 @@ class XMLSitemapFeed {
 
 	public function ping($uri, $timeout = 3) 
 	{
-		// steps:
-		// 1. ping url
-		// 2. update settings with last ping timestamp and succes status
-	
 		$options = array();
-		//if ( (int)$timeout <= 1 )
-		//	$options['timeout'] = 1;
-		//elseif ( (int)$timeout > 10 )
-		//	$options['timeout'] = 10;
-		//else
 		$options['timeout'] = $timeout;
 
 		$response = wp_remote_request( $uri, $options );
 
-		if ( '200' == wp_remote_retrieve_response_code(&$response) )
+		if ( '200' == wp_remote_retrieve_response_code($response) )
 			$succes = true;
 		else
 			$succes = false;	
@@ -652,7 +643,7 @@ class XMLSitemapFeed {
 					$pings = $this->get_pings();
 					$pings[$se][$pretty] = mysql2date('Y-m-d H:i:s', 'now', false);
 					update_option($this->prefix.'pings',$pings);
-				}		
+				}
 			}
 		}
 
