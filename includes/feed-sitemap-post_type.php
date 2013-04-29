@@ -103,17 +103,13 @@ if ( !empty($news) && $post->post_date > date('Y-m-d H:i:s', strtotime('-49 hour
 <?php
 endif;
 if ( !empty($image) && $xmlsf->get_images() ) : 
-?>
-		<image:image>
-<?php
 	foreach ( $xmlsf->get_images() as $loc ) { 
 ?>
+		<image:image>
 			<image:loc><?php echo $loc; ?></image:loc>
+		</image:image>
 <?php 
 	} 
-?>
-		</image:image>
-<?php
 endif;
 ?>
  	</url>
