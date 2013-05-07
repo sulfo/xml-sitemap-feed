@@ -82,7 +82,7 @@ class XMLSitemapFeed {
 			$this->defaults['post_types']['page']['priority'] = '0.3';
 		}
 
-/* attachment post type is disabled... images are included with tags in post and page sitemaps
+/* attachment post type is disabled... images are included via tags in the post and page sitemaps
 		if ( isset($this->defaults['post_types']['attachment']) ) {
 			$this->defaults['post_types']['attachment']['tags']['image'] = 'attached';
 			$this->defaults['post_types']['attachment']['priority'] = '0.3';
@@ -106,7 +106,10 @@ class XMLSitemapFeed {
 		$this->defaults['pings'] = array(); // for storing last ping timestamps and status
 
 		// robots
-		$this->defaults['robots'] = "Disallow: /xmlrpc.php\nDisallow: /wp-\nDisallow: /trackback/\nDisallow: ?wptheme=\nDisallow: ?comments=\nDisallow: ?replytocom\nDisallow: /comment-page-\nDisallow: /?s=\nDisallow: /wp-content/\nAllow: /wp-content/uploads/\n";
+		$this->defaults['robots'] = "Disallow: /xmlrpc.php\nDisallow: /wp-\nDisallow: /trackback/\nDisallow: ?wptheme=\nDisallow: ?comments=\nDisallow: ?replytocom\nDisallow: /comment-page-\nDisallow: /?s=\nDisallow: /wp-content/\n";
+		global $blog_id;
+		if ( !is_multisite() || $blog_id == 1 )
+			$this->defaults['robots'] .= "Allow: /wp-content/uploads/\n";
 	}
 
 	public function defaults($key = false) 
