@@ -72,7 +72,6 @@ class XMLSitemapFeed {
 				$this->defaults['post_types']['post']['archive'] = 'yearly';
 			else
 				$this->defaults['post_types']['post']['archive'] = '';
-			$this->defaults['post_types']['post']['tags']['news'] = '1';
 			$this->defaults['post_types']['post']['tags']['image'] = 'featured';
 			$this->defaults['post_types']['post']['priority'] = '0.7';
 			$this->defaults['post_types']['post']['dynamic_priority'] = '1';
