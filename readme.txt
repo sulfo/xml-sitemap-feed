@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravan
 Tags: sitemap, xml sitemap, news sitemap, sitemap.xml, robots.txt, Google, Google News, Yahoo, Bing, seo, feed, polylang, image sitemap
 Requires at least: 3.2
 Tested up to: 3.6
-Stable tag: 4.2.2
+Stable tag: 4.2.3
 
 Feeds that comply with the XML Sitemap and Google News protocol for the hungry spiders. Multisite compatible.
 
@@ -259,14 +259,17 @@ Thanks for sharing your translation :)
 
 == Upgrade Notice ==
 
-= 4.2 =
-New: Image & News tags and the possibility to exclude posts and pages on a per post basis.
+= 4.2.3 =
+Bugfix release and split custom post types by year/month
 
 
 == Changelog ==
 
-= 4.2.2 = 
+= 4.2.3 = 
+* BUGFIX: Empty ping options after disabling the main sitemap
 * BUGFIX: Empty language tag for Google News tags in posts sitemap
+* Small back end changes
+* NEW: Custom post types split by year/month
 
 = 4.2 =
 * NEW: Image & News tags 

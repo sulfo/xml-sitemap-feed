@@ -52,6 +52,7 @@ class XMLSitemapFeed {
 			$this->defaults['post_types'][$name] = array(
 								'name' => $name,
 								'active' => '',
+								'archive' => '',
 								'priority' => '0.5',
 								'dynamic_priority' => '',
 								'tags' => array('news' => '','image' => 'no')
@@ -70,14 +71,13 @@ class XMLSitemapFeed {
 		if ( isset($this->defaults['post_types']['post']) ) {
 			if (wp_count_posts('post')->publish > 500)
 				$this->defaults['post_types']['post']['archive'] = 'yearly';
-			else
-				$this->defaults['post_types']['post']['archive'] = '';
 			$this->defaults['post_types']['post']['tags']['image'] = 'featured';
 			$this->defaults['post_types']['post']['priority'] = '0.7';
 			$this->defaults['post_types']['post']['dynamic_priority'] = '1';
 		}
 
 		if ( isset($this->defaults['post_types']['page']) ) {
+			unset($this->defaults['post_types']['page']['archive']);
 			$this->defaults['post_types']['page']['tags'] = array('image' => 'featured');
 			$this->defaults['post_types']['page']['priority'] = '0.3';
 		}
@@ -129,15 +129,15 @@ class XMLSitemapFeed {
 	{
 		return get_option($this->prefix.$option, $this->defaults($option));
 	}
-		
+	
 	public function get_sitemaps() 
-	{		
+	{
 		$return = $this->get_option('sitemaps');
 		
 		// make sure it's an array we are returning
 		return (is_array($return)) ? (array)$return : array();
 	}
-		
+	
 	public function get_ping() 
 	{		
 		$return = $this->get_option('ping');
@@ -145,7 +145,7 @@ class XMLSitemapFeed {
 		// make sure it's an array we are returning
 		return (!empty($return)) ? (array)$return : array();
 	}
-		
+	
 	public function get_pings() 
 	{		
 		$return = $this->get_option('pings');
@@ -153,7 +153,7 @@ class XMLSitemapFeed {
 		// make sure it's an array we are returning
 		return (!empty($return)) ? (array)$return : array();
 	}
-		
+	
 	public function disabled_post_types() 
 	{		
 		return $this->disabled_post_types;
@@ -177,10 +177,6 @@ class XMLSitemapFeed {
 		foreach ( $post_types as $type => $values ) {
 			if(!empty($values['active'])) {
 				$count = wp_count_posts( $values['name'] );
-				/*if ('attachment' == $type && $count->inherit > 0) {
-					$values['count'] = $count->inherit;
-					$return[$type] = $values;
-				} else*/
 				if ($count->publish > 0) {
 					$values['count'] = $count->publish;
 					$return[$type] = $values;
