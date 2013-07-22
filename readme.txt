@@ -46,6 +46,7 @@ Please read the FAQ's for info on how to get your articles listed on Google News
 
 - **Dutch** * Author: [R.A. van Hagen](http://status301.net) (version 4.2)
 - **French** * Author: [R.A. van Hagen](http://status301.net) (version 4.2) (improved translation or suggestions accepted)
+- **Indonesian** * Author: [Nasrulhaq Muiz](http://al-badar.net/) (version 4.2)
 - **Serbian** * Author: [WPdiscounts](http://wpdiscounts.com) (version 4.1) 
 - **Ukrainian** * Author: [Cmd Software](http://www.cmd-soft.com/) (version 4.0) 
 
