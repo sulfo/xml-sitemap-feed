@@ -405,7 +405,7 @@ class XMLSitemapFeed {
 			$defaults = $this->defaults('post_types');
 			$priority_meta = get_metadata('post', $post->ID, '_xmlsf_priority' , true);
 		
-			if ( !empty($priority_meta) ) {
+			if ( !empty($priority_meta) || $priority_meta == '0' ) {
 		
 				$priority = $priority_meta;
 			
@@ -651,6 +651,7 @@ class XMLSitemapFeed {
 
 						// modify request parameters
 						$request['post_type'] = $post_type['name'];
+						$request['post_status'] = 'publish';
 						$request['orderby'] = 'modified';
 						$request['lang'] = '';
 						$request['no_found_rows'] = true;

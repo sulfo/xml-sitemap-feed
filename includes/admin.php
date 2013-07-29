@@ -423,7 +423,6 @@ jQuery( document ).ready( function() {
 		// The actual fields for data entry
 		// Use get_post_meta to retrieve an existing value from the database and use the value for the form
 		$value = get_post_meta( $post->ID, '_xmlsf_exclude', true );
-		echo '<!-- '.$value.' -->';
 		echo '<p><label><input type="checkbox" name="xmlsf_exclude" id="xmlsf_exclude" value="1"'.checked(!empty($value), true, false).' > ';
 		_e('Exclude from XML Sitemap','xml-sitemap-feed');
 		echo '</label></p>';
@@ -448,12 +447,12 @@ jQuery( document ).ready( function() {
 
 		// _xmlsf_priority
 		if ( isset($_POST['xmlsf_priority']) && $_POST['xmlsf_priority'] != '' && is_numeric($_POST['xmlsf_priority']) ) {
-			if ($_POST['xmlsf_priority'] <= 0)
+			if ($_POST['xmlsf_priority'] < 0 || $_POST['xmlsf_priority'] === 0 )
 				update_post_meta($post_id, 'priority', '0');
 			elseif ($_POST['xmlsf_priority'] >= 1)
 				update_post_meta($post_id, '_xmlsf_priority', '1');
 			else
-					update_post_meta($post_id, '_xmlsf_priority', $_POST['xmlsf_priority']);
+				update_post_meta($post_id, '_xmlsf_priority', $_POST['xmlsf_priority']);
 		} else {
 			delete_post_meta($post_id, '_xmlsf_priority');
 		}

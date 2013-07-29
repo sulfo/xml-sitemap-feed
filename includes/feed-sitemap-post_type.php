@@ -54,12 +54,12 @@ $excluded = $xmlsf->get_excluded($post_type);
 if ( have_posts() ) :
     while ( have_posts() ) : 
 	the_post();
-
+	
 	// check if we are not dealing with an external URL :: Thanks to Francois Deschenes :)
 	// or if page is in the exclusion list (like front pages)
 	// or if post meta says "exclude"
 	$exclude = get_post_meta( $post->ID, '_xmlsf_exclude', true );
-	if ( !empty($exclude) || !preg_match('/^' . preg_quote(home_url(), '/') . '/i', get_permalink()) || in_array($post->ID, $excluded) )
+	if ( !empty($exclude) || !preg_match('/^' . preg_quote(home_url(), '/') . '/i', get_permalink()) || in_array($post->ID, $excluded) || post_password_required( $post->ID ) )
 		continue;
 
 // TODO news, image & video tags

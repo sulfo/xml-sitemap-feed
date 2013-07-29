@@ -259,8 +259,10 @@ Bugfix release and split custom post types by year/month
 == Changelog ==
 
 = 4.3 =
+* BUGFIX: Priority value 0 in post meta not saved
 * BUGFIX: Ping for all post types
 * BUGFIX: Custom taxonomy support
+* BUGFIX: Split by month shows year
 
 = 4.2.4 =
 * NEW: Image tags
