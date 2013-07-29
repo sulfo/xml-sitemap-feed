@@ -249,7 +249,7 @@ class XMLSitemapFeed {
 		$return = $this->get_option('post_types');
 
 		// make sure it's an array we are returning
-		return (!empty($return[$type]['tags'])) ? (array)$return[$type]['tags'] : array();
+		return ( isset($return[$type]) && !empty($return[$type]['tags']) ) ? (array)$return[$type]['tags'] : array();
 	}
 	
 	public function is_home($id) {
