@@ -423,15 +423,28 @@ jQuery( document ).ready( function() {
 		// The actual fields for data entry
 		// Use get_post_meta to retrieve an existing value from the database and use the value for the form
 		$value = get_post_meta( $post->ID, '_xmlsf_exclude', true );
-		echo '<p><label><input type="checkbox" name="xmlsf_exclude" id="xmlsf_exclude" value="1"'.checked(!empty($value), true, false).' > ';
+		$priority = get_post_meta( $post->ID, '_xmlsf_priority', true );
+		$disabled = '';
+		
+		// disable options and (visibly) set excluded to true for private posts
+		if ( 'private' == $post->post_status || post_password_required($post->ID) ) {
+			$disabled = ' disabled="disabled"';
+			$value = true;
+		} 
+		
+		// disable options and (visibly) set priority to 1 for front page
+		if ( $post->ID == get_option('page_on_front') ) {
+			$disabled = ' disabled="disabled"';
+			$priority = '1'; // force excluded to true for private posts
+		}
+		
+		echo '<p><label><input type="checkbox" name="xmlsf_exclude" id="xmlsf_exclude" value="1"'.checked(!empty($value), true, false).$disabled.' > ';
 		_e('Exclude from XML Sitemap','xml-sitemap-feed');
 		echo '</label></p>';
 
 		echo '<p><label>';
 		_e('Priority','xml-sitemap-feed');
-		echo ' <input type="number" step="0.1" min="0" max="1" name="xmlsf_priority" id="xmlsf_priority" value="';
-		echo get_post_meta( $post->ID, '_xmlsf_priority', true );
-		echo '" class="small-text"></label> <span class="description">';
+		echo ' <input type="number" step="0.1" min="0" max="1" name="xmlsf_priority" id="xmlsf_priority" value="'.$priority.'" class="small-text"'.$disabled.'></label> <span class="description">';
 		printf(__('Leave empty for automatic Priority as configured on %1$s > %2$s.','xml-sitemap-feed'),__('Settings'),__('Reading'));
 		echo '</span></p>';
 	}
