@@ -22,7 +22,8 @@ class XMLSitemapFeed {
 	private $yes_mother = false;
 
 	private $defaults = array();
-	private $disabled_post_types = array('attachment');
+	private $disabled_post_types = array('attachment'); /* attachment post type is disabled... images are included via tags in the post and page sitemaps */
+	private $disabled_taxonomies = array('post_format'); /* post format taxonomy is brute force disabled for now; might come back... */
 	
 	// Global values used for priority and changefreq calculation
 	private $firstdate;
@@ -44,7 +45,7 @@ class XMLSitemapFeed {
 
 		// post_types
 		$this->defaults['post_types'] = array();
-		foreach ( get_post_types(array('public'=>true),'names') as $name ) {
+		foreach ( get_post_types(array('public'=>true),'names') as $name ) { // want 'publicly_queryable' but that excludes pages for some weird reason
 			// skip unallowed post types
 			if (in_array($name,$this->disabled_post_types))
 				continue;
@@ -82,14 +83,11 @@ class XMLSitemapFeed {
 			$this->defaults['post_types']['page']['priority'] = '0.3';
 		}
 
-/* attachment post type is disabled... images are included via tags in the post and page sitemaps
-		if ( isset($this->defaults['post_types']['attachment']) ) {
-			$this->defaults['post_types']['attachment']['tags']['image'] = 'attached';
-			$this->defaults['post_types']['attachment']['priority'] = '0.3';
-		}*/
-
 		// taxonomies
 		$this->defaults['taxonomies'] = array(); // by default do not include any taxonomies
+		
+		// news sitemap settings
+		$this->defaults['news_sitemap'] = array();
 
 		// ping search engines
 		$this->defaults['ping'] = array(
@@ -103,13 +101,11 @@ class XMLSitemapFeed {
 						),
 					);
 
-		$this->defaults['pings'] = array(); // for storing last ping timestamps and status
+		$this->defaults['pong'] = array(); // for storing last ping timestamps and status
 
 		// robots
-		$this->defaults['robots'] = "Disallow: /xmlrpc.php\nDisallow: /wp-\nDisallow: /trackback/\nDisallow: ?wptheme=\nDisallow: ?comments=\nDisallow: ?replytocom\nDisallow: /comment-page-\nDisallow: /?s=\nDisallow: /wp-content/\n";
+		$this->defaults['robots'] = "Disallow: /xmlrpc.php\nDisallow: /wp-\nDisallow: /trackback/\nDisallow: ?wptheme=\nDisallow: ?comments=\nDisallow: ?replytocom\nDisallow: /comment-page-\nDisallow: /?s=\nDisallow: /wp-content/\nAllow: /wp-content/uploads/\n";
 		global $blog_id;
-		if ( !is_multisite() || $blog_id == 1 )
-			$this->defaults['robots'] .= "Allow: /wp-content/uploads/\n";
 	}
 
 	public function defaults($key = false) 
@@ -146,9 +142,9 @@ class XMLSitemapFeed {
 		return (!empty($return)) ? (array)$return : array();
 	}
 	
-	public function get_pings() 
+	public function get_pong() 
 	{		
-		$return = $this->get_option('pings');
+		$return = $this->get_option('pong');
 		
 		// make sure it's an array we are returning
 		return (!empty($return)) ? (array)$return : array();
@@ -157,6 +153,12 @@ class XMLSitemapFeed {
 	public function disabled_post_types() 
 	{		
 		return $this->disabled_post_types;
+
+	}
+	
+	public function disabled_taxonomies() 
+	{		
+		return $this->disabled_taxonomies;
 
 	}
 	
@@ -172,7 +174,6 @@ class XMLSitemapFeed {
 	{		
 		$post_types = $this->get_option('post_types');
 		$return = array();
-		
 
 		foreach ( $post_types as $type => $values ) {
 			if(!empty($values['active'])) {
@@ -310,10 +311,11 @@ class XMLSitemapFeed {
 
 		elseif ( !empty($term) ) :
 
-			if ( is_object($term) ) {
-				if ( empty($this->termmodified[$term->term_id]) ) {
+			if ( is_object($term) ) { 
+				if ( !isset($this->termmodified[$term->term_id]) ) {
 				// get the latest post in this taxonomy item, to use its post_date as lastmod
 					$posts = get_posts ( array(
+						'post_type' => 'any',
 					 	'numberposts' => 1, 
 						'no_found_rows' => true, 
 						'update_post_meta_cache' => false, 
@@ -328,18 +330,17 @@ class XMLSitemapFeed {
 							)
 						)
 					);
-					$this->termmodified[$term->term_id] = $posts[0]->post_date_gmt;
+					$this->termmodified[$term->term_id] = isset($posts[0]->post_date_gmt) ? $posts[0]->post_date_gmt : '';
 				}
 				return $this->termmodified[$term->term_id];
 			} else {
 				$obj = get_taxonomy($term);
-				return get_lastdate( 'gmt', $obj->object_type[0] );
+				return get_lastdate( 'gmt', $obj->object_type );
 				// uses get_lastdate() function defined in xml-sitemap/hacks.php !
 				// which is a shortcut: returns last post date, not last modified date... 
 				// TODO find the long way around (take tax type, get all terms, 
 				// do tax_query with all terms for one post and get its lastmod date)
 			}
-
 
 		else :
 
@@ -772,22 +773,36 @@ class XMLSitemapFeed {
 		return $succes;
 	}
 
-	public function do_pings($post_ID) 
-	{		
-		$sitemaps = $this->get_sitemaps();
-		foreach ($this->get_ping() as $se => $data) {
-			if(empty($data['active']) || '1' != $data['active']) continue;
-				
-			foreach ( $sitemaps as $pretty ) {
-				if ( $this->ping( $data['uri'].urlencode(trailingslashit(get_bloginfo('url')) . $pretty) ) ) {
-					$pings = $this->get_pings();
-					$pings[$se][$pretty] = mysql2date('Y-m-d H:i:s', 'now', false);
-					update_option($this->prefix.'pings',$pings);
-				}
+	public function do_pings($new_status, $old_status, $post) 
+	{
+		// first check if we've got a post type that is included in our sitemap
+		foreach($this->get_option('post_types') as $post_type)
+			if( $post->post_type == $post_type['name'] ) {
+				$active = true; // got a live one, green light is on.
+				break;
 			}
+		if ( !isset($active) )
+			return;
+		
+		if ( $old_status != 'publish' && $new_status == 'publish' ) {
+			// Post is published from any other status
+			$sitemaps = $this->get_sitemaps();
+			foreach ($this->get_ping() as $se => $data)
+				if( !empty($data['active']) && '1' == $data['active'])
+					foreach ( $sitemaps as $pretty )
+						if ( $this->ping( $data['uri'].urlencode(trailingslashit(get_bloginfo('url')) . $pretty) ) ) {
+							$pong = $this->get_pong();
+							$pong[$se][$pretty] = mysql2date('Y-m-d H:i:s', 'now', false);
+							update_option($this->prefix.'pong',$pong);
+						}
 		}
-
-		return $post_ID;
+		/*
+		if ( $old_status == 'publish' && $new_status == 'publish' ) {
+			// Post is updated
+			// TODO make pinging in this case optional 
+		}
+		*/	
+		// see more on http://codex.wordpress.org/Post_Status_Transitions
 	}
 
 	/**
@@ -812,17 +827,22 @@ class XMLSitemapFeed {
 	public function plugins_loaded() 
 	{
 		// TEXT DOMAIN
-		
-		if ( is_admin() ) // text domain on plugins_loaded even if it is for admin only
+		if ( is_admin() ) // text domain needed on admin only
 			load_plugin_textdomain('xml-sitemap-feed', false, dirname(dirname(plugin_basename( __FILE__ ))) . '/languages' );
 
+		// UPGRADE
 		if (get_option('xmlsf_version') != XMLSF_VERSION) {
 			// rewrite rules not available on plugins_loaded 
 			// and don't flush rules from init as Polylang chokes on that
 			// just remove the rules and let WP renew them when ready...
 			delete_option('rewrite_rules');
 
-			$this->yes_mother = true;
+			// upgrade from ping to pong
+			$pings = get_option($this->prefix.'pings');
+			if (!empty($pings))
+				update_option($this->prefix.'pong',$pings);
+
+			$this->yes_mother = true; // did you flush and wash your hands?
 
 			update_option('xmlsf_version', XMLSF_VERSION);
 		}
@@ -831,8 +851,8 @@ class XMLSitemapFeed {
 
 	private function flush_rules($hard = false) 
 	{		
-		if ($this->yes_mother)
-			return;
+		if ($this->yes_mother) // did you flush and wash your hands?
+			return; // yes, mother!
 
 		global $wp_rewrite;
 		// don't need hard flush by default
@@ -843,12 +863,6 @@ class XMLSitemapFeed {
 	
 	public function admin_init() 
 	{
-		// UPGRADE RULES after plugin upgrade (is this needed since we do this on plugins_loaded too?)
-		if (get_option('xmlsf_version') != XMLSF_VERSION) {
-			$this->flush_rules();
-			update_option('xmlsf_version', XMLSF_VERSION);
-		}
-
 		// CATCH TRANSIENT for reset
 		if (delete_transient('xmlsf_clear_settings'))
 			$this->clear_settings();
@@ -878,7 +892,13 @@ class XMLSitemapFeed {
 	*/
 
 	function __construct() 
-	{	
+	{
+		// sitemap element filters
+		add_filter('the_title_xmlsitemap', 'strip_tags');
+		add_filter('the_title_xmlsitemap', 'ent2ncr', 8);
+		add_filter('the_title_xmlsitemap', 'esc_html');
+		add_filter('bloginfo_xmlsitemap', 'ent2ncr', 8);
+		
 		// REQUEST main filtering function
 		add_filter('request', array($this, 'filter_request'), 1 );
 		
@@ -897,7 +917,7 @@ class XMLSitemapFeed {
 		add_filter('robots_txt', array($this, 'robots_txt'), 0 );
 		
 		// PINGING
-		add_action('publish_post', array($this, 'do_pings'));
+		add_action('transition_post_status', array($this, 'do_pings'), 10, 3); 
 
 		// DE-ACTIVATION
 		register_deactivation_hook( XMLSF_PLUGIN_DIR . '/xml-sitemap.php', array($this, 'clear_settings') );

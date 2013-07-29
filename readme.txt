@@ -46,6 +46,7 @@ Please read the FAQ's for info on how to get your articles listed on Google News
 
 - **Dutch** * Author: [R.A. van Hagen](http://status301.net) (version 4.2)
 - **French** * Author: [R.A. van Hagen](http://status301.net) (version 4.2) (improved translation or suggestions accepted)
+- **Indonesian** * Author: [Nasrulhaq Muiz](http://al-badar.net/) (version 4.2)
 - **Serbian** * Author: [WPdiscounts](http://wpdiscounts.com) (version 4.1) 
 - **Ukrainian** * Author: [Cmd Software](http://www.cmd-soft.com/) (version 4.0) 
 
@@ -83,10 +84,6 @@ Done! Check your sparkling new XML Sitemap by visiting yourblogurl.tld/sitemap.x
 = WordPress 3+ in Multi Site mode =
 
 Same as above but do a **Network Activate** to make a XML sitemap available for each site on your network.
-
-= Wordpress MU =
-
-The plugin works best from the **/mu-plugins/** folder where it runs quietly in the background without bothering any blog owner with over-complicated options or the need for special knowledge of XML Sitemap submission. Just upload the complete package content to /mu-plugins/ and move the file xml-sitemap.php from the new /mu-plugins/xml-sitemap-feed/ to /mu-plugins/.
 
 Installed alongside [WordPress MU Sitewide Tags Pages](http://wordpress.org/extend/plugins/wordpress-mu-sitewide-tags/), XML Sitemap Feed will **not** create a sitemap.xml nor change robots.txt for any **tag blogs**. This is done deliberately because they would be full of links outside the tags blogs own domain and subsequently ignored (or worse: penalised) by Google.
 
@@ -227,11 +224,7 @@ Read more on [Increasing memory allocated to PHP](http://codex.wordpress.org/Edi
 
 = Can I run this on a WPMU / WP3+ Multi-Site setup? =
 
-Yes. In fact, it has been designed for it. Tested on WPMU 2.9.2 and WPMS 3.0.1 both with normal activation and with Network Activate / Site Wide Activate.
-
-= Can I run this plugin from /mu-plugins/ on WP3.0 MS or WPMU? =
-
-Yes. Upload the complete /xml-sitemap-feed/ directory to /wp-content/mu-plugins/ and move the file xml-sitemap.php one dir up.
+Yes. In fact, it has been designed for it. Tested on WPMU 2.9.2 and WPMS 3+ both with normal activation and with Network Activate / Site Wide Activate.
 
 
 == Translation ==
@@ -264,6 +257,15 @@ Bugfix release and split custom post types by year/month
 
 
 == Changelog ==
+
+= 4.3 =
+* BUGFIX: Ping for all post types
+* BUGFIX: Custom taxonomy support
+
+= 4.2.4 =
+* NEW: Image tags
+* Rearranged settings section
+* FIX: replace permalink, title and bloginfo rss filter hooks with own
 
 = 4.2.3 = 
 * BUGFIX: Empty ping options after disabling the main sitemap

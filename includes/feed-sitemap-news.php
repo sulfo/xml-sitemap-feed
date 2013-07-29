@@ -27,7 +27,7 @@ echo '<?xml version="1.0" encoding="'.get_bloginfo('charset').'"?>
 // bloginfo_rss('language') returns improper format so
 // we explode on hyphen and use only first part. 
 // TODO this workaround breaks (simplified) chinese :(
-$language = reset(explode('-', get_bloginfo_rss('language')));
+$language = reset(explode('-', convert_chars(strip_tags(get_bloginfo('language'))) ));	
 if ( empty($language) )
 	$language = 'en';
 
@@ -64,27 +64,27 @@ if ( have_posts() ) :
 
 	?>
 	<url>
-		<loc><?php the_permalink_rss() ?></loc>
+		<loc><?php echo esc_url( get_permalink() ); ?></loc>
 		<news:news>
 			<news:publication>
 				<news:name><?php 
 					if(defined('XMLSF_GOOGLE_NEWS_NAME')) 
-						echo apply_filters('the_title_rss', XMLSF_GOOGLE_NEWS_NAME); 
+						echo convert_chars(strip_tags(XMLSF_GOOGLE_NEWS_NAME)); 
 					else 
-						echo bloginfo_rss('name'); ?></news:name>
+						echo convert_chars(strip_tags(get_bloginfo('name'))); ?></news:name>
 				<news:language><?php 
 					$lang = reset(get_the_terms($post->ID,'language'));
 					echo (is_object($lang)) ? $lang->slug : $language;  ?></news:language>
 			</news:publication>
 			<news:publication_date><?php 
 				echo mysql2date('Y-m-d\TH:i:s+00:00', $post->post_date_gmt, false); ?></news:publication_date>
-			<news:title><?php the_title_rss() ?></news:title>
+			<news:title><?php echo apply_filters( 'the_title_xmlsitemap', get_the_title() ); ?></news:title>
 			<news:keywords><?php 
 				$do_comma = false; 
 				$keys_arr = get_the_category(); 
 				foreach($keys_arr as $key) { 
 					echo ( $do_comma ) ? ', ' : '' ; 
-					echo apply_filters('the_title_rss', $key->name); 
+					echo apply_filters('the_title_xmlsitemap', $key->name); 
 					$do_comma = true; 
 				} ?></news:keywords>
 <?php 
@@ -95,7 +95,7 @@ if ( have_posts() ) :
 				$do_comma = false; 
 				foreach(get_the_terms($post->ID,'gn_genre') as $key) { 
 					echo ( $do_comma ) ? ', ' : '' ; 
-					echo apply_filters('the_title_rss', $key->name); 
+					echo apply_filters('the_title_xmlsitemap', $key->name); 
 					$do_comma = true; 
 				} ?></news:genres>
 		<?php

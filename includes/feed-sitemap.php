@@ -54,7 +54,6 @@ foreach ( $xmlsf->get_taxonomies() as $taxonomy ) {
 		<lastmod><?php echo $xmlsf->get_lastmod('taxonomy',$taxonomy); ?></lastmod>
 	</sitemap>
 <?php 
-// TODO add lastmod ?
 	}
 }
 
