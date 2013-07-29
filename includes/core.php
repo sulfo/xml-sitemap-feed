@@ -202,7 +202,7 @@ class XMLSitemapFeed {
 		global $wpdb;
 		$return = array();
 		if ( 'monthly' == $type ) {
-			$query = "SELECT YEAR(post_date) AS `year`, MONTH(post_date) AS `month`, count(ID) as posts FROM $wpdb->posts WHERE post_type = '$post_type' AND post_status = 'publish' GROUP BY YEAR(post_date), MONTH(post_date) ORDER BY post_date DESC";
+			$query = "SELECT YEAR(post_date) AS `year`, LPAD(MONTH(post_date),2,'0') AS `month`, count(ID) as posts FROM $wpdb->posts WHERE post_type = '$post_type' AND post_status = 'publish' GROUP BY YEAR(post_date), MONTH(post_date) ORDER BY post_date DESC";			
 			$key = md5($query);
 			$cache = wp_cache_get( 'xmlsf_get_archives' , 'general');
 			if ( !isset( $cache[ $key ] ) ) {
