@@ -1041,7 +1041,7 @@ class XMLSitemapFeed {
 
 	private function flush_rules($hard = false) 
 	{		
-		if ($this->yes_mother) // did you flush and wash your hands?
+		if ($this->yes_mother) // did you flush?
 			return; // yes, mother!
 
 		global $wp_rewrite;
@@ -1077,7 +1077,7 @@ class XMLSitemapFeed {
 				'labels' => array(
 						'name' => __('Google News Country','xml-sitemap-feed'),
 						//'menu_name' => __('GN Genres','xml-sitemap-feed'),
-						'separate_items_with_commas' => __('Maximum one allowed. Must be consistent with State/Province and City (if set).','xml-sitemap-feed'),
+						'separate_items_with_commas' => __('Only one allowed. Must be consistent with other Google News location entities (if set).','xml-sitemap-feed'),
 					),
 				'public' => false,
 				'show_ui' => true,
@@ -1096,7 +1096,7 @@ class XMLSitemapFeed {
 				'labels' => array(
 						'name' => __('Google News State/Province','xml-sitemap-feed'),
 						//'menu_name' => __('GN Genres','xml-sitemap-feed'),
-						'separate_items_with_commas' => __('Maximum one allowed. Must be consistent with City and Country (if set).','xml-sitemap-feed'),
+						'separate_items_with_commas' => __('Only one allowed. Must be consistent with other Google News location entities (if set).','xml-sitemap-feed'),
 					),
 				'public' => false,
 				'show_ui' => true,
@@ -1115,7 +1115,7 @@ class XMLSitemapFeed {
 				'labels' => array(
 						'name' => __('Google News City','xml-sitemap-feed'),
 						//'menu_name' => __('GN Genres','xml-sitemap-feed'),
-						'separate_items_with_commas' => __('Maximum one allowed. Must be consistent with State/Province and Country (if set).','xml-sitemap-feed'),
+						'separate_items_with_commas' => __('Only one allowed. Must be consistent with other Google News location entities (if set).','xml-sitemap-feed'),
 					),
 				'public' => false,
 				'show_ui' => true,
@@ -1128,6 +1128,7 @@ class XMLSitemapFeed {
 						'assign_terms' => 'edit_posts'
 					)
 			));
+
 	}
 	
 	public function register_news_taxonomy() 
@@ -1140,57 +1141,12 @@ class XMLSitemapFeed {
 			$this->register_gn_taxonomies();
 
 			// create terms
-			$sitemaps = $this->get_sitemaps();
 			if (delete_transient('xmlsf_create_genres')) {
 				foreach ($this->gn_genres as $slug => $name) {
 					wp_insert_term(	$name, 'gn-genre', array(
 						'slug' => $slug,
 					) );
 				}
-/*
-				wp_insert_term(
-					__('Press Release','xml-sitemap-feed'), // an official press release.
-					'gn-genre',
-					array(
-						'slug' => 'gn-pressrelease',
-					)
-				);
-				wp_insert_term(
-					__('Satire','xml-sitemap-feed'), // an article which ridicules its subject for didactic purposes.
-					'gn-genre',
-					array(
-						'slug' => 'gn-satire',
-					)
-				);
-				wp_insert_term(
-					__('Blog','xml-sitemap-feed'), // any article published on a blog, or in a blog format.
-					'gn-genre',
-					array(
-						'slug' => 'gn-blog',
-					)
-				);
-				wp_insert_term(
-					__('Op-Ed','xml-sitemap-feed'), // an opinion-based article which comes specifically from the Op-Ed section of your site.
-					'gn-genre',
-					array(
-						'slug' => 'gn-oped',
-					)
-				);
-				wp_insert_term(
-					__('Opinion','xml-sitemap-feed'), // any other opinion-based article not appearing on an Op-Ed page, i.e., reviews, interviews, etc.
-					'gn-genre',
-					array(
-						'slug' => 'gn-opinion',
-					)
-				);
-				wp_insert_term(
-					__('User-Generated','xml-sitemap-feed'), // newsworthy user-generated content which has already gone through a formal editorial review process on your site.
-					'gn-genre',
-					array(
-						'slug' => 'gn-usergenerated',
-					)
-				);
-*/
 			}
 		}
 	}

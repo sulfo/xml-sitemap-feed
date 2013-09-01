@@ -199,6 +199,7 @@ if ( have_posts() ) :
 	?>
 		<lastmod><?php echo $xmlsf->get_lastmod(); ?></lastmod>
 		<changefreq><?php echo $xmlsf->get_changefreq(); ?></changefreq>
+	 	<priority><?php echo $xmlsf->get_priority(); ?></priority>
 	</url>
 <?php 
     endwhile;

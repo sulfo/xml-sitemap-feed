@@ -29,7 +29,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>'; ?>
 			<tr class="high">
 				<th>#</th>
 				<th>URL</th>
-				<th>Images</th>
+				<th># Images</th>
 				<th>Priority</th>
 				<th>Change Frequency</th>
 				<th>Last Changed</th>

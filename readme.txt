@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravan
 Tags: sitemap, xml sitemap, news sitemap, sitemap.xml, robots.txt, Google, Google News, Yahoo, Bing, , Yandex, Baidu, seo, feed, polylang, image sitemap
 Requires at least: 3.2
 Tested up to: 3.6
-Stable tag: 4.2.3
+Stable tag: 4.3
 
 Feeds from the XML Sitemap and Google News menu for the hungry spiders. Multisite compatible.
 
@@ -41,15 +41,16 @@ Please read the FAQ's for info on how to get your articles listed on Google News
 * Set priority per post.
 * Exclude individual posts or pages.
 * Option to add new robots.txt rules. These can be used to further control (read: limit) the indexation of various parts of your site and subsequent spread of pagerank accross your sites pages.
+* Includes XLS stylesheets for human readable sitemaps.
 
 
 = Translations =
 
-- **Dutch** * Author: [R.A. van Hagen](http://status301.net) (version 4.2)
-- **French** * Author: [R.A. van Hagen](http://status301.net) (version 4.2) (improved translation or suggestions accepted)
-- **Indonesian** * Author: [Nasrulhaq Muiz](http://al-badar.net/) (version 4.2)
-- **Serbian** * Author: [WPdiscounts](http://wpdiscounts.com) (version 4.1) 
-- **Ukrainian** * Author: [Cmd Software](http://www.cmd-soft.com/) (version 4.0) 
+- **Dutch** * R.A. van Hagen http://status301.net (version 4.3)
+- **French** * R.A. van Hagen http://status301.net (version 4.2) (improved translation or suggestions welcome)
+- **Indonesian** * Nasrulhaq Muiz http://al-badar.net/ (version 4.2)
+- **Serbian** * WPdiscounts http://wpdiscounts.com/ (version 4.1) 
+- **Ukrainian** * Cmd Software http://www.cmd-soft.com/ (version 4.0) 
 
 New transtations will be accepted and listed here. See translation instructions under [Other Notes](http://wordpress.org/plugins/xml-sitemap-feed/other_notes/).
 
@@ -274,6 +275,7 @@ Custom domains and URLs. Major Google News sitemap settings changes. Bugfixes.
 = 4.3 =
 * Google News sitemap settings section
 * Google News tags: access, genres, keywords, geo_locations
+* Improved Google News stylesheet
 * Custom Google News Publication Name
 * Image tags in Google News sitemap
 * Custom URLs
