@@ -286,6 +286,7 @@ Custom domains and URLs. Major Google News sitemap settings changes. Plus bugfix
 * Custom URLs
 * Allow additional domains
 * Image caption and title tags
+* Ping Yandex and Baidu optional
 * BUGFIX: Ineffective robots.txt rules
 * BUGFIX: Priority value 0 in post meta not saved
 * BUGFIX: Ping for all post types
