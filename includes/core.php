@@ -497,7 +497,12 @@ class XMLSitemapFeed {
 
 	public function get_changefreq($sitemap = 'post_type', $term = '') 
 	{
-		$lastactivityage = ( gmdate('U') - mysql2date( 'U', $this->modified($sitemap,$term) ) ); // post age
+		$modified = trim($this->modified($sitemap,$term));
+
+		if (empty($modified))
+			return 'weekly';
+		
+		$lastactivityage = ( gmdate('U') - mysql2date( 'U', $modified ) ); // post age
 	 	
 	 	if ( ($lastactivityage/86400) < 1 ) { // last activity less than 1 day old 
 	 		$changefreq = 'hourly';
