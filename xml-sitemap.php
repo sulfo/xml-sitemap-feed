@@ -27,14 +27,17 @@ Author URI: http://status301.net/
  * --------------------
  *
  * FILTERS
- *	xml_sitemap_url	->	Filters the URL used in the sitemap reference in robots.txt
+ *	xml_sitemap_url		-> Filters the URL used in the sitemap reference in robots.txt
  *	(deprecated)			(receives an ARRAY and MUST return one; can be multiple urls) 
- *				and for the home URL in the sitemap (receives a STRING and MUST
- *				return one) itself. Useful for multi language plugins or other 
- *				plugins that affect the blogs main URL... See pre-defined filter
- *				XMLSitemapFeed::qtranslate() in XMLSitemapFeed.class.php as an
- *				example.
- *      xmlsf_defaults ->       Filters the default array values for different option groups.
+ *					and for the home URL in the sitemap (receives a STRING and MUST
+ *					return one) itself. Useful for multi language plugins or other 
+ *					plugins that affect the blogs main URL... See pre-defined filter
+ *					XMLSitemapFeed::qtranslate() in XMLSitemapFeed.class.php as an
+ *					example.
+ *      xmlsf_defaults		-> Filters the default array values for different option groups.
+ *      xmlsf_allowed_domain	-> Filters the response when checking the url against allowed domains. 
+ *					Can be true or false.
+ *	the_title_xmlsitemap	-> Filters the Google News publication name, title and keywords
  
  * ACTIONS
  *	[ none at this point, but feel free to request, suggest or submit one :) ]
@@ -48,7 +51,7 @@ if(!empty($_SERVER['SCRIPT_FILENAME']) && 'xml-sitemap.php' == basename($_SERVER
  *      CONSTANTS
  * -------------------- */
 
-	define('XMLSF_VERSION', '4.2.10');
+	define('XMLSF_VERSION', '4.2.90');
 
 if ( file_exists ( dirname(__FILE__).'/xml-sitemap-feed' ) )
 	define('XMLSF_PLUGIN_DIR', dirname(__FILE__) . '/xml-sitemap-feed');
