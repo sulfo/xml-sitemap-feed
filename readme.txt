@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravan
 Tags: sitemap, xml sitemap, news sitemap, sitemap.xml, robots.txt, Google, Google News, Yahoo, Bing, , Yandex, Baidu, seo, feed, polylang, image sitemap
 Requires at least: 3.2
 Tested up to: 3.6
-Stable tag: 4.3.1
+Stable tag: 4.3.2
 
 Feeds from the XML Sitemap and Google News menu for the hungry spiders. Multisite compatible.
 
@@ -266,13 +266,14 @@ Thanks for sharing your translation :)
 
 == Upgrade Notice ==
 
-= 4.3.1 =
+= 4.3.2 =
 Custom domains and URLs. Major Google News sitemap settings changes. Plus bugfixes.
 
 
 == Changelog ==
 
-= 4.3.1 =
+= 4.3.2 =
+* BUGFIX: html esc / filter image title and caption tags
 * BUGFIX: empty terms counted causing empty taxonomy sitemap appearing in index
 * BUGFIX: custom taxonomies where lastmod cannot be determined show empty lastmod tag
 

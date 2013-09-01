@@ -470,9 +470,10 @@ class XMLSitemapFeed {
 					foreach ( $attachments as $attachment ) {
 						$url = wp_get_attachment_image_src( $attachment->ID, 'full' );
 						$this->images[$post->ID][] = array( 
-										'loc' => $url[0],
-										'title' => $attachment->post_title,
-										'caption' => $attachment->post_excerpt);
+										'loc' => esc_url( $url[0] ),
+										'title' => apply_filters( 'the_title_xmlsitemap', $attachment->post_title ),
+										'caption' => apply_filters( 'the_title_xmlsitemap', $attachment->post_excerpt )
+										);
 					}
 				}
 			} elseif ('featured' == $which) {
@@ -480,9 +481,10 @@ class XMLSitemapFeed {
 					$attachment = get_post(get_post_thumbnail_id( $post->ID ));
 					$url = wp_get_attachment_image_src( $attachment->ID, 'full' );
 					$this->images[$post->ID][] =  array( 
-										'loc' => $url[0],
-										'title' => $attachment->post_title,
-										'caption' => $attachment->post_excerpt);
+										'loc' => esc_url( $url[0] ),
+										'title' => apply_filters( 'the_title_xmlsitemap', $attachment->post_title ),
+										'caption' => apply_filters( 'the_title_xmlsitemap', $attachment->post_excerpt )
+										);
 				}
 			}
 		}
