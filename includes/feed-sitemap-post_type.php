@@ -61,7 +61,7 @@ if ( have_posts() ) :
 	?>
 	<url>
 		<loc><?php echo esc_url( get_permalink() ); ?></loc>
-		<lastmod><?php echo $xmlsf->get_lastmod(); ?></lastmod>
+		<?php echo $xmlsf->get_lastmod(); ?> 
 		<changefreq><?php echo $xmlsf->get_changefreq(); ?></changefreq>
 	 	<priority><?php echo $xmlsf->get_priority(); ?></priority>
 <?php

@@ -491,7 +491,8 @@ class XMLSitemapFeed {
 	
 	public function get_lastmod($sitemap = 'post_type', $term = '') 
 	{
-		return mysql2date('Y-m-d\TH:i:s+00:00', $this->modified($sitemap,$term), false);
+		$return = trim(mysql2date('Y-m-d\TH:i:s+00:00', $this->modified($sitemap,$term), false));
+		return !empty($return) ? '<lastmod>'.$return.'</lastmod>' : '';
 	}
 
 	public function get_changefreq($sitemap = 'post_type', $term = '') 

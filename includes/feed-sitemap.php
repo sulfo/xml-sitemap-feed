@@ -46,11 +46,11 @@ endforeach;
 	// add rules for custom public post taxonomies
 foreach ( $xmlsf->get_taxonomies() as $taxonomy ) :
 
-	if ( wp_count_terms( $taxonomy ) > 0 ) {
+	if ( wp_count_terms( $taxonomy, array('hide_empty'=>true) ) > 0 ) {
 ?>
 	<sitemap>
 		<loc><?php echo $xmlsf->get_index_url('taxonomy',$taxonomy); ?></loc>
-		<lastmod><?php echo $xmlsf->get_lastmod('taxonomy',$taxonomy); ?></lastmod>
+		<?php echo $xmlsf->get_lastmod('taxonomy',$taxonomy); ?>
 	</sitemap>
 <?php 
 	}
@@ -62,7 +62,6 @@ if ( !empty($urls) ) :
 ?>
 	<sitemap>
 		<loc><?php echo $xmlsf->get_index_url('custom'); ?></loc>
-		<lastmod></lastmod>
 	</sitemap>
 <?php 
 endif;
