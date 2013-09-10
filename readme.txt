@@ -1,4 +1,4 @@
-=== XML Sitemap & Google News Feeds ===
+=== XML Sitemap & Google News Feed ===
 Contributors: RavanH
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravanhagen%40gmail%2ecom&item_name=XML%20Sitemap%20Feed&item_number=3%2e8&no_shipping=0&tax=0&bn=PP%2dDonationsBF&charset=UTF%2d8&lc=us
 Tags: sitemap, xml sitemap, news sitemap, sitemap.xml, robots.txt, Google, Google News, Yahoo, Bing, , Yandex, Baidu, seo, feed, polylang, image sitemap
@@ -6,7 +6,7 @@ Requires at least: 3.2
 Tested up to: 3.6
 Stable tag: 4.3.2
 
-Feeds from the XML Sitemap and Google News menu for the hungry spiders. Multisite compatible.
+XML and Google News Sitemaps to feed the hungry spiders. Multisite, WP Super Cache and Polylang compatible.
 
 == Description ==
 
@@ -14,9 +14,9 @@ This plugin dynamically creates feeds that comply with the **XML Sitemap** and t
 
 The main advantage of this plugin over other XML Sitemap plugins is **simplicity**. No need to change file or folder permissions, move files or spend time tweaking difficult plugin options.
 
-You, or site owners on your Multisite network, will not be bothered with complicated settings like most other XML Sitemap plugins. The default settings will suffice in most cases and XML sitemap values like ChangeFreq and URL Priority are auto-calculated based on post age and comment activity.
+You, or site owners on your Multisite network, will not be bothered with overly complicated settings like most other XML Sitemap plugins. The default settings will suffice in most cases and XML sitemap values like ChangeFreq and URL Priority are auto-calculated based on post age and comment activity.
 
-The XML Sitemap Index becomes instantly available on yourblog.url/sitemap.xml (or yourblog.url/?feed=sitemap) containing references to posts and pages by default, ready for indexing by search engines like Google, Bing, Yahoo, AOL and Ask. When the Google News Sitemap is activated, it will become available on yourblog.url/sitemap-news.xml (or yourblog.url/?feed=sitemap-news), ready for indexing by Google News. Both are automatically referenced in the dynamically created **robots.txt** on yourblog.url/robots.txt to tell search engines where to find your XML Sitemaps. Google and Bing can be pinged on each new publication.
+an XML Sitemap Index becomes instantly available on yourblog.url/sitemap.xml (or yourblog.url/?feed=sitemap) containing references to posts and pages by default, ready for indexing by search engines like Google, Bing, Yahoo, AOL and Ask. When the Google News Sitemap is activated, it will become available on yourblog.url/sitemap-news.xml (or yourblog.url/?feed=sitemap-news), ready for indexing by Google News. Both are automatically referenced in the dynamically created **robots.txt** on yourblog.url/robots.txt to tell search engines where to find your XML Sitemaps. Google and Bing can be pinged on each new publication.
 
 Please read the FAQ's for info on how to get your articles listed on Google News.
 
@@ -30,23 +30,35 @@ Please read the FAQ's for info on how to get your articles listed on Google News
 
 = Features = 
 
+**XML Sitemap**
+
 * Sitemap Index with optional inclusion of sitemaps for post types, categories and tags.
-* Optional Google News sitemap.
+* Sitemap with custom URLs optional.
+* Custom/static sitemaps can be added to the index.
 * Completely **automatic** post URL _priority_ and _change frequency_ calculation based on post age and comment and trackback activity.
-* Works out-of-the-box, even on **multi-site / shared codebase / multi-blog setups** like WordPress MU, WP 3.0 in MultiSite mode and others. 
-* Optionally include Image tags with caption and title for featured images or attached images in both regular and Google News sitemaps.
-* Pings Google, Bing & Yahoo and optionally Yandex and Baidu on new post publication.
-* Compatible with multi-lingual sites using **Polylang** to allow all languages to be indexed equally.
+* Works out-of-the-box, even on **Multisite** installations. 
+* Optionally include Image tags with caption and title for featured images or attached images.
+* Pings Google, Bing & Yahoo, Yandex and Baidu on new post publication.
 * Options to define which post types and taxonomies get included in the sitemap and automatic priority calculation rules.
 * Set priority per post.
 * Exclude individual posts or pages.
+
+**Google News Sitemap**
+
+* Optionally include Image tags with caption and title for featured images or attached images.
+* Options to: set a different News Publication Name, include custom post types or limit inclusion to certain post categories.
+* Configure <access>, <genres>, <keywords> and <geo_locations> both globally and post by post
+* Pings Google on new publications.
+
+** More **
+
+* Compatible with multi-lingual sites using **Polylang** to allow all languages to be indexed equally.
 * Option to add new robots.txt rules. These can be used to further control (read: limit) the indexation of various parts of your site and subsequent spread of pagerank accross your sites pages.
 * Includes XLS stylesheets for human readable sitemaps.
 
-
 = Translations =
 
-- **Dutch** * R.A. van Hagen http://status301.net (version 4.3)
+- **Dutch** * R.A. van Hagen http://status301.net (version 4.4)
 - **French** * R.A. van Hagen http://status301.net (version 4.2) (improved translation or suggestions welcome)
 - **Indonesian** * Nasrulhaq Muiz http://al-badar.net/ (version 4.2)
 - **Serbian** * WPdiscounts http://wpdiscounts.com/ (version 4.1) 
@@ -266,11 +278,20 @@ Thanks for sharing your translation :)
 
 == Upgrade Notice ==
 
-= 4.3.2 =
-Custom domains and URLs. Major Google News sitemap settings changes. Plus bugfixes.
+= 4.4 =
+Google News Sitemap: limit posts to certain categories. Some (query) optimizations and a bugfix.
 
 
 == Changelog ==
+
+= 4.4 =
+* Append custom/static sitemaps to the index
+* Include other post types in News Sitemap
+* Optionally limit posts to certain categories in News Sitemap
+* Noindex response header for sitemaps to keep them out of search results
+* Static sitemap stylesheets
+* DB query streamlining
+* BUGFIX: fatal error on . (dot) as category base in permalinks
 
 = 4.3.2 =
 * BUGFIX: html esc / filter image title and caption tags

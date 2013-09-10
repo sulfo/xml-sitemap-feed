@@ -157,12 +157,18 @@ class XMLSitemapFeed {
 		// additional urls
 		$this->defaults['urls'] = array();
 
+		// additional custom_sitemaps
+		$this->defaults['custom_sitemaps'] = array();
+
 		// additional allowed domains
 		$this->defaults['domains'] = array();
 		
 		// news sitemap tags settings
+		$news_post_types = defined('XMLSF_NEWS_POST_TYPE') ? explode(',',XMLSF_NEWS_POST_TYPE) : array('post');
 		$this->defaults['news_tags'] = array( 
-						'name' => '', 
+						'name' => '',
+						'post_type' => (in_array('any',$news_post_types)) ? 'any' : $news_post_types,
+						'categories' => '',
 						'image' => 'featured',
 						'access' => array( 
 							'default' => '', 
@@ -182,8 +188,6 @@ class XMLSitemapFeed {
 							'default' => '' 
 							) 
 						);
-		
-		
 	}
 
 	/**
@@ -280,6 +284,21 @@ class XMLSitemapFeed {
 		return (!empty($return)) ? (array)$return : array();
 	}
 		
+	public function get_custom_sitemaps() 
+	{
+		$return = $this->get_option('custom_sitemaps');
+
+		// make sure it's an array we are returning
+		if(!empty($return)) {
+			if(is_array($return))
+				return $return;
+			else
+				return explode("\n",$return);
+		} else {
+			return array();
+		}	
+	}
+
 	public function get_urls() 
 	{
 		$return = $this->get_option('urls');
@@ -297,10 +316,11 @@ class XMLSitemapFeed {
 
 	public function get_domains() 
 	{
-		$return = array_merge( array( $this->domain() ), (array)$this->get_option('domains') );
-		
-		// make sure it's an array we are returning
-		return (!empty($return)) ? (array)$return : array();
+		$domains = $this->get_option('domains');
+		if (!empty($domains) && is_array($domains))
+			return array_merge( array( $this->domain() ), $domains );
+		else 
+			return array( $this->domain() );
 	}
 
 	public function get_archives($post_type = 'post', $type = '') 
@@ -320,7 +340,7 @@ class XMLSitemapFeed {
 			}
 			if ( $arcresults ) {
 				foreach ( (array) $arcresults as $arcresult ) {
-					$return[$arcresult->year.$arcresult->month] = $this->get_index_url( 'posttype', $post_type, $arcresult->year . $arcresult->month );
+					$return[$arcresult->year.$arcresult->month] = esc_html( $this->get_index_url( 'posttype', $post_type, $arcresult->year . $arcresult->month ) );
 				}
 			}
 		} elseif ('yearly' == $type) {
@@ -336,11 +356,11 @@ class XMLSitemapFeed {
 			}
 			if ($arcresults) {
 				foreach ( (array) $arcresults as $arcresult) {
-					$return[$arcresult->year] = $this->get_index_url( 'posttype', $post_type, $arcresult->year );
+					$return[$arcresult->year] = esc_html($this->get_index_url( 'posttype', $post_type, $arcresult->year ) );
 				}
 			}
 		} else {
-			$return[0] = $this->get_index_url('posttype', $post_type); // $sitemap = 'home', $type = false, $param = false
+			$return[0] = esc_html($this->get_index_url('posttype', $post_type) ); // $sitemap = 'home', $type = false, $param = false
 		}
 		return $return;
 	}
@@ -404,7 +424,7 @@ class XMLSitemapFeed {
 								) );
 
 				if ( isset($lastcomment[0]->comment_date_gmt) )
-					if ( mysql2date( 'U', $lastcomment[0]->comment_date_gmt ) > mysql2date( 'U', $postmodified ) )
+					if ( mysql2date( 'U', $lastcomment[0]->comment_date_gmt, false ) > mysql2date( 'U', $postmodified, false ) )
 						$postmodified = $lastcomment[0]->comment_date_gmt;
 		
 				$this->postmodified[$post->ID] = $postmodified;
@@ -425,14 +445,14 @@ class XMLSitemapFeed {
 						'update_post_term_cache' => false, 
 						'update_cache' => false,
 						'tax_query' => array(
-								array(
-									'taxonomy' => $term->taxonomy,
-									'field' => 'slug',
-									'terms' => $term->slug
+									array(
+										'taxonomy' => $term->taxonomy,
+										'field' => 'slug',
+										'terms' => $term->slug
+									)
 								)
 							)
-						)
-					);
+						);
 					$this->termmodified[$term->term_id] = isset($posts[0]->post_date_gmt) ? $posts[0]->post_date_gmt : '';
 				}
 				return $this->termmodified[$term->term_id];
@@ -441,13 +461,14 @@ class XMLSitemapFeed {
 				return get_lastdate( 'gmt', $obj->object_type );
 				// uses get_lastdate() function defined in xml-sitemap/hacks.php !
 				// which is a shortcut: returns last post date, not last modified date... 
-				// TODO find the long way around (take tax type, get all terms, 
-				// do tax_query with all terms for one post and get its lastmod date)
+				// TODO find the long way home: take tax type, get all terms, 
+				// do tax_query with all terms for one post and get its lastmod date 
+				// ... or can 'terms' in tax_query be empty?
 			}
 
 		else :
 
-			return '0000-00-00 00:00:00';
+			return '';
 
 		endif;
 	}
@@ -504,7 +525,7 @@ class XMLSitemapFeed {
 		if (empty($modified))
 			return 'weekly';
 		
-		$lastactivityage = ( gmdate('U') - mysql2date( 'U', $modified ) ); // post age
+		$lastactivityage = ( gmdate('U') - mysql2date( 'U', $modified, false ) ); // post age
 	 	
 	 	if ( ($lastactivityage/86400) < 1 ) { // last activity less than 1 day old 
 	 		$changefreq = 'hourly';
@@ -535,15 +556,15 @@ class XMLSitemapFeed {
 			
 			} elseif ( !empty($options[$post->post_type]['dynamic_priority']) ) {
 
-				$post_modified = mysql2date('U',$post->post_modified_gmt);
+				$post_modified = mysql2date('U',$post->post_modified_gmt, false);
 		
 				if ( empty($this->lastmodified) )
-					$this->lastmodified = mysql2date('U',get_lastmodified('GMT',$post->post_type)); 
+					$this->lastmodified = mysql2date('U',get_lastmodified('GMT',$post->post_type),false); 
 					// last posts or page modified date in Unix seconds 
 					// uses get_lastmodified() function defined in xml-sitemap/hacks.php !
 			
 				if ( empty($this->firstdate) )
-					$this->firstdate = mysql2date('U',get_firstdate('GMT',$post->post_type)); 
+					$this->firstdate = mysql2date('U',get_firstdate('GMT',$post->post_type),false); 
 					// uses get_firstdate() function defined in xml-sitemap/hacks.php !
 			
 				if ( isset($options[$post->post_type]['priority']) )
@@ -639,7 +660,7 @@ class XMLSitemapFeed {
 				}
 			}
 		}
-		
+
 		return apply_filters( 'xmlsf_allowed_domain', $return );
 	}
 
@@ -782,17 +803,21 @@ class XMLSitemapFeed {
 				add_filter('posts_where', array($this, 'filter_news_where'), 10, 1);
 
 				// modify request parameters
-				$types_arr = explode(',',XMLSF_NEWS_POST_TYPE);
-				$request['post_type'] = (in_array('any',$types_arr)) ? 'any' : $types_arr;
+				$defaults = $this->defaults('news_tags');
+				$options = $this->get_option('news_tags');
 				
-				// include post status private at some point?
-				// $request['post_status'] = array( 'publish', 'private' );
-				// for now only publish:
-				$request['post_status'] = 'publish';
+				// post type
+				if ( isset($options['post_type']) && is_array($options['post_type']) )
+					$request['post_type'] = $options['post_type'];
+				else
+					$request['post_type'] = isset($defaults['post_type']) ? $defaults['post_type'] : 'post';
+
+				// categories
+				if ( isset($options['categories']) && is_array($options['categories']) )
+							$request['cat'] = implode(',',$options['categories']);				
 				
+				$request['post_status'] = 'publish';				
 				$request['no_found_rows'] = true;
-				$request['update_post_meta_cache'] = false;
-				//$request['update_post_term_cache'] = false; // << TODO test: can we disable or do we need this for terms?
 
 				return $request;
 			}
@@ -817,12 +842,7 @@ class XMLSitemapFeed {
 						$request['orderby'] = 'modified';
 						$request['lang'] = '';
 						$request['no_found_rows'] = true;
-						$request['update_post_meta_cache'] = false;
 						$request['update_post_term_cache'] = false;
-						/*if ('attachment' == $post_type['name']) {
-							$request['post_status'] = 'inherit';
-							$request['post_mime_type'] = 'image,audio'; // ,video,audio
-						}*/
 
 						return $request;
 					}
@@ -839,8 +859,9 @@ class XMLSitemapFeed {
 						$request['taxonomy'] = $taxonomy;
 						$request['lang'] = '';
 						$request['no_found_rows'] = true;
-						$request['update_post_meta_cache'] = false;
+						$request['cache_results'] = false;
 						$request['update_post_term_cache'] = false;
+						$request['update_post_meta_cache'] = false;
 						$request['post_status'] = 'publish';
 
 						return $request;
@@ -969,7 +990,7 @@ class XMLSitemapFeed {
 					foreach ( $sitemaps as $pretty )
 						if ( $this->ping( $data['uri'].urlencode(trailingslashit(get_bloginfo('url')) . $pretty) ) ) {
 							$pong = $this->get_pong();
-							$pong[$se][$pretty] = mysql2date('Y-m-d H:i:s', 'now', false);
+							$pong[$se][$pretty] = date('Y-m-d H:i:s','now');
 							update_option($this->prefix.'pong',$pong);
 						}
 		}
@@ -1061,81 +1082,88 @@ class XMLSitemapFeed {
 	
 	public function register_gn_taxonomies() 
 	{
-			register_taxonomy( 'gn-genre', 'post', array(
-				'hierarchical' => true,
-				'labels' => array(
-						'name' => __('Google News Genres','xml-sitemap-feed'),
-						'singular_name' => __('Google News Genre','xml-sitemap-feed'),
-						//'menu_name' => __('GN Genres','xml-sitemap-feed'),
-					),
-				'public' => false,
-				'show_ui' => true,
-				'show_tagcloud' => false,
-				'query_var' => false,
-				'capabilities' => array( // prevent creation / deletion
-						'manage_terms' => 'nobody',
-						'edit_terms' => 'nobody',
-						'delete_terms' => 'nobody',
-						'assign_terms' => 'edit_posts'
-					)
-			));
+		$defaults = $this->defaults('news_tags');
+		$options = $this->get_option('news_tags');
 
-			register_taxonomy( 'gn-location-3', 'post', array(
-				'hierarchical' => false,
-				'labels' => array(
-						'name' => __('Google News Country','xml-sitemap-feed'),
-						//'menu_name' => __('GN Genres','xml-sitemap-feed'),
-						'separate_items_with_commas' => __('Only one allowed. Must be consistent with other Google News location entities (if set).','xml-sitemap-feed'),
-					),
-				'public' => false,
-				'show_ui' => true,
-				'show_tagcloud' => false,
-				'query_var' => false,
-				'capabilities' => array( // prevent creation / deletion
-						'manage_terms' => 'nobody',
-						'edit_terms' => 'nobody',
-						'delete_terms' => 'nobody',
-						'assign_terms' => 'edit_posts'
-					)
-			));
+		$post_types = !empty($options['post_type']) ? $options['post_type'] : $defaults['post_type'];
+		if ($post_types=='any')
+			$post_types = get_post_types(array('public'=>true));
 
-			register_taxonomy( 'gn-location-2', 'post', array(
-				'hierarchical' => false,
-				'labels' => array(
-						'name' => __('Google News State/Province','xml-sitemap-feed'),
-						//'menu_name' => __('GN Genres','xml-sitemap-feed'),
-						'separate_items_with_commas' => __('Only one allowed. Must be consistent with other Google News location entities (if set).','xml-sitemap-feed'),
-					),
-				'public' => false,
-				'show_ui' => true,
-				'show_tagcloud' => false,
-				'query_var' => false,
-				'capabilities' => array( // prevent creation / deletion
-						'manage_terms' => 'nobody',
-						'edit_terms' => 'nobody',
-						'delete_terms' => 'nobody',
-						'assign_terms' => 'edit_posts'
-					)
-			));
+		register_taxonomy( 'gn-genre', $post_types, array(
+			'hierarchical' => true,
+			'labels' => array(
+					'name' => __('Google News Genres','xml-sitemap-feed'),
+					'singular_name' => __('Google News Genre','xml-sitemap-feed'),
+					//'menu_name' => __('GN Genres','xml-sitemap-feed'),
+				),
+			'public' => false,
+			'show_ui' => true,
+			'show_tagcloud' => false,
+			'query_var' => false,
+			'capabilities' => array( // prevent creation / deletion
+					'manage_terms' => 'nobody',
+					'edit_terms' => 'nobody',
+					'delete_terms' => 'nobody',
+					'assign_terms' => 'edit_posts'
+				)
+		));
 
-			register_taxonomy( 'gn-location-1', 'post', array(
-				'hierarchical' => false,
-				'labels' => array(
-						'name' => __('Google News City','xml-sitemap-feed'),
-						//'menu_name' => __('GN Genres','xml-sitemap-feed'),
-						'separate_items_with_commas' => __('Only one allowed. Must be consistent with other Google News location entities (if set).','xml-sitemap-feed'),
-					),
-				'public' => false,
-				'show_ui' => true,
-				'show_tagcloud' => false,
-				'query_var' => false,
-				'capabilities' => array( // prevent creation / deletion
-						'manage_terms' => 'nobody',
-						'edit_terms' => 'nobody',
-						'delete_terms' => 'nobody',
-						'assign_terms' => 'edit_posts'
-					)
-			));
+		register_taxonomy( 'gn-location-3', $post_types, array(
+			'hierarchical' => false,
+			'labels' => array(
+					'name' => __('Google News Country','xml-sitemap-feed'),
+					//'menu_name' => __('GN Genres','xml-sitemap-feed'),
+					'separate_items_with_commas' => __('Only one allowed. Must be consistent with other Google News location entities (if set).','xml-sitemap-feed'),
+				),
+			'public' => false,
+			'show_ui' => true,
+			'show_tagcloud' => false,
+			'query_var' => false,
+			'capabilities' => array( // prevent creation / deletion
+					'manage_terms' => 'nobody',
+					'edit_terms' => 'nobody',
+					'delete_terms' => 'nobody',
+					'assign_terms' => 'edit_posts'
+				)
+		));
+
+		register_taxonomy( 'gn-location-2', $post_types, array(
+			'hierarchical' => false,
+			'labels' => array(
+					'name' => __('Google News State/Province','xml-sitemap-feed'),
+					//'menu_name' => __('GN Genres','xml-sitemap-feed'),
+					'separate_items_with_commas' => __('Only one allowed. Must be consistent with other Google News location entities (if set).','xml-sitemap-feed'),
+				),
+			'public' => false,
+			'show_ui' => true,
+			'show_tagcloud' => false,
+			'query_var' => false,
+			'capabilities' => array( // prevent creation / deletion
+					'manage_terms' => 'nobody',
+					'edit_terms' => 'nobody',
+					'delete_terms' => 'nobody',
+					'assign_terms' => 'edit_posts'
+				)
+		));
+
+		register_taxonomy( 'gn-location-1', $post_types, array(
+			'hierarchical' => false,
+			'labels' => array(
+					'name' => __('Google News City','xml-sitemap-feed'),
+					//'menu_name' => __('GN Genres','xml-sitemap-feed'),
+					'separate_items_with_commas' => __('Only one allowed. Must be consistent with other Google News location entities (if set).','xml-sitemap-feed'),
+				),
+			'public' => false,
+			'show_ui' => true,
+			'show_tagcloud' => false,
+			'query_var' => false,
+			'capabilities' => array( // prevent creation / deletion
+					'manage_terms' => 'nobody',
+					'edit_terms' => 'nobody',
+					'delete_terms' => 'nobody',
+					'assign_terms' => 'edit_posts'
+				)
+		));
 
 	}
 	

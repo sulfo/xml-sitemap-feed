@@ -7,9 +7,10 @@
 
 status_header('200'); // force header('HTTP/1.1 200 OK') even for sites without posts
 header('Content-Type: text/xml; charset=' . get_bloginfo('charset'), true);
+header('X-Robots-Tag: noindex, follow', true);
 
 echo '<?xml version="1.0" encoding="' . get_bloginfo('charset') . '"?>
-<?xml-stylesheet type="text/xsl" href="' . plugins_url('xsl/sitemap.xsl.php',__FILE__) . '?ver=' . XMLSF_VERSION . '"?>
+<?xml-stylesheet type="text/xsl" href="' . plugins_url('xsl/sitemap.xsl',__FILE__) . '?ver=' . XMLSF_VERSION . '"?>
 <!-- generated-on="' . date('Y-m-d\TH:i:s+00:00') . '" -->
 <!-- generator="XML & Google News Sitemap Feed plugin for WordPress" -->
 <!-- generator-url="http://status301.net/wordpress-plugins/xml-sitemap-feed/" -->
