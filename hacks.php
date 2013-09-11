@@ -4,144 +4,6 @@
  * ------------------------------------- */
 
 /**
- * Retrieve the date that the last page was published.
- *
- * The server timezone is the default and is the difference between GMT and
- * server time. The 'blog' value is the date when the last post was posted. The
- * 'gmt' is when the last post was posted in GMT formatted date.
- *
- * Variation of get_lastpostdate defined in wp-includes/post.php since 0.71
- *
- * @uses apply_filters() Calls 'get_lastpagedate' filter
- *
- * @param string $timezone The location to get the time. Can be 'gmt', 'blog', or 'server'.
- * @return string The date of the last post.
-
-if( !function_exists('get_lastpagedate') ) {
- function get_lastpagedate($timezone = 'server') {	
-	return apply_filters( 'get_lastpagedate', _get_time( $timezone, 'date', 'page' ), $timezone );
- }
-} */
-
-/**
- * Retrieve last page modified date depending on timezone.
- *
- * The server timezone is the default and is the difference between GMT and
- * server time. The 'blog' value is just when the last post was modified. The
- * 'gmt' is when the last post was modified in GMT time.
- *
- * Variation of get_lastpostmodified defined in wp-includes/post.php since 1.2.0
- *
- * @uses apply_filters() Calls 'get_lastpagemodified' filter
- *
- * @param string $timezone The location to get the time. Can be 'gmt', 'blog', or 'server'.
- * @return string The date the post was last modified.
-
-if( !function_exists('get_lastpagemodified') ) {
- function get_lastpagemodified($timezone = 'server') {
-	$lastpagemodified = _get_time( $timezone, 'modified', 'page' );
-
-	$lastpagedate = get_lastpagedate($timezone);
-	if ( $lastpagedate > $lastpagemodified )
-		$lastpagemodified = $lastpagedate;
-
-	return apply_filters( 'get_lastpagemodified', $lastpagemodified, $timezone );
- }
-} */
-
-/**
- * Retrieve the date that the first post was published.
- *
- * The server timezone is the default and is the difference between GMT and
- * server time. The 'blog' value is the date when the last post was posted. The
- * 'gmt' is when the last post was posted in GMT formatted date.
- *
- * Reverse of get_lastpostdate defined in wp-includes/post.php since 0.71
- *
- * @uses apply_filters() Calls 'get_firstpostdate' filter
- *
- * @param string $timezone The location to get the time. Can be 'gmt', 'blog', or 'server'.
- * @return string The date of the last post.
-
-if( !function_exists('get_firstpostdate') ) {
- function get_firstpostdate($timezone = 'server') {
-	return apply_filters( 'get_firstpostdate', _get_time( $timezone, 'date', 'post', 'first' ), $timezone );
- }
-} */
-
-/**
- * Retrieve the date that the first page was published.
- *
- * The server timezone is the default and is the difference between GMT and
- * server time. The 'blog' value is the date when the last post was posted. The
- * 'gmt' is when the last post was posted in GMT formatted date.
- *
- * Adaptation of get_firstpostdate defined in this file
- *
- * @uses apply_filters() Calls 'get_firstpagedate' filter
- *
- * @param string $timezone The location to get the time. Can be 'gmt', 'blog', or 'server'.
- * @return string The date of the last post.
-
-if( !function_exists('get_firstpagedate') ) {
- function get_firstpagedate($timezone = 'server') {
-	return apply_filters( 'get_firstpagedate', _get_time( $timezone, 'date', 'page', 'first' ), $timezone );
- }
-} */
-
-/**
- * Retrieve first post modified date depending on timezone.
- *
- * The server timezone is the default and is the difference between GMT and
- * server time. The 'blog' value is the date when the last post was posted. The
- * 'gmt' is when the last post was posted in GMT formatted date.
- *
- * Reverse of get_lastpostmodified defined in wp-includes/post.php since WP 1.2.0
- *
- * @uses apply_filters() Calls 'get_firstpostmodified' filter
- *
- * @param string $timezone The location to get the time. Can be 'gmt', 'blog', or 'server'.
- * @return string The date of the oldest modified post.
-
-if( !function_exists('get_firstpostmodified') ) {
- function get_firstpostmodified($timezone = 'server') {
-	$firstpostmodified = _get_time( $timezone, 'modified', 'post', 'first' );
-
-	$firstpostdate = get_firstpostdate($timezone);
-	if ( $firstpostdate > $firstpostmodified )
-		$firstpostmodified = $firstpostdate;
-
-	return apply_filters( 'get_firstpostmodified', $firstpostmodified, $timezone );
- }
-} */
-
-/**
- * Retrieve first page modified date depending on timezone.
- *
- * The server timezone is the default and is the difference between GMT and
- * server time. The 'blog' value is the date when the last post was posted. The
- * 'gmt' is when the last post was posted in GMT formatted date.
- *
- * Variation of get_firstpostmodified defined in this file
- *
- * @uses apply_filters() Calls 'get_firstpagemodified' filter
- *
- * @param string $timezone The location to get the time. Can be 'gmt', 'blog', or 'server'.
- * @return string The date of the oldest modified page.
-
-if( !function_exists('get_firstpagemodified') ) {
- function get_firstpagemodified($timezone = 'server') {
-	$firstpagemodified = _get_time( $timezone, 'modified', 'page', 'first' );
-
-	$firstpagedate = get_firstpagedate($timezone);
-	if ( $firstpagedate > $firstpagemodified )
-		$firstpagemodified = $firstpagedate;
-
-	return apply_filters( 'get_firstpagemodified', $firstpagemodified, $timezone );
- }
-} */
-
-/**
  * Retrieve the date that the first post/page was published.
  *
  * The server timezone is the default and is the difference between GMT and
@@ -159,30 +21,6 @@ if( !function_exists('get_firstdate') ) {
 	return apply_filters( 'get_firstdate', _get_time( $timezone, 'date', $post_type, 'first' ), $timezone );
  }
 }
-
-/**
- * Retrieve first post/page modified date depending on timezone.
- *
- * The server timezone is the default and is the difference between GMT and
- * server time. The 'blog' value is the date when the last post was posted. The
- * 'gmt' is when the last post was posted in GMT formatted date.
- *
- * @uses apply_filters() Calls 'get_firstmodified' filter
- *
- * @param string $timezone The location to get the time. Can be 'gmt', 'blog', or 'server'.
- * @return string The date of the oldest modified post or page.
-
-if( !function_exists('get_firstmodified') ) {
- function get_firstmodified($timezone = 'server') {
-	$firstmodified = _get_time( $timezone, 'modified', 'any', 'first' );
-
-	$firstdate = get_firstdate($timezone);
-	if ( $firstdate > $firstmodified )
-		$firstmodified = $firstdate;
-
-	return apply_filters( 'get_firstmodified', $firstmodified, $timezone );
- }
-} */
 
 /**
  * Retrieve the date that the last post/page was published.
@@ -227,12 +65,6 @@ if( !function_exists('get_lastdate') ) {
  */
 if( !function_exists('get_lastmodified') ) {
  function get_lastmodified($timezone = 'server', $post_type = 'any', $m = false) {
-	//$lastmodified = _get_time( $timezone, 'modified', $post_type, 'last', $m );
-
-	//$lastdate = get_lastdate($timezone, $post_type, $m);
-	//if ( $lastdate > $lastmodified )
-	//	$lastmodified = $lastdate;
-
 	return apply_filters( 'get_lastmodified', _get_time( $timezone, 'modified', $post_type, 'last', $m ), $timezone );
  }
 }
@@ -313,35 +145,3 @@ if( !function_exists('_get_time') ) {
 	return $date;
  }
 }
-
-/* By gunter [dot] sammet [at] gmail [dot] com http://www.php.net/manual/en/function.htmlentities.php#88169 */
-$entity_custom_from = false; 
-$entity_custom_to = false;
-function html_entity_decode_encode_rss($data) {
-	global $entity_custom_from, $entity_custom_to;
-	
-	if(!is_array($entity_custom_from) || !is_array($entity_custom_to)) {
-		$array_position = 0;
-		foreach (get_html_translation_table(HTML_ENTITIES) as $key => $value) {
-			switch ($value) {
-				case '&nbsp;':
-					break;
-				case '&gt;':
-				case '&lt;':
-				case '&quot;':
-				case '&apos;':
-				case '&amp;':
-					$entity_custom_from[$array_position] = $key; 
-					$entity_custom_to[$array_position] = $value; 
-					$array_position++; 
-					break; 
-				default: 
-					$entity_custom_from[$array_position] = $value; 
-					$entity_custom_to[$array_position] = $key; 
-					$array_position++; 
-			} 
-		}
-	}
-	return str_replace($entity_custom_from, $entity_custom_to, $data); 
-}
-

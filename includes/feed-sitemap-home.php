@@ -44,4 +44,4 @@ foreach ( $xmlsf->get_home_urls() as $url ) {
 }
 ?>
 </urlset>
-<?php $xmlsf->_e_usage(); ?>
+<?php $xmlsf->_e_usage();

@@ -50,4 +50,4 @@ if ( $terms ) :
 endif; 
 
 ?></urlset>
-<?php $xmlsf->_e_usage(); ?>
+<?php $xmlsf->_e_usage();

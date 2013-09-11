@@ -80,4 +80,4 @@ foreach ($custom_sitemaps as $url) {
 <?php 
 }
 ?></sitemapindex>
-<?php $xmlsf->_e_usage(); ?>
+<?php $xmlsf->_e_usage(); 

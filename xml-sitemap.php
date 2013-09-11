@@ -124,4 +124,3 @@ include_once(XMLSF_PLUGIN_DIR . '/hacks.php');
 
 if ( class_exists('XMLSitemapFeed') || include_once( XMLSF_PLUGIN_DIR . '/includes/core.php' ) )
 	$xmlsf = new XMLSitemapFeed();
-

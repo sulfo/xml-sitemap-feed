@@ -90,4 +90,4 @@ if ( have_posts() ) :
     endwhile; 
 endif; 
 ?></urlset>
-<?php $xmlsf->_e_usage(); ?>
+<?php $xmlsf->_e_usage(); 

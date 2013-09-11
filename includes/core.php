@@ -120,36 +120,39 @@ class XMLSitemapFeed {
 		// news sitemap settings
 		$this->defaults['news_sitemap'] = array();
 
-		// ping search engines
+		// search engines to ping
 		$this->defaults['ping'] = array(
 					'google' => array (
 						'active' => '1',
 						'uri' => 'http://www.google.com/webmasters/tools/ping?sitemap=',
-						'type' => 'GET'
+						'type' => 'GET',
+						'pong' => ''
 						),
 					'bing' => array (
 						'active' => '1',
 						'uri' => 'http://www.bing.com/ping?sitemap=',
-						'type' => 'GET'
+						'type' => 'GET',
+						'pong' => ''
 						),
 					'yandex' => array (
 						'active' => '',
 						'uri' => 'http://ping.blogs.yandex.ru/RPC2',
-						'type' => 'RPC'
+						'type' => 'RPC',
+						'pong' => ''
 						),
 					'baidu' => array (
 						'active' => '',
 						'uri' => 'http://ping.baidu.com/ping/RPC2',
-						'type' => 'RPC'
+						'type' => 'RPC',
+						'pong' => ''
 						),
 					'others' => array (
 						'active' => '1',
 						'uri' => 'http://rpc.pingomatic.com/',
-						'type' => 'RPC'
+						'type' => 'RPC',
+						'pong' => ''
 						),
 					);
-
-		$this->defaults['pong'] = array(); // for storing last ping timestamps and status
 
 		// robots
 		$this->defaults['robots'] = "Disallow: */xmlrpc.php\nDisallow: */wp-*.php\nDisallow: */trackback/\nDisallow: *?wptheme=\nDisallow: *?comments=\nDisallow: *?replytocom\nDisallow: */comment-page-\nDisallow: *?s=\nDisallow: */wp-content/\nAllow: */wp-content/uploads/\n";
@@ -228,15 +231,7 @@ class XMLSitemapFeed {
 		// make sure it's an array we are returning
 		return (!empty($return)) ? (array)$return : array();
 	}
-	
-	public function get_pong() 
-	{		
-		$return = $this->get_option('pong');
 		
-		// make sure it's an array we are returning
-		return (!empty($return)) ? (array)$return : array();
-	}
-	
 	public function disabled_post_types() 
 	{		
 		return $this->disabled_post_types;
@@ -973,34 +968,61 @@ class XMLSitemapFeed {
 
 	public function do_pings($new_status, $old_status, $post) 
 	{
-		// first check if we've got a post type that is included in our sitemap
-		foreach($this->get_option('post_types') as $post_type)
-			if( $post->post_type == $post_type['name'] ) {
-				$active = true; // got a live one, green light is on.
-				break;
-			}
-		if ( !isset($active) )
-			return;
-		
-		if ( $old_status != 'publish' && $new_status == 'publish' ) {
-			// Post is published from any other status
-			$sitemaps = $this->get_sitemaps();
-			foreach ($this->get_ping() as $se => $data)
-				if( !empty($data['active']) && '1' == $data['active'])
-					foreach ( $sitemaps as $pretty )
-						if ( $this->ping( $data['uri'].urlencode(trailingslashit(get_bloginfo('url')) . $pretty) ) ) {
-							$pong = $this->get_pong();
-							$pong[$se][$pretty] = date('Y-m-d H:i:s','now');
-							update_option($this->prefix.'pong',$pong);
+		$sitemaps = $this->get_sitemaps();
+		$defaults = $this->defaults('ping');
+		$to_ping = $this->get_ping();
+
+		// first check if news sitemap is set
+		if ( !empty($sitemaps['sitemap-news']) ) {
+			// then check if we've got a post type that is included in our news sitemap
+			$news_tags = $this->get_option('news_tags');
+			$active = false;
+			if ( !empty($news_tags['post_type']) )
+				foreach((array)$news_tags['post_type'] as $post_type)
+					if( $post->post_type == $post_type ) {
+						// TODO: verify if limited by categories and we're in the correct category!!!
+						$active = true; // got a live one, green light is on.
+						break;
+					}
+			if ( $active ) {
+				if ( $old_status != 'publish' && $new_status == 'publish' ) {
+					// Post is published from any other status
+					foreach ($to_ping as $se => $data) {
+						if( !empty($data['active']) && !empty($defaults[$se]['type']) && $defaults[$se]['type']=='GET') {
+							if ( $this->ping( $data['uri'].urlencode(trailingslashit(get_bloginfo('url')) . $sitemaps['sitemap-news']) ) ) {
+								$to_ping[$se]['pong'][$sitemaps['sitemap-news']] = date('Y-m-d H:i:s');
+							}
 						}
+					}
+				}
+			}
 		}
-		/*
-		if ( $old_status == 'publish' && $new_status == 'publish' ) {
-			// Post is updated
-			// TODO make pinging in this case optional ... later, maybe
+
+		// first check if regular sitemap is set
+		if ( !empty($sitemaps['sitemap']) ) {
+			// then check if we've got a post type that is included in our sitemap
+			$active = false;
+			foreach($this->get_option('post_types') as $post_type)
+				if( $post->post_type == $post_type['name'] ) {
+					// TODO: verify if "exclude from sitemap" is not checked!!!
+					$active = true; // got a live one, green light is on.
+					break;
+				}
+			if ( $active ) {
+				if ( $old_status != 'publish' && $new_status == 'publish' ) {
+					// Post is published from any other status
+					foreach ($to_ping as $se => $data) {
+						if( !empty($data['active']) && !empty($defaults[$se]['type']) && $defaults[$se]['type']=='GET') {
+							if ( $this->ping( $data['uri'].urlencode(trailingslashit(get_bloginfo('url')) . $sitemaps['sitemap']) ) ) {
+								$to_ping[$se]['pong'][$sitemaps['sitemap']] = date('Y-m-d H:i:s');
+							}
+						}
+					}
+				}
+			}
 		}
-		*/	
-		// see more on http://codex.wordpress.org/Post_Status_Transitions
+
+		update_option($this->prefix.'ping',$to_ping);
 	}
 
 	/**
