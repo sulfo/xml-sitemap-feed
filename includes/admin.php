@@ -643,7 +643,7 @@ jQuery( document ).ready( function() {
 	//sanitize callback functions
 
 	public function sanitize_robots_settings($new) {
-		return trim(strip_tags($new));
+		return trim(strip_tags((string)$new));
 	}
 	
 	public function sanitize_sitemaps_settings($new) {
@@ -714,7 +714,7 @@ jQuery( document ).ready( function() {
 	public function sanitize_custom_sitemaps_settings($new) {
 		$old = parent::get_custom_sitemaps();
 		$callback = create_function('$a','return filter_var($a,FILTER_VALIDATE_URL);');
-		$input_arr = explode("\n",trim(strip_tags($new)));
+		$input_arr = explode("\n",trim(strip_tags((string)$new)));
 		$sanitized = array();
 
 		foreach ($input_arr as $line) {
@@ -728,7 +728,7 @@ jQuery( document ).ready( function() {
 
 	public function sanitize_urls_settings($new) {
 		$old = parent::get_urls();
-		$input_arr = explode("\n",trim(strip_tags($new)));
+		$input_arr = explode("\n",trim(strip_tags((string)$new)));
 		$sanitized = array();
 		$callback = create_function('$a','return filter_var($a,FILTER_VALIDATE_URL) || is_numeric($a);');
 
@@ -760,7 +760,7 @@ jQuery( document ).ready( function() {
 
 	public function sanitize_domains_settings($new) {
 		$default = parent::domain();
-		$input = explode("\n",trim(strip_tags($new)));
+		$input = explode("\n",trim(strip_tags((string)$new)));
 		$sanitized = array();
 
 		foreach ($input as $line) {
