@@ -254,10 +254,9 @@ class XMLSitemapFeed {
 
 	public function have_post_types() 
 	{		
-		$post_types = $this->get_option('post_types');
 		$return = array();
 
-		foreach ( $post_types as $type => $values ) {
+		foreach ( $this->get_post_types() as $type => $values ) {
 			if(!empty($values['active'])) {
 				$count = wp_count_posts( $values['name'] );
 				if ($count->publish > 0) {
@@ -367,7 +366,7 @@ class XMLSitemapFeed {
 
 	public function do_tags( $type = 'post' ) 
 	{
-		$return = $this->get_option('post_types');
+		$return = $this->get_post_types();
 
 		// make sure it's an array we are returning
 		return ( isset($return[$type]) && !empty($return[$type]['tags']) ) ? (array)$return[$type]['tags'] : array();
@@ -409,7 +408,7 @@ class XMLSitemapFeed {
 
 			if ( empty($this->postmodified[$post->ID]) ) {
 				$postmodified = get_post_modified_time( 'Y-m-d H:i:s', true, $post->ID );
-				$options = $this->get_option('post_types');
+				$options = $this->get_post_types();
 
 				if( !empty($options[$post->post_type]['update_lastmod_on_comments']) )
 					$lastcomment = get_comments( array(
@@ -476,7 +475,7 @@ class XMLSitemapFeed {
 				$options = $this->get_option('news_tags');
 				$which = isset($options['image']) ? $options['image'] : '';
 			} else {
-				$options = $this->get_option('post_types');
+				$options = $this->get_post_types();
 				$which = isset($options[$post->post_type]['tags']['image']) ? $options[$post->post_type]['tags']['image'] : '';
 			}
 			if('attached' == $which) {
@@ -541,7 +540,7 @@ class XMLSitemapFeed {
 	{
 		if ( 'post_type' == $sitemap ) :
 			global $post;
-			$options = $this->get_option('post_types');
+			$options = $this->get_post_types();
 			$defaults = $this->defaults('post_types');
 			$priority_meta = get_metadata('post', $post->ID, '_xmlsf_priority' , true);
 		
@@ -1002,7 +1001,7 @@ class XMLSitemapFeed {
 		if ( !empty($sitemaps['sitemap']) ) {
 			// then check if we've got a post type that is included in our sitemap
 			$active = false;
-			foreach($this->get_option('post_types') as $post_type)
+			foreach($this->get_post_types() as $post_type)
 				if( $post->post_type == $post_type['name'] ) {
 					// TODO: verify if "exclude from sitemap" is not checked!!!
 					$active = true; // got a live one, green light is on.
