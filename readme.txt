@@ -292,6 +292,7 @@ Google News Sitemap: limit posts to certain categories. Some (query) optimizatio
 * Static sitemap stylesheets
 * DB query streamlining
 * BUGFIX: fatal error on . (dot) as category base in permalinks
+* BIGFIX: PHP Strict notices
 
 = 4.3.2 =
 * BUGFIX: html esc / filter image title and caption tags
