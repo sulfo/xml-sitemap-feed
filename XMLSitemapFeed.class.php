@@ -22,6 +22,8 @@ class XMLSitemapFeed {
 				'post_types' => array('page','post'),
 				'taxonomies' => array('category','post_tag'),
 				);
+				
+	private $do_news_feed = true;
 	
 	private $do_news_tags = array('post'); // TODO replace by get_option + defaults['news_tags']
 	
@@ -123,13 +125,14 @@ class XMLSitemapFeed {
 							'default' => '',
 							//'class' => '', // used for text fields
 							'description' => '',
-							//'sanitize_callback' => 'functionname'
+							'sanitize_callback' => ''//'functionname'
 							),
 						'option2' => array(
 							'label' => 'Test 2',
 							'type' => 'function', // select, function, checkbox, text, number, hidden...
 							'function' => 'test',
 							'description' => 'Test 2 description',
+							'sanitize_callback' => ''//'functionname'
 							)
 		
 					);
@@ -302,7 +305,7 @@ error_log('called test function with parameter: ' . print_r($args, true));
 		// hook for filter 'xml_sitemap_url' provides an array here and MUST get an array returned
 		//$sitemap_array = apply_filters('xml_sitemap_url',$this->sitemaps);
 
-		echo "\n# XML & Google News Sitemap Feeds - version ".XMLSF_VERSION." (http://4visions.nl/wordpress-plugins/xml-sitemap-feed/)";
+		echo "\n# XML & Google News Sitemap Feeds - version ".XMLSF_VERSION." (http://status301.net/wordpress-plugins/xml-sitemap-feed/)";
 
 		if ( !empty($this->sitemaps) )
 			foreach ( $this->sitemaps as $url )
@@ -339,7 +342,7 @@ error_log('called test function with parameter: ' . print_r($args, true));
 		if (pathinfo($request, PATHINFO_EXTENSION)) {
 			return untrailingslashit($request);
 		}
-		return trailingslashit($request);
+		return $request; // trailingslashit($request);
 	}
 
 	/**
@@ -427,6 +430,10 @@ error_log('called test function with parameter: ' . print_r($args, true));
 			}
 
 			if ( $request['feed'] == $this->news_name ) {
+				// disable caching
+				define( 'DONOTCACHEPAGE', 1 ); // wp super cache -- or does super cache always clear feeds after new posts??
+				// TODO w3tc
+				
 				// setup actions and filters
 				add_action('do_feed_'.$this->news_name, array($this, 'load_template_news'), 10, 1);
 				add_filter( 'post_limits', array($this, 'filter_news_limits') );
