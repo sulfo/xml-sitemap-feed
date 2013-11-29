@@ -59,6 +59,7 @@ Please read the FAQ's for info on how to get your articles listed on Google News
 = Translations =
 
 - **Dutch** * R.A. van Hagen http://status301.net (version 4.4)
+- **Spanish** * Andrew Kurtis - WebHostingHub Support http://www.webhostinghub.com/ (version 4.3.2)
 - **French** * R.A. van Hagen http://status301.net (version 4.2) (improved translation or suggestions welcome)
 - **Indonesian** * Nasrulhaq Muiz http://al-badar.net/ (version 4.2)
 - **Serbian** * WPdiscounts http://wpdiscounts.com/ (version 4.1) 
