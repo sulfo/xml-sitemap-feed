@@ -3,7 +3,7 @@ Contributors: RavanH
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravanhagen%40gmail%2ecom&item_name=XML%20Sitemap%20Feed&item_number=3%2e8&no_shipping=0&tax=0&bn=PP%2dDonationsBF&charset=UTF%2d8&lc=us
 Tags: sitemap, xml sitemap, news sitemap, sitemap.xml, robots.txt, Google, Google News, Yahoo, Bing, , Yandex, Baidu, seo, feed, polylang, image sitemap
 Requires at least: 3.2
-Tested up to: 3.6
+Tested up to: 3.8
 Stable tag: 4.3.2
 
 XML and Google News Sitemaps to feed the hungry spiders. Multisite, WP Super Cache and Polylang compatible.
@@ -59,10 +59,10 @@ Please read the FAQ's for info on how to get your articles listed on Google News
 = Translations =
 
 - **Dutch** * R.A. van Hagen http://status301.net (version 4.4)
-- **Spanish** * Andrew Kurtis - WebHostingHub Support http://www.webhostinghub.com/ (version 4.3.2)
 - **French** * R.A. van Hagen http://status301.net (version 4.2) (improved translation or suggestions welcome)
 - **Indonesian** * Nasrulhaq Muiz http://al-badar.net/ (version 4.2)
 - **Serbian** * WPdiscounts http://wpdiscounts.com/ (version 4.1) 
+- **Spanish** * Andrew Kurtis - WebHostingHub Support http://www.webhostinghub.com/ (version 4.3.2)
 - **Ukrainian** * Cmd Software http://www.cmd-soft.com/ (version 4.0) 
 
 New transtations will be accepted and listed here. See translation instructions under [Other Notes](http://wordpress.org/plugins/xml-sitemap-feed/other_notes/).
