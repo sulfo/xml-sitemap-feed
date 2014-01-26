@@ -693,14 +693,14 @@ jQuery( document ).ready( function() {
 		return $sanitized;
 	}
 
-	private function sanitize_priority($priority, $min = 0, $max = 1) {
-			$priority = (float)$priority;
-			if ($priority < $min || $priority === 0 )
-				return (string)$min;
-			elseif ($priority >= $max)
-				return (string)$max;
+	private function sanitize_priority($priority, $min = 0.0, $max = 1.0) {
+			$priority = floatval(str_replace(",",".",$priority));
+			if ($priority <= (float)$min)
+				return number_format($min,1);
+			elseif ($priority >= (float)$max)
+				return number_format($max,1);
 			else
-				return (string)$priority;
+				return number_format($priority,1);
 	}
 
 	public function sanitize_taxonomies_settings($new) {

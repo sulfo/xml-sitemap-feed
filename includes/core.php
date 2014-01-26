@@ -546,7 +546,7 @@ class XMLSitemapFeed {
 		
 			if ( !empty($priority_meta) || $priority_meta == '0' ) {
 		
-				$priority = $priority_meta;
+				$priority = floatval(str_replace(",",".",$priority_meta));
 			
 			} elseif ( !empty($options[$post->post_type]['dynamic_priority']) ) {
 
@@ -562,9 +562,9 @@ class XMLSitemapFeed {
 					// uses get_firstdate() function defined in xml-sitemap/hacks.php !
 			
 				if ( isset($options[$post->post_type]['priority']) )
-					$priority_value = $options[$post->post_type]['priority'];
+					$priority_value = floatval(str_replace(",",".",$options[$post->post_type]['priority']));
 				else
-					$priority_value = $defaults[$post->post_type]['priority'];
+					$priority_value = floatval($defaults[$post->post_type]['priority']);
 		
 				// reduce by age
 				// NOTE : home/blog page gets same treatment as sticky post
