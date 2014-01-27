@@ -39,7 +39,9 @@ echo '">
 // bloginfo_rss('language') returns improper format so
 // we explode on hyphen and use only first part. 
 // TODO this workaround breaks (simplified) chinese :(
-$language = reset(explode('-', convert_chars(strip_tags(get_bloginfo('language'))) ));	
+$langs = explode('-', convert_chars(strip_tags(get_bloginfo('language'))) );
+$language = reset( $langs );	
+
 if ( empty($language) )
 	$language = 'en';
 

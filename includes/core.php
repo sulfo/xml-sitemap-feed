@@ -576,10 +576,6 @@ class XMLSitemapFeed {
 				if ( $post->comment_count > 0 )
 					$priority = $priority + 0.1 + ( 0.9 - $priority ) * $post->comment_count / wp_count_comments($post->post_type)->approved;
 
-				// and a final trim for cases where we end up above 1 (sticky posts with many comments)
-				if ($priority > 1) 
-					$priority = 1;
-
 			} else {
 
 				$priority = ( isset($options[$post->post_type]['priority']) && is_numeric($options[$post->post_type]['priority']) ) ? $options[$post->post_type]['priority'] : $defaults[$post->post_type]['priority'];
@@ -607,6 +603,14 @@ class XMLSitemapFeed {
 
 		endif;
 		
+		// make sure we're not below zero
+		if ($priority < 0)
+			$priority = 0;
+
+		// and a final trim for cases where we ended up above 1 (sticky posts with many comments)
+		if ($priority > 1)
+			$priority = 1;
+
 		return number_format($priority,1);
 	}
 
