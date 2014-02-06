@@ -67,8 +67,13 @@ if ( have_posts() ) :
 					else 
 						echo apply_filters( 'the_title_xmlsitemap', get_bloginfo('name') ); ?></news:name>
 				<news:language><?php 
-					$lang = reset(get_the_terms($post->ID,'language'));
-					echo (is_object($lang)) ? $lang->slug : $language;  ?></news:language>
+					$lang = get_the_terms($post->ID,'language');
+					if ( is_array($lang) ) {
+						$lang = reset($lang);
+						echo is_object($lang) ? $lang->slug : $language;
+					} else {
+						echo $language; 
+					}  ?></news:language>
 			</news:publication>
 			<news:publication_date><?php 
 				echo mysql2date('Y-m-d\TH:i:s+00:00', $post->post_date_gmt, false); ?></news:publication_date>
@@ -209,10 +214,10 @@ else :
 	<url>
 		<loc><?php 
 			// hook for filter 'xml_sitemap_url' provides a string here and MUST get a string returned
-			$url = apply_filters( 'xml_sitemap_url', trailingslashit(home_url()) );
-			if ( is_string($url) ) 
-				echo esc_url( $url ); 
-			else 
+			//$url = apply_filters( 'xml_sitemap_url', trailingslashit(home_url()) );
+			//if ( is_string($url) ) 
+			//	echo esc_url( $url ); 
+			//else 
 				echo esc_url( trailingslashit(home_url()) ); ?></loc>
 		<lastmod><?php echo mysql2date('Y-m-d\TH:i:s+00:00', $lastmodified_gmt, false); ?></lastmod>
 		<changefreq>daily</changefreq>

@@ -26,9 +26,9 @@
 				<th>Language</th>
 				<th>Genre(s)</th>
 				<th>Keyword(s)</th>
-				<th># Images</th>
+				<th>Image(s)</th>
 				<th>Location</th>
-				<th>Publication Date</th>
+				<th>Date GMT</th>
 			</tr>
 <xsl:variable name="lower" select="'abcdefghijklmnopqrstuvwxyz'"/>
 <xsl:variable name="upper" select="'ABCDEFGHIJKLMNOPQRSTUVWXYZ'"/>
@@ -43,7 +43,7 @@
 				<td><xsl:value-of select="news:news/news:keywords"/></td>
 				<td><xsl:value-of select="count(image:image)"/></td>
 				<td><xsl:value-of select="news:news/news:geo_locations"/></td>
-				<td><xsl:value-of select="concat(substring(news:news/news:publication_date,0,11),concat(' ', substring(news:news/news:publication_date,12,5)))"/></td>
+				<td><xsl:value-of select="concat(substring(news:news/news:publication_date,0,11),concat(' ', substring(news:news/news:publication_date,12,8)))"/>GMT<xsl:value-of select="substring(news:news/news:publication_date,20,6)"/></td>
 			</tr>
 </xsl:for-each>
 		</table>
