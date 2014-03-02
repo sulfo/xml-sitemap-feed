@@ -175,8 +175,8 @@
 		echo '
 		<label><input type="checkbox" name="'.parent::prefix().'sitemaps[reset]" value="1" /> '.
 				__('Clear all XML Sitemap Feed options from the database and start fresh with the default settings.','xml-sitemap-feed').'</label>';
-		echo '
-		<p class="description">'.sprintf(__('Disabling and reenabling the %s plugin will have the same effect.','xml-sitemap-feed'),__('XML Sitemap & Google News Feeds','xml-sitemap-feed')).'</p>';
+//		echo '
+//		<p class="description">'.sprintf(__('Uninstalling and reinstalling the %s plugin will have the same effect.','xml-sitemap-feed'),__('XML Sitemap & Google News Feeds','xml-sitemap-feed')).'</p>';
 	}
 
 	/**

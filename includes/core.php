@@ -1277,7 +1277,8 @@ class XMLSitemapFeed {
 		add_action('transition_post_status', array($this, 'do_pings'), 10, 3); 
 
 		// DE-ACTIVATION
-		register_deactivation_hook( XMLSF_PLUGIN_DIR . '/xml-sitemap.php', array($this, 'clear_settings') );
+		//register_uninstall_hook( XMLSF_PLUGIN_DIR . '/xml-sitemap.php', array($this, 'clear_settings') );
+		// see http://codex.wordpress.org/Function_Reference/register_uninstall_hook for multisite uninstall hook method
 	}
 
 }
