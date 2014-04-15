@@ -792,8 +792,8 @@ class XMLSitemapFeed {
 
 			if ( $request['feed'] == 'sitemap-news' ) {
 				// disable caching
-				define( 'DONOTCACHEPAGE', 1 ); // wp super cache -- or does super cache always clear feeds after new posts??
-				// TODO w3tc
+				define('DONOTCACHEPAGE', true);
+				define('DONOTCACHEDB', true);
 				
 				// setup actions and filters
 				add_action('do_feed_sitemap-news', array($this, 'load_template_news'), 10, 1);

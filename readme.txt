@@ -199,6 +199,12 @@ The Google News sitemap is designed to NOT be cached.
 
 The absolute first thing you need to check is your blogs privacy settings. Go to **Settings > Privacy** and make sure you are **allowing search engines to index your site**. If they are blocked, your sitemap will _not_ be available.
 
+Then, you might want to make sure that there is at least ONE post published. WordPress is known to send 404 status headers with feed requests when there are NO posts. Even though the plugin tries to prevent that, in some cases the wrong status header will get sent anyway and Google Webmaster Tools will report a vague message like:
+
+    We encountered an error while trying to access your Sitemap. 
+    Please ensure your Sitemap follows our guidelines and can be 
+    accessed at the location you provided and then resubmit.
+
 If that did not solve the issue, check the following errors that might be encountered along with their respective solutions:
 
 **404 page instead of my sitemap.xml**
@@ -286,6 +292,7 @@ Google News Sitemap: limit posts to certain categories. Some (query) optimizatio
 == Changelog ==
 
 = 4.4 =
+* Seperate ping for Google News Sitemap
 * Append custom/static sitemaps to the index
 * Include other post types in News Sitemap
 * Optionally limit posts to certain categories in News Sitemap
