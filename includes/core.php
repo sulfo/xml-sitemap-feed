@@ -706,7 +706,7 @@ class XMLSitemapFeed {
 	// add robots.txt rules
 	public function robots_txt($output) 
 	{
-		return $output . $this->get_option('robots') ;
+		return $output . $this->get_option('robots') . "\n\n";
 	}
 	
 	/**
