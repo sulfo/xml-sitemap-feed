@@ -365,11 +365,15 @@ class XMLSitemapFeed {
 	}
 
 	public function do_tags( $type = 'post' ) 
-	{
+	{		
 		$return = $this->get_post_types();
 
 		// make sure it's an array we are returning
-		return ( isset($return[$type]) && !empty($return[$type]['tags']) ) ? (array)$return[$type]['tags'] : array();
+		return ( 
+				is_string($type) && 
+				isset($return[$type]) && 
+				!empty($return[$type]['tags']) 
+				) ? (array)$return[$type]['tags'] : array();
 	}
 	
 	public function is_home($id) {
