@@ -39,9 +39,8 @@ echo '">
 // bloginfo_rss('language') returns improper format so
 // we explode on hyphen and use only first part. 
 // TODO this workaround breaks (simplified) chinese :(
-$language = reset(explode('-', convert_chars(strip_tags(get_bloginfo('language'))) ));	
-if ( empty($language) )
-	$language = 'en';
+$language = explode('-', convert_chars(strip_tags(get_bloginfo('language'))));
+$language = empty($language) ? 'en' : reset($language);
 
 // loop away!
 if ( have_posts() ) : 
@@ -160,7 +159,7 @@ if ( have_posts() ) :
 	foreach ($locs as $tax) {
 		$terms = get_the_terms($post->ID,$tax);
 		if ( is_array($terms) ) {
-			$obj = array_shift($terms);
+			$obj = reset($terms);
 			$term = is_object($obj) ? trim($obj->name) : '';
 			if ( !empty($term) ) { 
 				$locations .= $sep . $term; 
@@ -207,7 +206,7 @@ if ( have_posts() ) :
 <?php 
     endwhile;
 else :
-// TODO replace link to home with the last post even if it's older than 2 days?
+	// No posts? Then there is only the homepage...
 
 	$lastmodified_gmt = get_lastmodified('GMT'); // last posts or page modified date
 ?>

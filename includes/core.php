@@ -36,7 +36,7 @@ class XMLSitemapFeed {
 	// Global values used for priority and changefreq calculation
 	private $domain;
 	private $firstdate;
-	private $lastmodified;
+	private $lastmodified; // unused at the moment
 	private $postmodified = array();
 	private $termmodified = array();
 	private $blogpage;
@@ -66,7 +66,7 @@ class XMLSitemapFeed {
 	}
 
 	// default options
-	private function build_defaults() 
+	private function set_defaults() 
 	{
 		// sitemaps
 		if ( '1' == get_option('blog_public') )
@@ -200,7 +200,7 @@ class XMLSitemapFeed {
 	public function defaults($key = false) 
 	{
 		if (empty($this->defaults))
-			$this->build_defaults();
+			$this->set_defaults();
 
 		if ($key) {
 			$return = ( isset($this->defaults[$key]) ) ? $this->defaults[$key] : '';
@@ -795,24 +795,37 @@ class XMLSitemapFeed {
 			}
 
 			if ( $request['feed'] == 'sitemap-news' ) {
-				// disable caching
-				define('DONOTCACHEPAGE', true);
-				define('DONOTCACHEDB', true);
-				
-				// setup actions and filters
-				add_action('do_feed_sitemap-news', array($this, 'load_template_news'), 10, 1);
-				add_filter('post_limits', array($this, 'filter_news_limits') );
-				add_filter('posts_where', array($this, 'filter_news_where'), 10, 1);
-
-				// modify request parameters
 				$defaults = $this->defaults('news_tags');
 				$options = $this->get_option('news_tags');
+				$news_post_type = isset($options['post_type']) && !empty($options['post_type']) ? $options['post_type'] : $defaults['post_type'];
+				if (empty($news_post_type)) $news_post_type = 'post'; 
 				
+				// disable caching
+				define('DONOTCACHEPAGE', true);
+				define('DONOTCACHEDB', true);			
+				
+				// setup template
+				add_action('do_feed_sitemap-news', array($this, 'load_template_news'), 10, 1);
+
+				// set up query filters
+				// TODO: test 'gmt' against 'blog' against 'server'
+				
+				if ( function_exists('date_default_timezone_set') ) {
+					date_default_timezone_set ( 'UTC' );
+					$zone = 'gmt';
+				} else {
+					$zone = 'blog';
+				}
+				if ( get_lastdate($zone, $news_post_type) > date('Y-m-d H:i:s', strtotime('-48 hours')) ) {
+					add_filter('post_limits', array($this, 'filter_news_limits'));
+					add_filter('posts_where', array($this, 'filter_news_where'), 10, 1);					
+				} else {
+					add_filter('post_limits', array($this, 'filter_no_news_limits'));
+				}
+
+				/* modify request parameters */
 				// post type
-				if ( isset($options['post_type']) && is_array($options['post_type']) )
-					$request['post_type'] = $options['post_type'];
-				else
-					$request['post_type'] = isset($defaults['post_type']) ? $defaults['post_type'] : 'post';
+				$request['post_type'] = $news_post_type;
 
 				// categories
 				if ( isset($options['categories']) && is_array($options['categories']) )
@@ -944,13 +957,22 @@ class XMLSitemapFeed {
 	{
 		return 'LIMIT 0, 1000';
 	}
+	public function filter_no_news_limits( $limits ) 
+	{
+		return 'LIMIT 0, 1';
+	}
 
 	// Create a new filtering function that will add a where clause to the query,
 	// used for the Google News Sitemap
 	public function filter_news_where( $where = '' ) 
 	{
-		// only posts from the last 2 days
-		return $where . " AND post_date > '" . date('Y-m-d H:i:s', strtotime('-49 hours')) . "'";
+		// only posts from the last 48 hours
+		if ( function_exists('date_default_timezone_set') ) {
+			date_default_timezone_set ( 'UTC' );
+			return $where . " AND post_date_gmt > '" . date('Y-m-d H:i:s', strtotime('-48 hours')) . "'";
+		} else {
+			return $where . " AND post_date > '" . date('Y-m-d H:i:s', strtotime('-48 hours')) . "'";
+		}
 	}
 		
 
@@ -1066,11 +1088,35 @@ class XMLSitemapFeed {
 		remove_action('generate_rewrite_rules', array($this, 'rewrite_rules') );
 		global $wp_rewrite;
 		$wp_rewrite->flush_rules();
+		
+		error_log('XML Sitemap Feeds settings cleared');
 	}
 
 	/**
 	* INITIALISATION
 	*/
+
+	public function upgrade($version) 
+	{
+		if (version_compare(XMLSF_VERSION, $version, '>')) {
+			// rewrite rules not available on plugins_loaded 
+			// and don't flush rules from init as Polylang chokes on that
+			// just remove the rules and let WP renew them when ready...
+			wp_cache_flush();
+			delete_option('rewrite_rules');
+			$this->yes_mother = true; // did you flush and wash your hands?		
+
+			// upgrade pings to pong
+			if ( $pings = get_option($this->prefix.'pings') ) {
+				delete_option($this->prefix.'pings');
+				update_option($this->prefix.'pong',$pings);
+			}
+
+			update_option('xmlsf_version', XMLSF_VERSION);
+			error_log('XML Sitemap Feeds upgraded from '.$version.' to '.XMLSF_VERSION);
+		}
+
+	}
 
 	public function plugins_loaded() 
 	{
@@ -1079,21 +1125,7 @@ class XMLSitemapFeed {
 			load_plugin_textdomain('xml-sitemap-feed', false, dirname(dirname(plugin_basename( __FILE__ ))) . '/languages' );
 
 		// UPGRADE
-		if (get_option('xmlsf_version') != XMLSF_VERSION) {
-			// rewrite rules not available on plugins_loaded 
-			// and don't flush rules from init as Polylang chokes on that
-			// just remove the rules and let WP renew them when ready...
-			delete_option('rewrite_rules');
-
-			// upgrade from ping to pong
-			$pings = get_option($this->prefix.'pings');
-			if (!empty($pings))
-				update_option($this->prefix.'pong',$pings);
-
-			$this->yes_mother = true; // did you flush and wash your hands?		
-
-			update_option('xmlsf_version', XMLSF_VERSION);
-		}
+		$this->upgrade( get_option('xmlsf_version', 0) );
 		
 	}
 
@@ -1107,6 +1139,7 @@ class XMLSitemapFeed {
 		$wp_rewrite->flush_rules($hard); 
 
 		$this->yes_mother = true;
+		error_log('XML Sitemap Feeds rewrite rules flushed');
 	}
 	
 	public function register_gn_taxonomies() 
@@ -1260,7 +1293,7 @@ class XMLSitemapFeed {
 		// REQUEST main filtering function
 		add_filter('request', array($this, 'filter_request'), 1 );
 		
-		// TEXT DOMAIN, LANGUAGE PLUGIN FILTERS ...
+		// TEXT DOMAIN, UPGRADE PROCESS ...
 		add_action('plugins_loaded', array($this,'plugins_loaded'), 11 );
 
 		// REWRITES
@@ -1280,9 +1313,16 @@ class XMLSitemapFeed {
 		// PINGING
 		add_action('transition_post_status', array($this, 'do_pings'), 10, 3); 
 
+		// ACTIVATION
+		// activation currently same as upgrade routine
+		//register_activation_hook( XMLSF_PLUGIN_BASENAME, array($this, 'activate') );
+		
 		// DE-ACTIVATION
-		//register_uninstall_hook( XMLSF_PLUGIN_DIR . '/xml-sitemap.php', array($this, 'clear_settings') );
+		register_deactivation_hook( XMLSF_PLUGIN_BASENAME, array($this, 'clear_settings') );
+		
+		// UN-INSTALLATION
+		//register_uninstall_hook( XMLSF_PLUGIN_BASENAME, array($this, 'clear_settings') );
+		// do delete_option('rewrite_rules'); for all blogs on multisite ?
 		// see http://codex.wordpress.org/Function_Reference/register_uninstall_hook for multisite uninstall hook method
 	}
-
 }
