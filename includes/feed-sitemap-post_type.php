@@ -66,12 +66,17 @@ if ( have_posts() ) :
 		<image:image>
 			<image:loc><?php echo esc_url( $image['loc'] ); ?></image:loc>
 <?php 
-		if ( !empty($image['title']) )
-			echo "\t\t\t<image:title>{$image['title']}</image:title>\n";
-
-		if ( !empty($image['caption']) )
-			echo "\t\t\t<image:caption>{$image['caption']}</image:caption>\n";
-?>
+		if ( !empty($image['title']) ) {
+		?>
+			<image:title><![CDATA[<?php str_replace(']]>', ']]&gt;', $image['title']); ?>]]></image:title>
+<?php
+		}
+		if ( !empty($image['caption']) ) {
+		?>
+			<image:caption><![CDATA[<?php str_replace(']]>', ']]&gt;', $image['caption']); ?>]]></image:caption>
+<?php
+		}
+		?>
 		</image:image>
 <?php 
 		}
