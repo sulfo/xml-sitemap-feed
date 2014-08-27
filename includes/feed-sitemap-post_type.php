@@ -64,7 +64,7 @@ if ( have_posts() ) :
 				continue;
 	?>
 		<image:image>
-			<image:loc><?php echo esc_url( $image['loc'] ); ?></image:loc>
+			<image:loc><?php echo utf8_uri_encode( $image['loc'] ); ?></image:loc>
 <?php 
 		if ( !empty($image['title']) ) {
 		?>
