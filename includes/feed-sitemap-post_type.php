@@ -64,7 +64,7 @@ if ( have_posts() ) :
 				continue;
 	?>
 		<image:image>
-			<image:loc><?php echo $image['loc']; ?></image:loc>
+			<image:loc><?php echo esc_url( $image['loc'] ); ?></image:loc>
 <?php 
 		if ( !empty($image['title']) )
 			echo "\t\t\t<image:title>{$image['title']}</image:title>\n";
