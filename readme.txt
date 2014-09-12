@@ -77,11 +77,15 @@ XML Sitemap Feed was originally based on the discontinued plugin Standard XML Si
 
 = Wordpress =
 
-Quick installation: [Install now](http://coveredwebservices.com/wp-plugin-install/?plugin=xml-sitemap-feed) !
+**I.** If you have been using another XML Sitemap plugin before, check your site root and remove any created sitemap.xml, sitemap-news.xml and (if you're not managing this one manually) robots.txt files that remained there.
+
+**II.** Install plugin by:
+
+Quick installation via **[Covered Web Services](http://coveredwebservices.com/wp-plugin-install/?plugin=xml-sitemap-feed)** !
 
  &hellip; OR &hellip;
 
-Search for "xml sitemap feed" and install with that slick **Plugins > Add New** back-end page.
+Search for "xml sitemap feed" and install with that slick **Plugins > Add New** admin page.
 
  &hellip; OR &hellip;
 
@@ -91,11 +95,9 @@ Follow these steps:
 
 2. Upload the zip file via the Plugins > Add New > Upload page &hellip; OR &hellip; unpack and upload with your favourite FTP client to the /plugins/ folder.
 
-3. Activate the plugin on the Plugins page.
+**III.** Activate the plugin on the Plugins page.
 
-4. If you have been using another XML Sitemap plugin before, check your site root and remove any created sitemap.xml file that remained there.
-
-Done! Check your sparkling new XML Sitemap by visiting yourblogurl.tld/sitemap.xml (adapted to your domain name ofcourse) with a browser or any online XML Sitemap validator. You might also want to check if the sitemap is listed in your yourblogurl.tld/robots.txt file.
+Done! Check your sparkling new XML Sitemap by visiting yourblogurl.tld/sitemap.xml (adapted to your domain name of course) with a browser or any online XML Sitemap validator. You might also want to check if the sitemap is listed in your yourblogurl.tld/robots.txt file.
 
 = WordPress 3+ in Multi Site mode =
 
@@ -180,7 +182,7 @@ Note: your modifications will be overwritten upon the next plugin upgrade!
 
 = I see no sitemap.xml file in my site root! =
 
-The sitemap is dynamically generated just like a feed. There is no actual file created.
+There is no actual file created. The sitemap is dynamically generated just like a feed.
 
 = I see a sitemap.xml file in site root but it does not seem to get updated! =
 
