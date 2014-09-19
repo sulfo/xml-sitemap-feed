@@ -427,7 +427,7 @@ class XMLSitemapFeed {
 		
 				// make sure lastmod is not older than publication date (happens on scheduled posts)
 				if ( isset($post->post_date_gmt) && strtotime($post->post_date_gmt) > strtotime($postmodified) )
-					$postmodified = $postpublished;
+					$postmodified = $post->post_date_gmt;
 
 				$this->postmodified[$post->ID] = $postmodified;
 			}
