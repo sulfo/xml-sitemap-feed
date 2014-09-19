@@ -426,8 +426,7 @@ class XMLSitemapFeed {
 						$postmodified = $lastcomment[0]->comment_date_gmt;
 		
 				// make sure lastmod is not older than publication date (happens on scheduled posts)
-				$postpublished = get_the_date( 'Y-m-d H:i:s', $post->ID );
-				if ( strtotime($postpublished) > strtotime($postmodified) )
+				if ( isset($post->post_date_gmt) && strtotime($post->post_date_gmt) > strtotime($postmodified) )
 					$postmodified = $postpublished;
 
 				$this->postmodified[$post->ID] = $postmodified;
