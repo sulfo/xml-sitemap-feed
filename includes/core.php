@@ -1335,10 +1335,10 @@ class XMLSitemapFeed {
 		//register_activation_hook( XMLSF_PLUGIN_BASENAME, array($this, 'activate') );
 		
 		// DE-ACTIVATION
-		//register_deactivation_hook( XMLSF_PLUGIN_BASENAME, array($this, 'clear_settings') );
+		register_deactivation_hook( XMLSF_PLUGIN_BASENAME, array($this, 'clear_settings') );
 		
 		// UN-INSTALLATION
-		register_uninstall_hook( XMLSF_PLUGIN_BASENAME, array($this, 'clear_settings') );
+		//register_uninstall_hook( XMLSF_PLUGIN_BASENAME, array($this, 'clear_settings') );
 		// TODO move to usage of uninstall.php
 		// do a delete_option('rewrite_rules'); for all blogs on multisite ?
 		// see http://codex.wordpress.org/Function_Reference/register_uninstall_hook for multisite uninstall hook method
