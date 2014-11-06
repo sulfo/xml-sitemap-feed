@@ -126,36 +126,35 @@ class XMLSitemapFeed {
 						'active' => '1',
 						'uri' => 'http://www.google.com/webmasters/tools/ping?sitemap=',
 						'type' => 'GET',
-						'pong' => ''
+						'news' => '1'
 						),
 					'bing' => array (
 						'active' => '1',
 						'uri' => 'http://www.bing.com/ping?sitemap=',
 						'type' => 'GET',
-						'pong' => ''
+						'news' => '1'
 						),
 					'yandex' => array (
 						'active' => '',
 						'uri' => 'http://ping.blogs.yandex.ru/RPC2',
 						'type' => 'RPC',
-						'pong' => ''
 						),
 					'baidu' => array (
 						'active' => '',
 						'uri' => 'http://ping.baidu.com/ping/RPC2',
 						'type' => 'RPC',
-						'pong' => ''
 						),
 					'others' => array (
 						'active' => '1',
 						'uri' => 'http://rpc.pingomatic.com/',
 						'type' => 'RPC',
-						'pong' => ''
 						),
 					);
 
 		// robots
-		$this->defaults['robots'] = "Disallow: */xmlrpc.php\nDisallow: */wp-*.php\nDisallow: */trackback/\nDisallow: *?wptheme=\nDisallow: *?comments=\nDisallow: *?replytocom\nDisallow: */comment-page-\nDisallow: *?s=\nDisallow: */wp-content/\nAllow: */wp-content/uploads/\n";
+		$this->defaults['robots'] = "";
+		// Old rules "Disallow: */xmlrpc.php\nDisallow: */wp-*.php\nDisallow: */trackback/\nDisallow: *?wptheme=\nDisallow: *?comments=\nDisallow: *?replytocom\nDisallow: */comment-page-\nDisallow: *?s=\nDisallow: */wp-content/\nAllow: */wp-content/uploads/\n";
+		// Better is to set <meta name="robots" content="noindex, follow"> or send X-Robots-Tag header. TODO !!
 		
 		// additional urls
 		$this->defaults['urls'] = array();
@@ -517,7 +516,7 @@ class XMLSitemapFeed {
 	public function get_lastmod($sitemap = 'post_type', $term = '') 
 	{
 		$return = trim(mysql2date('Y-m-d\TH:i:s+00:00', $this->modified($sitemap,$term), false));
-		return !empty($return) ? '<lastmod>'.$return.'</lastmod>' : '';
+		return !empty($return) ? "\t<lastmod>".$return."</lastmod>\r\n\t" : '';
 	}
 
 	public function get_changefreq($sitemap = 'post_type', $term = '') 
@@ -1002,30 +1001,32 @@ class XMLSitemapFeed {
 	public function do_pings($new_status, $old_status, $post) 
 	{
 		$sitemaps = $this->get_sitemaps();
-		$defaults = $this->defaults('ping');
 		$to_ping = $this->get_ping();
+		$update = false;
 
 		// first check if news sitemap is set
 		if ( !empty($sitemaps['sitemap-news']) ) {
 			// then check if we've got a post type that is included in our news sitemap
 			$news_tags = $this->get_option('news_tags');
-			$active = false;
-			if ( !empty($news_tags['post_type']) )
-				foreach((array)$news_tags['post_type'] as $post_type)
-					if( $post->post_type == $post_type ) {
-						// TODO: verify if limited by categories and we're in the correct category!!!
-						$active = true; // got a live one, green light is on.
-						break;
-					}
-			if ( $active ) {
+			if ( !empty($news_tags['post_type']) && is_array($news_tags['post_type']) && in_array($post->post_type,$news_tags['post_type']) ) {
+				// are we publishing?
 				if ( $old_status != 'publish' && $new_status == 'publish' ) {
-					// Post is published from any other status
+					// loop through ping targets
 					foreach ($to_ping as $se => $data) {
-						if( !empty($data['active']) && !empty($defaults[$se]['type']) && $defaults[$se]['type']=='GET') {
-							if ( $this->ping( $data['uri'].urlencode(trailingslashit(get_bloginfo('url')) . $sitemaps['sitemap-news']) ) ) {
-								$to_ping[$se]['pong'][$sitemaps['sitemap-news']] = date('Y-m-d H:i:s');
-							}
+						// check active switch
+						if( empty($data['active']) || empty($data['news']) )
+							continue;
+						// and if we did not ping already within the last 5 minutes
+						if( !empty($data['pong']) && is_array($data['pong']) && !empty($pong[$sitemaps['sitemap-news']]) ) {
+							if ( strtotime($pong[$sitemaps['sitemap-news']]) + 300 > time() )
+								 continue;
 						}
+						// ping !
+						if ( $this->ping( $data['uri'].urlencode(trailingslashit(get_bloginfo('url')) . $sitemaps['sitemap-news']) ) ) {
+							$to_ping[$se]['pong'][$sitemaps['sitemap-news']] = time();
+							$update = true;
+						}
+
 					}
 				}
 			}
@@ -1034,20 +1035,23 @@ class XMLSitemapFeed {
 		// first check if regular sitemap is set
 		if ( !empty($sitemaps['sitemap']) ) {
 			// then check if we've got a post type that is included in our sitemap
-			$active = false;
-			foreach($this->get_post_types() as $post_type)
-				if( $post->post_type == $post_type['name'] ) {
-					// TODO: verify if "exclude from sitemap" is not checked!!!
-					$active = true; // got a live one, green light is on.
-					break;
-				}
-			if ( $active ) {
-				if ( $old_status != 'publish' && $new_status == 'publish' ) {
-					// Post is published from any other status
-					foreach ($to_ping as $se => $data) {
-						if( !empty($data['active']) && !empty($defaults[$se]['type']) && $defaults[$se]['type']=='GET') {
+			foreach($this->get_post_types() as $post_type) {
+				if ( !empty($post_type) && is_array($post_type) && in_array($post->post_type,$post_type) ) {
+					// are we publishing?
+					if ( $old_status != 'publish' && $new_status == 'publish' ) {
+						foreach ($to_ping as $se => $data) {
+							// check active switch
+							if( empty($data['active']) || empty($data['type']) || $data['type']!='GET' )
+								continue;
+							// and if we did not ping already within the last hour
+							if( !empty($data['pong']) && is_array($data['pong']) && !empty($pong[$sitemaps['sitemap']]) ) {
+								if ( strtotime($pong[$sitemaps['sitemap']]) + 3600 > time() )
+									 continue;
+							}
+							// ping !
 							if ( $this->ping( $data['uri'].urlencode(trailingslashit(get_bloginfo('url')) . $sitemaps['sitemap']) ) ) {
-								$to_ping[$se]['pong'][$sitemaps['sitemap']] = date('Y-m-d H:i:s');
+								$to_ping[$se]['pong'][$sitemaps['sitemap']] = time();
+								$update = true;
 							}
 						}
 					}
@@ -1055,7 +1059,7 @@ class XMLSitemapFeed {
 			}
 		}
 
-		update_option($this->prefix.'ping',$to_ping);
+		if ( $update ) update_option($this->prefix.'ping',$to_ping);
 	}
 
 	/**
@@ -1102,18 +1106,27 @@ class XMLSitemapFeed {
 
 	public function upgrade($version) 
 	{
-		if (version_compare(XMLSF_VERSION, $version, '>')) {
+		if ( version_compare(XMLSF_VERSION, $version, '>') ) {
 			// rewrite rules not available on plugins_loaded 
 			// and don't flush rules from init as Polylang chokes on that
 			// just remove the rules and let WP renew them when ready...
 			wp_cache_flush();
 			delete_option('rewrite_rules');
-			$this->yes_mother = true; // did you flush and wash your hands?		
+			$this->yes_mother = true; // did we flush and wash your hands?
 
-			// upgrade pings to pong
-			if ( $pings = get_option($this->prefix.'pings') ) {
-				delete_option($this->prefix.'pings');
-				update_option($this->prefix.'pong',$pings);
+			// remove stylesheets blocking robots.txt rule, but only one time!
+			if ( version_compare('4.4', $version, '>') && $robot_rules = get_option($this->prefix.'robots')) {
+				$robot_rules = str_replace(array("Disallow: */wp-content/","Allow: */wp-content/uploads/"),"",$robot_rules);
+				update_option($this->prefix.'robots', $robot_rules);
+			
+				// upgrade pings
+				$pong = get_option( $this->prefix.'pong' );
+				$ping = $this->get_ping();
+				foreach ( $pong as $se => $arr) {
+					if ( is_array( $arr ) )
+						$ping[$se]['pong'] = $arr;
+				}
+				update_option( $this->prefix.'ping', array_merge( $this->defaults('ping'), $ping ) );
 			}
 
 			update_option('xmlsf_version', XMLSF_VERSION);

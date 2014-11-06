@@ -295,13 +295,14 @@ Google News Sitemap: limit posts to certain categories. Some (query) optimizatio
 == Changelog ==
 
 = 4.4 =
-* TODO: max pings to 1/h (and disable on import?)
+* Pings max once per hour (5 minutes for news sitemap)
 * Seperate ping for Google News Sitemap
 * Append custom/static sitemaps to the index
 * Include other post types in News Sitemap
 * Optionally limit posts to certain categories in News Sitemap
 * Noindex response header for sitemaps to keep them out of search results
 * Static sitemap stylesheets
+* Controvercial default robots.txt rules removed 
 * DB query streamlining
 * BUGFIX: fatal error on . (dot) as category base in permalinks
 * BIGFIX: PHP Strict notices

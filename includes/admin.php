@@ -90,10 +90,6 @@
 			';
 		foreach ( $defaults as $key => $values ) {
 
-			echo '
-				<input type="hidden" name="'.$prefix.'ping['.
-				$key.'][uri]" value="'.
-				$values['uri'].'" />';
 			if ( isset($values['type']) && $values['type'] == 'RPC' ) {
 				$active = ( strpos($update_services,untrailingslashit($values['uri'])) === false ) ? false : true;
 			} else {
@@ -107,10 +103,30 @@
 			echo isset($names[$key]) && !empty($names[$key]['name']) ? $names[$key]['name'] : $key ;
 			echo '</label>';
 			
+			echo '
+				<input type="hidden" name="'.$prefix.'ping['.
+				$key.'][uri]" value="'.
+				$values['uri'].'" />';
+			echo '
+				<input type="hidden" name="'.$prefix.'ping['.
+				$key.'][type]" value="'.
+				$values['type'].'" />';
+			if (isset($values['news']))
+				echo '
+				<input type="hidden" name="'.$prefix.'ping['.
+				$key.'][news]" value="'.
+				$values['news'].'" />';
+
 			echo ' <span class="description">';
 			if (!empty($options[$key]['pong']))
-				foreach ((array)$options[$key]['pong'] as $pretty => $time)
-					echo sprintf(__('Successfully pinged for %1$s on %2$s GMT.','xml-sitemap-feed'),$pretty, $time).' ';
+				foreach ((array)$options[$key]['pong'] as $pretty => $time) {
+					echo '
+						<input type="hidden" name="'.$prefix.'ping['.
+						$key.'][pong]['.$pretty.']" value="'.
+						$time.'" />';
+					if ( !empty($time) )
+						echo sprintf(__('Successfully sent %1$s on %2$s.','xml-sitemap-feed'),$pretty, date('Y-m-d H:i:s',$time)).' ';
+				}
 			echo '</span><br />';
 		}
 
