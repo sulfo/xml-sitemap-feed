@@ -302,7 +302,7 @@ Google News Sitemap: limit posts to certain categories. Some (query) optimizatio
 * Optionally limit posts to certain categories in News Sitemap
 * Noindex response header for sitemaps to keep them out of search results
 * Static sitemap stylesheets
-* Controvercial default robots.txt rules removed 
+* Controversial default robots.txt rules removed 
 * DB query streamlining
 * BUGFIX: fatal error on . (dot) as category base in permalinks
 * BIGFIX: PHP Strict notices
