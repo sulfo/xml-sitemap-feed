@@ -1063,7 +1063,7 @@ class XMLSitemapFeed {
 	}
 
 	/**
-	* DE-ACTIVATION
+	* CLEAR ALL SETTINGS
 	*/
 
 	public function clear_settings() 
@@ -1082,21 +1082,17 @@ class XMLSitemapFeed {
 		}
 		$terms = get_terms('gn-location-1',array('hide_empty' => false));
 		foreach ( $terms as $term ) {
-			wp_delete_term(	$term->term_id, 'gn-genre' );
+			wp_delete_term(	$term->term_id, 'gn-location-1' );
 		}
 		$terms = get_terms('gn-location-2',array('hide_empty' => false));
 		foreach ( $terms as $term ) {
-			wp_delete_term(	$term->term_id, 'gn-genre' );
+			wp_delete_term(	$term->term_id, 'gn-location-2' );
 		}
 		$terms = get_terms('gn-location-3',array('hide_empty' => false));
 		foreach ( $terms as $term ) {
-			wp_delete_term(	$term->term_id, 'gn-genre' );
+			wp_delete_term(	$term->term_id, 'gn-location-3' );
 		}
 
-		remove_action('generate_rewrite_rules', array($this, 'rewrite_rules') );
-		global $wp_rewrite;
-		$wp_rewrite->flush_rules();
-		
 		error_log('XML Sitemap Feeds settings cleared');
 	}
 
@@ -1109,12 +1105,12 @@ class XMLSitemapFeed {
 		if ( version_compare(XMLSF_VERSION, $version, '>') ) {
 			// rewrite rules not available on plugins_loaded 
 			// and don't flush rules from init as Polylang chokes on that
-			// just remove the rules and let WP renew them when ready...
-			wp_cache_flush();
+			// just remove the db option and let WP regenerate them when ready...
 			delete_option('rewrite_rules');
-			$this->yes_mother = true; // did we flush and wash your hands?
+			// ... but make sure rules are regenerated when admin is visited.
+			set_transient('xmlsf_flush_rewrite_rules','');
 
-			// remove stylesheets blocking robots.txt rule, but only one time!
+			// remove robots.txt rule blocking stylesheets, but only one time!
 			if ( version_compare('4.4', $version, '>') && $robot_rules = get_option($this->prefix.'robots')) {
 				$robot_rules = str_replace(array("Disallow: */wp-content/","Allow: */wp-content/uploads/"),"",$robot_rules);
 				update_option($this->prefix.'robots', $robot_rules);
@@ -1148,7 +1144,8 @@ class XMLSitemapFeed {
 
 	private function flush_rules($hard = false) 
 	{		
-		if ($this->yes_mother) // did you flush?
+		// did you flush already?
+		if ($this->yes_mother)
 			return; // yes, mother!
 
 		global $wp_rewrite;
@@ -1335,10 +1332,9 @@ class XMLSitemapFeed {
 		//register_activation_hook( XMLSF_PLUGIN_BASENAME, array($this, 'activate') );
 		
 		// DE-ACTIVATION
-		register_deactivation_hook( XMLSF_PLUGIN_BASENAME, array($this, 'clear_settings') );
+		register_deactivation_hook( XMLSF_PLUGIN_BASENAME, array($this, 'flush_rules') );
 		
 		// UN-INSTALLATION
-		//register_uninstall_hook( XMLSF_PLUGIN_BASENAME, array($this, 'clear_settings') );
 		// TODO move to usage of uninstall.php
 		// do a delete_option('rewrite_rules'); for all blogs on multisite ?
 		// see http://codex.wordpress.org/Function_Reference/register_uninstall_hook for multisite uninstall hook method
