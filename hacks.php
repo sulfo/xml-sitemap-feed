@@ -73,8 +73,6 @@ if( !function_exists('get_lastmodified') ) {
  * Retrieve first or last post type date data based on timezone.
  * Variation of function _get_last_post_time
  *
- * @access private
- *
  * @param string $timezone The location to get the time. Can be 'gmt', 'blog', or 'server'.
  * @param string $field Field to check. Can be 'date' or 'modified'.
  * @param string $post_type Post type to check. Defaults to 'any'.

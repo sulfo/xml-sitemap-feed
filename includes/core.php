@@ -375,8 +375,8 @@ class XMLSitemapFeed {
 				) ? (array)$return[$type]['tags'] : array();
 	}
 	
-	public function is_home($id) {
-		
+	public function is_home($id) 
+	{
 			if ( empty($this->blogpage) ) {
 				$blogpage = get_option('page_for_posts');
 				
@@ -392,7 +392,6 @@ class XMLSitemapFeed {
 			}
 
 			return in_array($id,$this->blogpage);
-			
 	}
 		
 	/**
@@ -1095,6 +1094,12 @@ class XMLSitemapFeed {
 
 		error_log('XML Sitemap Feeds settings cleared');
 	}
+	
+	function cache_flush()
+	{
+		// make this optional?
+		wp_cache_flush();
+	}
 
 	/**
 	* INITIALISATION
@@ -1327,6 +1332,9 @@ class XMLSitemapFeed {
 		// PINGING
 		add_action('transition_post_status', array($this, 'do_pings'), 10, 3); 
 
+		// CLEAR OBJECT CACHE
+		add_action('transition_post_status', array($this, 'cache_flush'), 99); 
+		
 		// ACTIVATION
 		// activation currently same as upgrade routine based on db version check
 		//register_activation_hook( XMLSF_PLUGIN_BASENAME, array($this, 'activate') );

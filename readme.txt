@@ -306,6 +306,7 @@ Google News Sitemap: limit posts to certain categories. Some (query) optimizatio
 * DB query streamlining
 * BUGFIX: fatal error on . (dot) as category base in permalinks
 * BIGFIX: PHP Strict notices
+* Force object cache flush on post publication
 
 = 4.3.2 =
 * Italian translation
