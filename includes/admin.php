@@ -194,10 +194,10 @@
 		echo '
 		<fieldset><legend class="screen-reader-text">'.__('Reset XML sitemaps','xml-sitemap-feed').'</legend>
 			<label><input type="checkbox" name="'.parent::prefix().'sitemaps[reset]" value="1" /> '.
-				__('Clear all XML Sitemap Feed options from the database and start fresh with the default settings.','xml-sitemap-feed').'</label>
+				__('Clear all XML Sitemap Feed settings from the database.','xml-sitemap-feed').'</label>
 		</fieldset>';
-//		echo '
-//		<p class="description">'.sprintf(__('Uninstalling and reinstalling the %s plugin will have the same effect.','xml-sitemap-feed'),__('XML Sitemap & Google News Feeds','xml-sitemap-feed')).'</p>';
+		echo '
+		<p class="description">'.__('You can use this to start fresh with the default settings or to remove all XML Sitemap and Google News settings and taxonomy terms before uninstalling.','xml-sitemap-feed').'</p>';
 	}
 
 	/**
