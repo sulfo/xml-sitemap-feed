@@ -1118,22 +1118,23 @@ class XMLSitemapFeed {
 			// remove robots.txt rule blocking stylesheets, but only one time!
 			if ( version_compare('4.4', $version, '>') && $robot_rules = get_option($this->prefix.'robots')) {
 				$robot_rules = str_replace(array("Disallow: */wp-content/","Allow: */wp-content/uploads/"),"",$robot_rules);
-				remove_option($this->prefix.'robots');
+				delete_option($this->prefix.'robots');
 				add_option($this->prefix.'robots', $robot_rules, '', 'no');
 			
 				// upgrade pings
-				$pong = get_option( $this->prefix.'pong' );
-				$ping = $this->get_ping();
-				foreach ( $pong as $se => $arr) {
-					if ( is_array( $arr ) )
-						$ping[$se]['pong'] = $arr;
+				if ( $pong = get_option( $this->prefix.'pong' ) && is_array($pong) ) {
+					$ping = $this->get_ping();
+					foreach ( $pong as $se => $arr) {
+						if ( is_array( $arr ) )
+							$ping[$se]['pong'] = $arr;
+					}
+					delete_option( $this->prefix.'pong' );
+					delete_option( $this->prefix.'ping' );
+					update_option( $this->prefix.'ping', array_merge( $this->defaults('ping'), $ping ), '', 'no' );
 				}
-				remove_option( $this->prefix.'pong' );
-				remove_option( $this->prefix.'ping' );
-				update_option( $this->prefix.'ping', array_merge( $this->defaults('ping'), $ping ), '', 'no' );
 			}
 
-			remove_option('xmlsf_version');
+			delete_option('xmlsf_version');
 			add_option($this->prefix.'version', XMLSF_VERSION, '', 'no');
 
 			error_log('XML Sitemap Feeds upgraded from '.$version.' to '.XMLSF_VERSION);
