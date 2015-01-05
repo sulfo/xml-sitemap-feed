@@ -1117,18 +1117,25 @@ class XMLSitemapFeed {
 				$robot_rules = str_replace(array("Disallow: */wp-content/","Allow: */wp-content/uploads/"),"",$robot_rules);
 				delete_option($this->prefix.'robots');
 				add_option($this->prefix.'robots', $robot_rules, '', 'no');
+			}
 			
-				// upgrade pings
-				if ( $pong = get_option( $this->prefix.'pong' ) && is_array($pong) ) {
-					$ping = $this->get_ping();
-					foreach ( $pong as $se => $arr) {
-						if ( is_array( $arr ) )
-							$ping[$se]['pong'] = $arr;
+			// upgrade pings
+			if ( $pong = get_option( $this->prefix.'pong' ) && is_array($pong) ) {
+				$ping = $this->get_ping();
+				foreach ( $pong as $se => $arr) {
+					if ( is_array( $arr ) ) {
+						// convert formatted time to unix time
+						foreach ( $arr as $pretty => $date ) {
+							$time = strtotime($date);
+							$arr[$pretty] = (int)$time < time() ? $time : '';
+						}
+						// and set array 
+						$ping[$se]['pong'] = $arr;
 					}
-					delete_option( $this->prefix.'pong' );
-					delete_option( $this->prefix.'ping' );
-					update_option( $this->prefix.'ping', array_merge( $this->defaults('ping'), $ping ), '', 'no' );
 				}
+				delete_option( $this->prefix.'pong' );
+				delete_option( $this->prefix.'ping' );
+				add_option( $this->prefix.'ping', array_merge( $this->defaults('ping'), $ping ), '', 'no' );
 			}
 
 			delete_option('xmlsf_version');

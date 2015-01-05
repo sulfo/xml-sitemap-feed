@@ -118,15 +118,25 @@
 				$values['news'].'" />';
 
 			echo ' <span class="description">';
-			if (!empty($options[$key]['pong']))
+			if (!empty($options[$key]['pong'])) {
+				if ( $tzstring = get_option('timezone_string') ) {
+					// use same timezoneformat as translatable examples in options-general.php
+					$timezone_format = _x('Y-m-d G:i:s', 'timezone date format');
+					date_default_timezone_set($tzstring);
+				} else {
+					$timezone_format = 'Y-m-d G:i:s T';
+				}
+
 				foreach ((array)$options[$key]['pong'] as $pretty => $time) {
 					echo '
 						<input type="hidden" name="'.$prefix.'ping['.
 						$key.'][pong]['.$pretty.']" value="'.
 						$time.'" />';
 					if ( !empty($time) )
-						echo sprintf(__('Successfully sent %1$s on %2$s.','xml-sitemap-feed'),$pretty, date('Y-m-d H:i:s',$time)).' ';
+						echo sprintf(__('Successfully sent %1$s on %2$s.','xml-sitemap-feed'),$pretty, date($timezone_format,$time)).' ';
 				}
+				date_default_timezone_set('UTC');
+			}
 			echo '</span><br />';
 		}
 
