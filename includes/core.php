@@ -1017,7 +1017,7 @@ class XMLSitemapFeed {
 						if( empty($data['active']) || empty($data['news']) )
 							continue;
 						// and if we did not ping already within the last 5 minutes
-						if( !empty($data['pong']) && is_array($data['pong']) && !empty($pong[$sitemaps['sitemap-news']]) && (int)$pong[$sitemaps['sitemap-news']] + 300 > time() )
+						if( !empty($data['pong']) && is_array($data['pong']) && !empty($data['pong'][$sitemaps['sitemap-news']]) && (int)$data['pong'][$sitemaps['sitemap-news']] + 300 > time() )
 								 continue;
 						// ping !
 						if ( $this->ping( $data['uri'].urlencode(trailingslashit(get_bloginfo('url')) . $sitemaps['sitemap-news']) ) ) {
@@ -1042,7 +1042,7 @@ class XMLSitemapFeed {
 							if( empty($data['active']) || empty($data['type']) || $data['type']!='GET' )
 								continue;
 							// and if we did not ping already within the last hour
-							if( !empty($data['pong']) && is_array($data['pong']) && !empty($pong[$sitemaps['sitemap']]) && (int)$pong[$sitemaps['sitemap']] + 3600 > time() )
+							if( !empty($data['pong']) && is_array($data['pong']) && !empty($data['pong'][$sitemaps['sitemap']]) && (int)$data['pong'][$sitemaps['sitemap']] + 3600 > time() )
 									 continue;
 							// ping !
 							if ( $this->ping( $data['uri'].urlencode(trailingslashit(get_bloginfo('url')) . $sitemaps['sitemap']) ) ) {
