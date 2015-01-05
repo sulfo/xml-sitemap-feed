@@ -859,6 +859,7 @@ class XMLSitemapFeed {
 						$request['orderby'] = 'modified';
 						$request['lang'] = '';
 						$request['no_found_rows'] = true;
+						$request['update_post_meta_cache'] = false;
 						$request['update_post_term_cache'] = false;
 
 						return $request;
