@@ -1332,7 +1332,7 @@ class XMLSitemapFeed {
 		// TAXONOMY
 		add_action('init', array($this,'register_news_taxonomy'), 0 );
 		
-		// REGISTER SETTINGS, SETTINGS FIELDS, UPGRADE checks...
+		// REGISTER SETTINGS, SETTINGS FIELDS...
 		add_action('admin_init', array($this,'admin_init'));
 		
 		// ROBOTSTXT
