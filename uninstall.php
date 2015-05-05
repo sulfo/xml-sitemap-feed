@@ -20,7 +20,7 @@ class XMLSitemapFeed_Uninstall {
 		global $wpdb;
 
 		// check if it is a multisite uninstall - if so, run the uninstall function for each blog id
-		if (is_multisite()) {
+		if ( is_multisite() && defined('XMLSF_MULTISITE_UNINSTALL') && XMLSF_MULTISITE_UNINSTALL ) {
 			error_log('Clearing XML Sitemap Feeds settings from each site brefore uninstall:');
 			foreach ($wpdb->get_col("SELECT blog_id FROM $wpdb->blogs") as $blog_id) {
 				switch_to_blog($blog_id);

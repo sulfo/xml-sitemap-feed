@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravan
 Tags: sitemap, xml sitemap, news sitemap, sitemap.xml, robots.txt, Google, Google News, Yahoo, Bing, , Yandex, Baidu, seo, feed, polylang, image sitemap
 Requires at least: 3.2
 Tested up to: 4.2
-Stable tag: 4.3.2
+Stable tag: 4.4
 
 XML and Google News Sitemaps to feed the hungry spiders. Multisite, WP Super Cache and Polylang compatible.
 
@@ -105,6 +105,11 @@ Same as above but do a **Network Activate** to make a XML sitemap available for 
 
 Installed alongside [WordPress MU Sitewide Tags Pages](http://wordpress.org/plugins/wordpress-mu-sitewide-tags/), XML Sitemap Feed will **not** create a sitemap.xml nor change robots.txt for any **tag blogs**. This is done deliberately because they would be full of links outside the tags blogs own domain and subsequently ignored (or worse: penalised) by Google.
 
+= Uninstallation =
+
+Upon uninstalling the plugin from the Admin > Plugins page, most plugins optiosn will be cleared from the database. However, since by that time the plugin itself is already deactivated, some taxonomies cannot be removed and will remain dormant in the database. See notes in the uninstall.php file.
+
+On multisite, the uninstall.php *can* loop through all sites in the network to perform the uninstalltion process for each site. However, this does not scale for large networks so it *only* does a per-site uninstallation when `define('XMLSF_MULTISITE_UNINSTALL', true);` is explicitly set in wp-config.php.
 
 == Frequently Asked Questions ==
 
@@ -289,7 +294,7 @@ Thanks for sharing your translation :)
 == Upgrade Notice ==
 
 = 4.4 =
-Google News Sitemap: limit posts to certain categories. Some (query) optimizations and a bugfix.
+Google News Sitemap: limit posts to certain categories. Some (query) optimizations and a bugfixes.
 
 
 == Changelog ==

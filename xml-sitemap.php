@@ -4,7 +4,7 @@ Plugin Name: XML Sitemap & Google News feeds
 Plugin URI: http://status301.net/wordpress-plugins/xml-sitemap-feed/
 Description: Feed the  hungry spiders in compliance with the XML Sitemap and Google News protocols. Happy with the results? Please leave me a <strong><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravanhagen%40gmail%2ecom&item_name=XML%20Sitemap%20Feed&item_number=4%2e0&no_shipping=0&tax=0&bn=PP%2dDonationsBF&charset=UTF%2d8&lc=us">tip</a></strong> for continued development and support. Thanks :)
 Text Domain: xml-sitemap-feed
-Version: 4.3.136
+Version: 4.4
 Author: RavanH
 Author URI: http://status301.net/
 */
@@ -45,7 +45,7 @@ if(!empty($_SERVER['SCRIPT_FILENAME']) && 'xml-sitemap.php' == basename($_SERVER
  *      CONSTANTS
  * -------------------- */
 
-	define('XMLSF_VERSION', '4.3.136');
+	define('XMLSF_VERSION', '4.4');
 
 	define('XMLSF_PLUGIN_BASENAME', plugin_basename(__FILE__));
 
@@ -120,6 +120,18 @@ if ( !defined('XMLSF_NEWS_NAME') )
  *
  * example:
  * define('XMLSF_NEWS_POST_TYPE', 'post,news');
+ */
+
+/* 
+ * XMLSF_MULTISITE_UNINSTALL 
+ * 
+ * Set this constant in wp-config.php if you want to allow looping over each site
+ * in the network to run XMLSitemapFeed_Uninstall->uninstall() defined in uninstall.php
+ * 
+ * Be careful: There is NO batch-processing so it does not scale on large networks!
+ *
+ * example:
+ * define('XMLSF_MULTISITE_UNINSTALL', true);
  */
 
 
