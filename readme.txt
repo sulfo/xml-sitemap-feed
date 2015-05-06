@@ -294,7 +294,7 @@ Thanks for sharing your translation :)
 == Upgrade Notice ==
 
 = 4.4 =
-Google News Sitemap: limit posts to certain categories. Some (query) optimizations and a bugfixes.
+Google News Sitemap: limit posts to certain categories. Some (query) optimizations and bugfixes.
 
 
 == Changelog ==
