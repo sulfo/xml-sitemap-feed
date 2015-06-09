@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: XML Sitemap and Google News feeds/4.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-01-05 04:05+0100\n"
-"PO-Revision-Date: 2015-01-05 04:26+0100\n"
+"PO-Revision-Date: 2015-06-09 21:29+0100\n"
 "Last-Translator: RavanH <ravanhagen@gmail.com>\n"
 "Language-Team: \n"
 "Language: fr_FR\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-KeywordsList: __;_e;_n\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Poedit 1.7.5\n"
 
 #: ../includes/core.php:1186
 msgid "Google News Genres"
@@ -155,15 +155,15 @@ msgstr "Mois"
 
 #: ../includes/admin.php:279
 msgid "Split by"
-msgstr "Trier par"
+msgstr "Découper par"
 
 #: ../includes/admin.php:289
 msgid ""
 "Split by year if you experience errors or slow sitemaps. In very rare cases, "
 "split by month is needed."
 msgstr ""
-"Trie par an si tu vois des erreurs ou des sitemaps très lentes. Aux très "
-"rares cas, un trie par mois est nécessaire."
+"A utiliser si vous constatez des erreurs ou des lenteurs dans vos sitemaps. "
+"Dans de rares cas, le découpage par mois peut être nécessaire."
 
 #: ../includes/admin.php:294 ../includes/admin.php:908
 msgid "Priority"
