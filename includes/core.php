@@ -906,37 +906,37 @@ class XMLSitemapFeed {
 	// set up the sitemap index template
 	public function load_template_index() 
 	{
-		load_template( XMLSF_PLUGIN_DIR . '/includes/feed-sitemap.php' );
+		load_template( dirname( __FILE__ ) . '/feed-sitemap.php' );
 	}
 
 	// set up the sitemap home page(s) template
 	public function load_template_base() 
 	{
-		load_template( XMLSF_PLUGIN_DIR . '/includes/feed-sitemap-home.php' );
+		load_template( dirname( __FILE__ ) . '/feed-sitemap-home.php' );
 	}
 
 	// set up the post types sitemap template
 	public function load_template() 
 	{
-		load_template( XMLSF_PLUGIN_DIR . '/includes/feed-sitemap-post_type.php' );
+		load_template( dirname( __FILE__ ) . '/feed-sitemap-post_type.php' );
 	}
 
 	// set up the taxonomy sitemap template
 	public function load_template_taxonomy() 
 	{
-		load_template( XMLSF_PLUGIN_DIR . '/includes/feed-sitemap-taxonomy.php' );
+		load_template( dirname( __FILE__ ) . '/feed-sitemap-taxonomy.php' );
 	}
 
 	// set up the news sitemap template
 	public function load_template_news() 
 	{
-		load_template( XMLSF_PLUGIN_DIR . '/includes/feed-sitemap-news.php' );
+		load_template( dirname( __FILE__ ) . '/feed-sitemap-news.php' );
 	}
 
 	// set up the news sitemap template
 	public function load_template_custom() 
 	{
-		load_template( XMLSF_PLUGIN_DIR . '/includes/feed-sitemap-custom.php' );
+		load_template( dirname( __FILE__ ) . '/feed-sitemap-custom.php' );
 	}
 
 	/**
@@ -1289,7 +1289,7 @@ class XMLSitemapFeed {
 			$this->flush_rules();
 		
 		// Include the admin class file
-		include_once( XMLSF_PLUGIN_DIR . '/includes/admin.php' );
+		include_once( './admin.php' );
 
 	}
 
