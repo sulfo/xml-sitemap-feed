@@ -95,10 +95,7 @@ class XMLSitemapFeed {
 								);
 		}		
 
-		if ( defined('XMLSF_POST_TYPE') && XMLSF_POST_TYPE != 'any' )
-			$active_arr = array_map('trim',explode(',',XMLSF_POST_TYPE));
-		else 
-			$active_arr = array('post','page');
+		$active_arr = array('post','page');
 			
 		foreach ( $active_arr as $name )
 			if ( isset($this->defaults['post_types'][$name]) )
@@ -168,10 +165,9 @@ class XMLSitemapFeed {
 		$this->defaults['domains'] = array();
 		
 		// news sitemap tags settings
-		$news_post_types = defined('XMLSF_NEWS_POST_TYPE') ? explode(',',XMLSF_NEWS_POST_TYPE) : array('post');
 		$this->defaults['news_tags'] = array( 
 						'name' => '',
-						'post_type' => (in_array('any',$news_post_types)) ? 'any' : $news_post_types,
+						'post_type' => array('post'),
 						'categories' => '',
 						'image' => 'featured',
 						'access' => array( 
@@ -1083,131 +1079,71 @@ class XMLSitemapFeed {
 
 	public function upgrade($version) 
 	{
-		if ( version_compare(XMLSF_VERSION, $version, '>') ) {
-			// rewrite rules not available on plugins_loaded 
-			// and don't flush rules from init as Polylang chokes on that
-			// just remove the db option and let WP regenerate them when ready...
-			delete_option('rewrite_rules');
-			// ... but make sure rules are regenerated when admin is visited.
-			set_transient('xmlsf_flush_rewrite_rules','');
+		// rewrite rules not available on plugins_loaded 
+		// and don't flush rules from init as Polylang chokes on that
+		// just remove the db option and let WP regenerate them when ready...
+		delete_option('rewrite_rules');
+		// ... but make sure rules are regenerated when admin is visited.
+		set_transient('xmlsf_flush_rewrite_rules','');
 
-			// remove robots.txt rule blocking stylesheets, but only one time!
-			if ( version_compare('4.4', $version, '>') && $robot_rules = get_option($this->prefix.'robots')) {
-				$robot_rules = str_replace(array("Disallow: */wp-content/","Allow: */wp-content/uploads/"),"",$robot_rules);
-				delete_option($this->prefix.'robots');
-				add_option($this->prefix.'robots', $robot_rules, '', 'no');
-			}
-			
-			if ( version_compare('4.4.1', $version, '>') ) {
-				// register location taxonomies then delete all terms
+		// remove robots.txt rule blocking stylesheets, but only one time!
+		if ( version_compare('4.4', $version, '>') && $robot_rules = get_option($this->prefix.'robots')) {
+			$robot_rules = str_replace(array("Disallow: */wp-content/","Allow: */wp-content/uploads/"),"",$robot_rules);
+			delete_option($this->prefix.'robots');
+			add_option($this->prefix.'robots', $robot_rules, '', 'no');
+		}
+		
+		if ( version_compare('4.4.1', $version, '>') ) {
+			// register location taxonomies then delete all terms
 
-				$defaults = $this->defaults('news_tags');
-				$options = $this->get_option('news_tags');
+			register_taxonomy( 'gn-location-3', null );
 
-				$post_types = !empty($options['post_type']) ? $options['post_type'] : $defaults['post_type'];
-				if ($post_types=='any')
-					$post_types = get_post_types(array('public'=>true));
+			$terms = get_terms('gn-location-3',array('hide_empty' => false));
 
-				register_taxonomy( 'gn-location-3', $post_types, array(
-					'hierarchical' => false,
-					'labels' => array(
-							'name' => __('Google News Country','xml-sitemap-feed'),
-							//'menu_name' => __('GN Genres','xml-sitemap-feed'),
-							'separate_items_with_commas' => __('Only one allowed. Must be consistent with other Google News location entities (if set).','xml-sitemap-feed'),
-						),
-					'public' => false,
-					'show_ui' => true,
-					'show_tagcloud' => false,
-					'query_var' => false,
-					'capabilities' => array( // prevent creation / deletion
-							'manage_terms' => 'nobody',
-							'edit_terms' => 'nobody',
-							'delete_terms' => 'nobody',
-							'assign_terms' => 'edit_posts'
-						)
-				));
+			foreach ( $terms as $term )
+				wp_delete_term(	$term->term_id, 'gn-location-3' );
 
-				$terms = get_terms('gn-location-3',array('hide_empty' => false));
-				foreach ( $terms as $term ) {
-					wp_delete_term(	$term->term_id, 'gn-location-3' );
-				}
+			register_taxonomy( 'gn-location-2', null );
 
-				register_taxonomy( 'gn-location-2', $post_types, array(
-					'hierarchical' => false,
-					'labels' => array(
-							'name' => __('Google News State/Province','xml-sitemap-feed'),
-							//'menu_name' => __('GN Genres','xml-sitemap-feed'),
-							'separate_items_with_commas' => __('Only one allowed. Must be consistent with other Google News location entities (if set).','xml-sitemap-feed'),
-						),
-					'public' => false,
-					'show_ui' => true,
-					'show_tagcloud' => false,
-					'query_var' => false,
-					'capabilities' => array( // prevent creation / deletion
-							'manage_terms' => 'nobody',
-							'edit_terms' => 'nobody',
-							'delete_terms' => 'nobody',
-							'assign_terms' => 'edit_posts'
-						)
-				));
+			$terms = get_terms('gn-location-2',array('hide_empty' => false));
 
-				$terms = get_terms('gn-location-2',array('hide_empty' => false));
-				foreach ( $terms as $term ) {
-					wp_delete_term(	$term->term_id, 'gn-location-2' );
-				}
+			foreach ( $terms as $term )
+				wp_delete_term(	$term->term_id, 'gn-location-2' );
 
-				register_taxonomy( 'gn-location-1', $post_types, array(
-					'hierarchical' => false,
-					'labels' => array(
-							'name' => __('Google News City','xml-sitemap-feed'),
-							//'menu_name' => __('GN Genres','xml-sitemap-feed'),
-							'separate_items_with_commas' => __('Only one allowed. Must be consistent with other Google News location entities (if set).','xml-sitemap-feed'),
-						),
-					'public' => false,
-					'show_ui' => true,
-					'show_tagcloud' => false,
-					'query_var' => false,
-					'capabilities' => array( // prevent creation / deletion
-							'manage_terms' => 'nobody',
-							'edit_terms' => 'nobody',
-							'delete_terms' => 'nobody',
-							'assign_terms' => 'edit_posts'
-						)
-				));
+			register_taxonomy( 'gn-location-1', null );
 
-				$terms = get_terms('gn-location-1',array('hide_empty' => false));
-				foreach ( $terms as $term ) {
-					wp_delete_term(	$term->term_id, 'gn-location-1' );
-				}
+			$terms = get_terms('gn-location-1',array('hide_empty' => false));
 
-			}
+			foreach ( $terms as $term )
+				wp_delete_term(	$term->term_id, 'gn-location-1' );
 
-			// upgrade pings
-			if ( $pong = get_option( $this->prefix.'pong' ) && is_array($pong) ) {
-				$ping = $this->get_ping();
-				foreach ( $pong as $se => $arr) {
-					if ( is_array( $arr ) ) {
-						// convert formatted time to unix time
-						foreach ( $arr as $pretty => $date ) {
-							$time = strtotime($date);
-							$arr[$pretty] = (int)$time < time() ? $time : '';
-						}
-						// and set array 
-						$ping[$se]['pong'] = $arr;
-					}
-				}
-				delete_option( $this->prefix.'pong' );
-				delete_option( $this->prefix.'ping' );
-				add_option( $this->prefix.'ping', array_merge( $this->defaults('ping'), $ping ), '', 'no' );
-			}
-
-			delete_option('xmlsf_version');
-			add_option($this->prefix.'version', XMLSF_VERSION, '', 'no');
-
-			if ( defined('WP_DEBUG') && WP_DEBUG )
-				error_log('XML Sitemap Feeds upgraded from '.$version.' to '.XMLSF_VERSION);
 		}
 
+		// upgrade pings
+		if ( $pong = get_option( $this->prefix.'pong' ) && is_array($pong) ) {
+			$ping = $this->get_ping();
+			foreach ( $pong as $se => $arr) {
+				if ( is_array( $arr ) ) {
+					// convert formatted time to unix time
+					foreach ( $arr as $pretty => $date ) {
+						$time = strtotime($date);
+						$arr[$pretty] = (int)$time < time() ? $time : '';
+					}
+					// and set array 
+					$ping[$se]['pong'] = $arr;
+				}
+			}
+			delete_option( $this->prefix.'pong' );
+			delete_option( $this->prefix.'ping' );
+			add_option( $this->prefix.'ping', array_merge( $this->defaults('ping'), $ping ), '', 'no' );
+		}
+
+		delete_option('xmlsf_version');
+		add_option($this->prefix.'version', XMLSF_VERSION, '', 'no');
+
+		if ( defined('WP_DEBUG') && WP_DEBUG )
+			error_log('XML Sitemap Feeds upgraded from '.$version.' to '.XMLSF_VERSION);
+			
 	}
 
 	public function plugins_loaded() 
@@ -1215,10 +1151,49 @@ class XMLSitemapFeed {
 		// TEXT DOMAIN
 		if ( is_admin() ) // text domain needed on admin only
 			load_plugin_textdomain('xml-sitemap-feed', false, dirname(dirname(plugin_basename( __FILE__ ))) . '/languages' );
-
-		// UPGRADE
-		$this->upgrade( get_option('xmlsf_version', 0) );
 		
+	}
+
+	public function init() 
+	{
+		// UPGRADE
+		$version = get_option('xmlsf_version', 0);
+
+		if ( version_compare(XMLSF_VERSION, $version, '>') )
+			$this->upgrade($version);
+
+		// TAXONOMIES
+		$sitemaps = $this->get_sitemaps();
+		
+		if (isset($sitemaps['sitemap-news'])) {
+			// register the taxonomies
+			$this->register_gn_taxonomies();
+
+			// create terms
+			if ( delete_transient('xmlsf_create_genres') ) {
+				foreach ($this->gn_genres as $slug => $name) {
+					wp_insert_term(	$name, 'gn-genre', array(
+						'slug' => $slug,
+					) );
+				}
+			}
+		}
+
+	}
+
+	public function admin_init() 
+	{
+		// CATCH TRANSIENT for reset
+		if (delete_transient('xmlsf_clear_settings'))
+			$this->clear_settings();
+		
+		// CATCH TRANSIENT for flushing rewrite rules after the sitemaps setting has changed
+		if (delete_transient('xmlsf_flush_rewrite_rules'))
+			$this->flush_rules();
+		
+		// Include the admin class file
+		include_once( dirname(__FILE__) . '/admin.php' );
+
 	}
 
 	public function flush_rules($hard = false) 
@@ -1267,41 +1242,6 @@ class XMLSitemapFeed {
 
 	}
 	
-	public function register_news_taxonomy() 
-	{
-		$sitemaps = $this->get_sitemaps();
-		
-		if (isset($sitemaps['sitemap-news'])) {
-			
-			// register the taxonomies
-			$this->register_gn_taxonomies();
-
-			// create terms
-			if (delete_transient('xmlsf_create_genres')) {
-				foreach ($this->gn_genres as $slug => $name) {
-					wp_insert_term(	$name, 'gn-genre', array(
-						'slug' => $slug,
-					) );
-				}
-			}
-		}
-	}
-	
-	public function admin_init() 
-	{
-		// CATCH TRANSIENT for reset
-		if (delete_transient('xmlsf_clear_settings'))
-			$this->clear_settings();
-		
-		// CATCH TRANSIENT for flushing rewrite rules after the sitemaps setting has changed
-		if (delete_transient('xmlsf_flush_rewrite_rules'))
-			$this->flush_rules();
-		
-		// Include the admin class file
-		include_once( dirname(__FILE__) . '/admin.php' );
-
-	}
-
 	// for debugging
 	public function _e_usage() 
 	{
@@ -1339,7 +1279,7 @@ class XMLSitemapFeed {
 		add_filter('user_trailingslashit', array($this, 'trailingslash') );
 		
 		// TAXONOMY
-		add_action('init', array($this,'register_news_taxonomy'), 0 );
+		add_action('init', array($this,'init'), 0 );
 		
 		// REGISTER SETTINGS, SETTINGS FIELDS...
 		add_action('admin_init', array($this,'admin_init'));

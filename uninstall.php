@@ -40,16 +40,15 @@ class XMLSitemapFeed_Uninstall {
 	 */
 	function uninstall($blog_id = false) 
 	{
-		/* TODO: find a way to delete tax terms without the plugin active and the tax being registered.
-		 * 
-		 * Either replicate register_gn_taxonomies and clear_settings here...
-		 * Or do something like (would this work at all? and on multisite with switch_to_blog?):
-				if ( class_exists('XMLSitemapFeed') || include_once( dirname(__FILE__) . '/includes/core.php' ) )
-					$xmlsf = new XMLSitemapFeed();
-				$xmlsf->clear_settings();
-		 * But for now, stick to siple options removal:
-		 */
-		 
+		// delete all taxonomy terms
+		register_taxonomy( 'gn-genre', null );
+
+		$terms = get_terms('gn-genre',array('hide_empty' => false));
+
+		if ( is_array($terms) )
+			foreach ( $terms as $term )
+				wp_delete_term(	$term->term_id, 'gn-genre' );
+		
 		// remove plugin settings
 		delete_option('xmlsf_version');
 		delete_option('xmlsf_sitemaps');
@@ -66,7 +65,7 @@ class XMLSitemapFeed_Uninstall {
 		// make rewrite rules update at the appropriate time
 		delete_option('rewrite_rules');
 		
-		// one last 'Kilroy was here'
+		// Kilroy was here
 		if ($blog_id)
 			error_log('XML Sitemap Feeds settings cleared from site '.$blog_id.'.');
 		else

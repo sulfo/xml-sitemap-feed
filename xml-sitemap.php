@@ -77,39 +77,6 @@ if ( !defined('XMLSF_NEWS_NAME') )
 	define('XMLSF_NEWS_NAME', 'sitemap-news.xml');
 
 /* 
- * XMLSF_POST_TYPE 
- * 
- * Comma seperated list of post types.
- * default: 'any'
- *
- * example:
- * define('XMLSF_POST_TYPE', 'post,page');
- */
- 
-
-/* 
- * XMLSF_POST_TYPE_NEWS_TAGS 
- * 
- * Post types to append sitemap news tags to in regular sitemaps.
- * Does not have effect when News sitemap is switched of in site settings.
- * default: 'post'
- *
- * example:
- * define('XMLSF_POST_TYPE_NEWS_TAGS', 'post,mycustomtype');
- */
-
-	
-/* 
- * XMLSF_NEWS_POST_TYPE 
- * 
- * Post types to include in dedicated news sitemap
- * default: 'post'
- *
- * example:
- * define('XMLSF_NEWS_POST_TYPE', 'post,news');
- */
-
-/* 
  * XMLSF_MULTISITE_UNINSTALL 
  * 
  * Set this constant in wp-config.php if you want to allow looping over each site
