@@ -40,6 +40,7 @@ Author URI: http://status301.net/
  */
 
 if(!empty($_SERVER['SCRIPT_FILENAME']) && 'xml-sitemap.php' == basename($_SERVER['SCRIPT_FILENAME']))
+
 	die('You may not access this file directly!');
 
 /* --------------------
@@ -49,14 +50,6 @@ if(!empty($_SERVER['SCRIPT_FILENAME']) && 'xml-sitemap.php' == basename($_SERVER
 	define('XMLSF_VERSION', '4.4.1');
 
 	define('XMLSF_PLUGIN_BASENAME', plugin_basename(__FILE__));
-
-if ( file_exists ( dirname(__FILE__).'/xml-sitemap-feed' ) ) 
-
-	define('XMLSF_MU_PLUGINS', '/xml-sitemap-feed');
-
-else 
-
-	define('XMLSF_MU_PLUGINS', '');
 
 /* 
  * The following constants can be used to change plugin defaults 
@@ -130,14 +123,19 @@ if ( !defined('XMLSF_NEWS_NAME') )
 
 
 /* -------------------------------------
- *      MISSING WORDPRESS FUNCTIONS
+ *      INCLUDE HACKS & CLASS
  * ------------------------------------- */
+ 
+$xmlsf_dir = dirname(__FILE__);
 
-include_once(XMLSF_PLUGIN_DIR . '/hacks.php');
+if ( file_exists ( $xmlsf_dir.'/xml-sitemap-feed' ) )
+	$xmlsf_dir .= '/xml-sitemap-feed';
+
+include_once( $xmlsf_dir.'/hacks.php' );
+include_once( $xmlsf_dir.'/includes/core.php' );
 
 /* ----------------------
  *     INSTANTIATE
  * ---------------------- */
 
-if ( class_exists('XMLSitemapFeed') || include_once( '.' . XMLSF_MU_PLUGINS . '/includes/core.php' ) )
-	$xmlsf = new XMLSitemapFeed();
+$xmlsf = new XMLSitemapFeed();

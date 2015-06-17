@@ -3,6 +3,8 @@
  *      XMLSitemapFeed CLASS
  * ------------------------------ */
 
+if ( !class_exists('XMLSitemapFeed') ) :
+
 class XMLSitemapFeed {
 
 	/**
@@ -184,11 +186,7 @@ class XMLSitemapFeed {
 						'keywords' => array( 
 							'from' => 'category', 
 							'default' => '' 
-							),
-						'locations' => array( 
-							'active' => '1', 
-							'default' => '' 
-							) 
+							)
 						);
 	}
 
@@ -1069,27 +1067,8 @@ class XMLSitemapFeed {
 			delete_option('xmlsf_'.$option);
 		}
 		
-		if(!term_exists('gn-genre') || !term_exists('gn-location-1') || !term_exists('gn-location-2') || !term_exists('gn-location-3'))
-			$this->register_gn_taxonomies();
-
-		$terms = get_terms('gn-genre',array('hide_empty' => false));
-		foreach ( $terms as $term ) {
-			wp_delete_term(	$term->term_id, 'gn-genre' );
-		}
-		$terms = get_terms('gn-location-1',array('hide_empty' => false));
-		foreach ( $terms as $term ) {
-			wp_delete_term(	$term->term_id, 'gn-location-1' );
-		}
-		$terms = get_terms('gn-location-2',array('hide_empty' => false));
-		foreach ( $terms as $term ) {
-			wp_delete_term(	$term->term_id, 'gn-location-2' );
-		}
-		$terms = get_terms('gn-location-3',array('hide_empty' => false));
-		foreach ( $terms as $term ) {
-			wp_delete_term(	$term->term_id, 'gn-location-3' );
-		}
-
-		error_log('XML Sitemap Feeds settings cleared');
+		if ( defined('WP_DEBUG') && WP_DEBUG )
+			error_log('XML Sitemap Feeds settings cleared');
 	}
 	
 	function cache_flush()
@@ -1119,6 +1098,90 @@ class XMLSitemapFeed {
 				add_option($this->prefix.'robots', $robot_rules, '', 'no');
 			}
 			
+			if ( version_compare('4.4.1', $version, '>') ) {
+				// register location taxonomies then delete all terms
+
+				$defaults = $this->defaults('news_tags');
+				$options = $this->get_option('news_tags');
+
+				$post_types = !empty($options['post_type']) ? $options['post_type'] : $defaults['post_type'];
+				if ($post_types=='any')
+					$post_types = get_post_types(array('public'=>true));
+
+				register_taxonomy( 'gn-location-3', $post_types, array(
+					'hierarchical' => false,
+					'labels' => array(
+							'name' => __('Google News Country','xml-sitemap-feed'),
+							//'menu_name' => __('GN Genres','xml-sitemap-feed'),
+							'separate_items_with_commas' => __('Only one allowed. Must be consistent with other Google News location entities (if set).','xml-sitemap-feed'),
+						),
+					'public' => false,
+					'show_ui' => true,
+					'show_tagcloud' => false,
+					'query_var' => false,
+					'capabilities' => array( // prevent creation / deletion
+							'manage_terms' => 'nobody',
+							'edit_terms' => 'nobody',
+							'delete_terms' => 'nobody',
+							'assign_terms' => 'edit_posts'
+						)
+				));
+
+				$terms = get_terms('gn-location-3',array('hide_empty' => false));
+				foreach ( $terms as $term ) {
+					wp_delete_term(	$term->term_id, 'gn-location-3' );
+				}
+
+				register_taxonomy( 'gn-location-2', $post_types, array(
+					'hierarchical' => false,
+					'labels' => array(
+							'name' => __('Google News State/Province','xml-sitemap-feed'),
+							//'menu_name' => __('GN Genres','xml-sitemap-feed'),
+							'separate_items_with_commas' => __('Only one allowed. Must be consistent with other Google News location entities (if set).','xml-sitemap-feed'),
+						),
+					'public' => false,
+					'show_ui' => true,
+					'show_tagcloud' => false,
+					'query_var' => false,
+					'capabilities' => array( // prevent creation / deletion
+							'manage_terms' => 'nobody',
+							'edit_terms' => 'nobody',
+							'delete_terms' => 'nobody',
+							'assign_terms' => 'edit_posts'
+						)
+				));
+
+				$terms = get_terms('gn-location-2',array('hide_empty' => false));
+				foreach ( $terms as $term ) {
+					wp_delete_term(	$term->term_id, 'gn-location-2' );
+				}
+
+				register_taxonomy( 'gn-location-1', $post_types, array(
+					'hierarchical' => false,
+					'labels' => array(
+							'name' => __('Google News City','xml-sitemap-feed'),
+							//'menu_name' => __('GN Genres','xml-sitemap-feed'),
+							'separate_items_with_commas' => __('Only one allowed. Must be consistent with other Google News location entities (if set).','xml-sitemap-feed'),
+						),
+					'public' => false,
+					'show_ui' => true,
+					'show_tagcloud' => false,
+					'query_var' => false,
+					'capabilities' => array( // prevent creation / deletion
+							'manage_terms' => 'nobody',
+							'edit_terms' => 'nobody',
+							'delete_terms' => 'nobody',
+							'assign_terms' => 'edit_posts'
+						)
+				));
+
+				$terms = get_terms('gn-location-1',array('hide_empty' => false));
+				foreach ( $terms as $term ) {
+					wp_delete_term(	$term->term_id, 'gn-location-1' );
+				}
+
+			}
+
 			// upgrade pings
 			if ( $pong = get_option( $this->prefix.'pong' ) && is_array($pong) ) {
 				$ping = $this->get_ping();
@@ -1141,7 +1204,8 @@ class XMLSitemapFeed {
 			delete_option('xmlsf_version');
 			add_option($this->prefix.'version', XMLSF_VERSION, '', 'no');
 
-			error_log('XML Sitemap Feeds upgraded from '.$version.' to '.XMLSF_VERSION);
+			if ( defined('WP_DEBUG') && WP_DEBUG )
+				error_log('XML Sitemap Feeds upgraded from '.$version.' to '.XMLSF_VERSION);
 		}
 
 	}
@@ -1157,7 +1221,7 @@ class XMLSitemapFeed {
 		
 	}
 
-	private function flush_rules($hard = false) 
+	public function flush_rules($hard = false) 
 	{		
 		// did you flush already?
 		if ($this->yes_mother)
@@ -1167,8 +1231,10 @@ class XMLSitemapFeed {
 		// don't need hard flush by default
 		$wp_rewrite->flush_rules($hard); 
 
+		if ( defined('WP_DEBUG') && WP_DEBUG )
+			error_log('XML Sitemap Feeds rewrite rules flushed');
+
 		$this->yes_mother = true;
-		error_log('XML Sitemap Feeds rewrite rules flushed');
 	}
 	
 	public function register_gn_taxonomies() 
@@ -1186,63 +1252,6 @@ class XMLSitemapFeed {
 					'name' => __('Google News Genres','xml-sitemap-feed'),
 					'singular_name' => __('Google News Genre','xml-sitemap-feed'),
 					//'menu_name' => __('GN Genres','xml-sitemap-feed'),
-				),
-			'public' => false,
-			'show_ui' => true,
-			'show_tagcloud' => false,
-			'query_var' => false,
-			'capabilities' => array( // prevent creation / deletion
-					'manage_terms' => 'nobody',
-					'edit_terms' => 'nobody',
-					'delete_terms' => 'nobody',
-					'assign_terms' => 'edit_posts'
-				)
-		));
-
-		register_taxonomy( 'gn-location-3', $post_types, array(
-			'hierarchical' => false,
-			'labels' => array(
-					'name' => __('Google News Country','xml-sitemap-feed'),
-					//'menu_name' => __('GN Genres','xml-sitemap-feed'),
-					'separate_items_with_commas' => __('Only one allowed. Must be consistent with other Google News location entities (if set).','xml-sitemap-feed'),
-				),
-			'public' => false,
-			'show_ui' => true,
-			'show_tagcloud' => false,
-			'query_var' => false,
-			'capabilities' => array( // prevent creation / deletion
-					'manage_terms' => 'nobody',
-					'edit_terms' => 'nobody',
-					'delete_terms' => 'nobody',
-					'assign_terms' => 'edit_posts'
-				)
-		));
-
-		register_taxonomy( 'gn-location-2', $post_types, array(
-			'hierarchical' => false,
-			'labels' => array(
-					'name' => __('Google News State/Province','xml-sitemap-feed'),
-					//'menu_name' => __('GN Genres','xml-sitemap-feed'),
-					'separate_items_with_commas' => __('Only one allowed. Must be consistent with other Google News location entities (if set).','xml-sitemap-feed'),
-				),
-			'public' => false,
-			'show_ui' => true,
-			'show_tagcloud' => false,
-			'query_var' => false,
-			'capabilities' => array( // prevent creation / deletion
-					'manage_terms' => 'nobody',
-					'edit_terms' => 'nobody',
-					'delete_terms' => 'nobody',
-					'assign_terms' => 'edit_posts'
-				)
-		));
-
-		register_taxonomy( 'gn-location-1', $post_types, array(
-			'hierarchical' => false,
-			'labels' => array(
-					'name' => __('Google News City','xml-sitemap-feed'),
-					//'menu_name' => __('GN Genres','xml-sitemap-feed'),
-					'separate_items_with_commas' => __('Only one allowed. Must be consistent with other Google News location entities (if set).','xml-sitemap-feed'),
 				),
 			'public' => false,
 			'show_ui' => true,
@@ -1289,7 +1298,7 @@ class XMLSitemapFeed {
 			$this->flush_rules();
 		
 		// Include the admin class file
-		include_once( './admin.php' );
+		include_once( dirname(__FILE__) . '/admin.php' );
 
 	}
 
@@ -1354,3 +1363,5 @@ class XMLSitemapFeed {
 		
 	}
 }
+
+endif;
