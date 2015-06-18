@@ -1218,8 +1218,6 @@ class XMLSitemapFeed {
 		$options = $this->get_option('news_tags');
 
 		$post_types = !empty($options['post_type']) ? $options['post_type'] : $defaults['post_type'];
-		if ($post_types=='any')
-			$post_types = get_post_types(array('public'=>true));
 
 		register_taxonomy( 'gn-genre', $post_types, array(
 			'hierarchical' => true,

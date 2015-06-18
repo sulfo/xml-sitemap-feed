@@ -497,7 +497,7 @@ jQuery( document ).ready( function() {
 				if ( !is_object($post_type) || in_array($post_type->name,parent::disabled_post_types()) )
 					continue;			
 
-				$checked = in_array($post_type->name,$news_post_type) || $news_post_type == 'any' ? true : false;
+				$checked = in_array($post_type->name,$news_post_type) ? true : false;
 				$disabled = false;
 				if ( isset($options['categories']) && is_array($options['categories']) ) {
 					// need to disable all post types that do not have the category taxonomy

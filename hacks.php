@@ -47,7 +47,7 @@ if( !function_exists('get_lastdate') ) {
 
 	sort($lastmodified);
 	$lastmodified = array_filter($lastmodified);	
-	return apply_filters( 'get_lastdate', reset($lastmodified), $timezone );
+	return apply_filters( 'get_lastdate', end($lastmodified), $timezone );
  }
 }
 
