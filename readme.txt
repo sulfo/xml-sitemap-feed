@@ -47,7 +47,7 @@ Please read the FAQ's for info on how to get your articles listed on Google News
 
 * Optionally include Image tags with caption and title for featured images or attached images.
 * Options to: set a different News Publication Name, include custom post types or limit inclusion to certain post categories.
-* Configure <access>, <genres>, <keywords> and <geo_locations> both globally and post by post
+* Configure <access>, <genres> and <keywords> tags both globally and post by post
 * Pings Google on new publications.
 
 ** More **
@@ -293,11 +293,18 @@ Thanks for sharing your translation :)
 
 == Upgrade Notice ==
 
-= 4.4 =
-Google News Sitemap: limit posts to certain categories. Some (query) optimizations and bugfixes.
+= 4.4.1 =
+Several bugfixes. Dropping Google News old geolocation tag plus XMLSF_POST_TYPE and XMLSF_NEWS_POST_TYPE.
 
 
 == Changelog ==
+
+= 4.4.1 =
+* BUGFIX contribution by alejandra.aranibar: multiple news post types makes get_lastdate return oldest instead of newest date
+* BUGFIX plugins_url filter not working, reported by Michael
+* Dropped GN Geolocation tag support
+* Dropped XMLSF_POST_TYPE and XMLSF_NEWS_POST_TYPE defines support
+* Multiple default genres
 
 = 4.4 =
 * Pings max once per hour (5 minutes for news sitemap)

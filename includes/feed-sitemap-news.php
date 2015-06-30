@@ -81,9 +81,6 @@ if ( have_posts() ) :
 	// access tag
 	$access = '';
 	if (!empty($options['access'])) {
-//		if ( get_post_status() == 'private' ) {
-//			if (!empty($options['access']['private'])) $access = $options['access']['private'];
-//		} else
 		if ( post_password_required() ) {
 			if (!empty($options['access']['password'])) $access = $options['access']['password'];
 		} else {
@@ -113,7 +110,7 @@ if ( have_posts() ) :
 	$genres = trim(apply_filters('the_title_xmlsitemap', $genres));
 	
 	if ( empty($genres) && !empty($options['genres']) && !empty($options['genres']['default']) ) { 
-		$genres = trim(apply_filters('the_title_xmlsitemap', $options['genres']['default']));
+		$genres = implode( ', ', (array)$options['genres']['default'] );
 	}
 
 	if ( !empty($genres) ) {
@@ -150,36 +147,7 @@ if ( have_posts() ) :
 	?>
 			<news:keywords><?php echo $keywords; ?></news:keywords>
 <?php
-	}
-	
-	// locations tag
-	$locations = '';
-	$sep = '';
-	$locs = array('gn-location-1','gn-location-2','gn-location-3');
-	foreach ($locs as $tax) {
-		$terms = get_the_terms($post->ID,$tax);
-		if ( is_array($terms) ) {
-			$obj = reset($terms);
-			$term = is_object($obj) ? trim($obj->name) : '';
-			if ( !empty($term) ) { 
-				$locations .= $sep . $term; 
-				$sep = ', ';			
-			}
-		}
-	}
-	
-	$locations = trim(apply_filters('the_title_xmlsitemap', $locations));
-	
-	if ( empty($locations) && isset($options['locations']) && !empty($options['locations']['default']) ) { 
-		$locations = trim(apply_filters('the_title_xmlsitemap', $options['locations']['default']));
-	}
-
-	if ( !empty($locations) ) {
-	?>
-			<news:geo_locations><?php echo $locations; ?></news:geo_locations>
-<?php
-	}
-	
+	}	
 	?>
 		</news:news>
 <?php
@@ -211,18 +179,12 @@ if ( have_posts() ) :
 <?php 
     endwhile;
 else :
-	// No posts? Then there is only the homepage...
+	// No posts? Then only do the homepage...
 
 	$lastmodified_gmt = get_lastmodified('GMT'); // last posts or page modified date
 ?>
 	<url>
-		<loc><?php 
-			// hook for filter 'xml_sitemap_url' provides a string here and MUST get a string returned
-			//$url = apply_filters( 'xml_sitemap_url', trailingslashit(home_url()) );
-			//if ( is_string($url) ) 
-			//	echo esc_url( $url ); 
-			//else 
-				echo esc_url( trailingslashit(home_url()) ); ?></loc>
+		<loc><?php echo esc_url( trailingslashit(home_url()) ); ?></loc>
 		<lastmod><?php echo mysql2date('Y-m-d\TH:i:s+00:00', $lastmodified_gmt, false); ?></lastmod>
 		<changefreq>daily</changefreq>
 		<priority>1.0</priority>
