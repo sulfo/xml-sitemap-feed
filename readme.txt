@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=ravan
 Tags: sitemap, xml sitemap, news sitemap, sitemap.xml, robots.txt, Google, Google News, Yahoo, Bing, , Yandex, Baidu, seo, feed, polylang, image sitemap
 Requires at least: 3.2
 Tested up to: 4.2
-Stable tag: 4.4
+Stable tag: 4.4.1
 
 XML and Google News Sitemaps to feed the hungry spiders. Multisite, WP Super Cache and Polylang compatible.
 
@@ -294,7 +294,7 @@ Thanks for sharing your translation :)
 == Upgrade Notice ==
 
 = 4.4.1 =
-Several bugfixes. Dropping Google News old geolocation tag plus XMLSF_POST_TYPE and XMLSF_NEWS_POST_TYPE.
+Multiple default genres, several bugfixes, dropping Google News old geolocation tag plus XMLSF_POST_TYPE and XMLSF_NEWS_POST_TYPE.
 
 
 == Changelog ==
