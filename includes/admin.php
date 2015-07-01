@@ -627,7 +627,7 @@ jQuery( document ).ready( function() {
 		// genres tag
 		$gn_genres = parent::gn_genres();
 		$genres = !empty($options['genres']) ? $options['genres'] : array();
-		$genres_default = !empty($genres['default']) ? (array)$genres['default'] : '';
+		$genres_default = !empty($genres['default']) ? (array)$genres['default'] : array();
 
 		$count = count($gn_genres);
 
