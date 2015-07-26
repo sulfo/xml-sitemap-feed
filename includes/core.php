@@ -1003,6 +1003,9 @@ class XMLSitemapFeed {
 			// then check if we've got a post type that is included in our news sitemap
 			$news_tags = $this->get_option('news_tags');
 			if ( !empty($news_tags['post_type']) && is_array($news_tags['post_type']) && in_array($post->post_type,$news_tags['post_type']) ) {
+
+				// TODO: check if we're posting to an included category!
+				
 				// are we publishing?
 				if ( $old_status != 'publish' && $new_status == 'publish' ) {
 					// loop through ping targets
@@ -1280,7 +1283,7 @@ class XMLSitemapFeed {
 		add_action('init', array($this,'init'), 0 );
 		
 		// REGISTER SETTINGS, SETTINGS FIELDS...
-		add_action('admin_init', array($this,'admin_init'));
+		add_action('admin_init', array($this,'admin_init'), 0);
 		
 		// ROBOTSTXT
 		add_action('do_robotstxt', array($this, 'robots'), 0 );

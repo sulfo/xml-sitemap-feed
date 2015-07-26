@@ -49,7 +49,7 @@ if ( have_posts() ) :
 
 	// check if we are not dealing with an external URL :: Thanks to Francois Deschenes :)
 	// or if post meta says "exclude me please"
-	$exclude = get_post_meta( $post->ID, '_xmlsf_exclude', true );
+	$exclude = get_post_meta( $post->ID, '_xmlsf_news_exclude', true );
 	if ( !empty($exclude) || !$xmlsf->is_allowed_domain(get_permalink()) )
 		continue;
 

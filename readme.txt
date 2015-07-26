@@ -293,11 +293,14 @@ Thanks for sharing your translation :)
 
 == Upgrade Notice ==
 
-= 4.4.1 =
-Multiple default genres, several bugfixes, dropping Google News old geolocation tag plus XMLSF_POST_TYPE and XMLSF_NEWS_POST_TYPE.
+= 4.5 =
+Exclude posts from Google News sitemap.
 
 
 == Changelog ==
+
+= 4.4.1 =
+* Exclude posts from Google News sitemap
 
 = 4.4.1 =
 * BUGFIX contribution by alejandra.aranibar: multiple news post types makes get_lastdate return oldest instead of newest date

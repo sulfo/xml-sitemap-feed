@@ -472,8 +472,8 @@ jQuery( document ).ready( function() {
 		$name = !empty($options['name']) ? $options['name'] : '';
 		echo '
 		<fieldset><legend class="screen-reader-text">'.__('Publication name','xml-sitemap-feed').'</legend>
-			<input type="text" name="'.parent::prefix().'news_tags[name]" id="xmlsf_news_name" value="'.$name.'" class="regular-text"> <span class="description">'.sprintf(__('By default, the general %s setting will be used.','xml-sitemap-feed'),'<a href="options-general.php">'.translate('Site Title').'</a>').'</span> ' . 
-			__('The publication name should match the name submitted on the Google News Publisher Center. If you wish to change it, please read <a href="https://support.google.com/news/publisher/answer/40402" target="_blank">Updated publication name</a>.') . '
+			<input type="text" name="'.parent::prefix().'news_tags[name]" id="xmlsf_news_name" value="'.$name.'" class="regular-text"> <span class="description">'.sprintf(__('By default, the general %s setting will be used.','xml-sitemap-feed'),'<a href="options-general.php">'.translate('Site Title').'</a>').'</span><p class="description">' . 
+			__('The publication name should match the name submitted on the Google News Publisher Center. If you wish to change it, please read <a href="https://support.google.com/news/publisher/answer/40402" target="_blank">Updated publication name</a>.') . '</p>
 		</fieldset>';
 	}
 
@@ -586,7 +586,7 @@ jQuery( document ).ready( function() {
 				'>'.__('Attached images','xml-sitemap-feed').'</option>
 				';
 		echo '</select></label> 
-			<p class="description">'.__('Note: Google News prefers at most one image per article in the News Sitemap. If multiple valid images are specified, the crawler will have to pick one arbitrarily. Images in News Sitemaps should be in jpeg or png format.','xml-sitemap-feed').' <a href="https://support.google.com/news/publisher/answer/185541" target="_blank">'.__('More information&hellip;','xml-sitemap-feed').'</a></p>
+			<p class="description">'.__('Note: Google News prefers at most one image per article in the News Sitemap. If multiple valid images are specified, the crawler will have to pick one arbitrarily. Images in News Sitemaps should be in jpeg or png format.','xml-sitemap-feed').' <a href="https://support.google.com/news/publisher/answer/13369" target="_blank">'.__('More information&hellip;','xml-sitemap-feed').'</a></p>
 		</fieldset>';
 	}
 
@@ -844,10 +844,11 @@ jQuery( document ).ready( function() {
 	*/
 
 	/* Adds a box to the side column */
-	public function add_meta_box() 
+	public function add_meta_boxes() 
 	{
-		// Only include metaboxes on post types that are included
+		// XML Sitemap
 		foreach (parent::get_post_types() as $post_type) {
+			// Only include metaboxes on post types that are included
 			if (isset($post_type["active"]))
 				add_meta_box(
 				    'xmlsf_section',
@@ -856,6 +857,18 @@ jQuery( document ).ready( function() {
 				    $post_type['name'],
 				    'side'
 				);
+		}
+		// Google News Sitemap
+		// Only include metaboxes on post types that are included
+		$news_tags = parent::get_option('news_tags');
+		foreach ( (array)$news_tags['post_type'] as $post_type ) {
+			add_meta_box(
+				'xmlsf_news_section',
+				__( 'Google News Sitemap', 'xml-sitemap-feed' ),
+				array($this,'meta_box_news'),
+				$post_type,
+				'side'
+			);
 		}
 	}
 
@@ -866,14 +879,16 @@ jQuery( document ).ready( function() {
 
 		// The actual fields for data entry
 		// Use get_post_meta to retrieve an existing value from the database and use the value for the form
-		$value = get_post_meta( $post->ID, '_xmlsf_exclude', true );
+		$exclude = get_post_meta( $post->ID, '_xmlsf_exclude', true );
 		$priority = get_post_meta( $post->ID, '_xmlsf_priority', true );
+		$news_exclude = get_post_meta( $post->ID, '_xmlsf_news_exclude', true );
 		$disabled = '';
 		
 		// disable options and (visibly) set excluded to true for private posts
 		if ( 'private' == $post->post_status ) {
 			$disabled = ' disabled="disabled"';
-			$value = true;
+			$exclude = true;
+			$news_exclude = true;
 		} 
 		
 		// disable options and (visibly) set priority to 1 for front page
@@ -882,15 +897,36 @@ jQuery( document ).ready( function() {
 			$priority = '1'; // force excluded to true for private posts
 		}
 		
-		echo '<p><label><input type="checkbox" name="xmlsf_exclude" id="xmlsf_exclude" value="1"'.checked(!empty($value), true, false).$disabled.' > ';
+		echo '<p><label><input type="checkbox" name="xmlsf_exclude" id="xmlsf_exclude" value="1"'.checked(!empty($exclude), true, false).$disabled.' > ';
 		_e('Exclude from XML Sitemap','xml-sitemap-feed');
 		echo '</label></p>';
 
 		echo '<p><label>';
 		_e('Priority','xml-sitemap-feed');
 		echo ' <input type="number" step="0.1" min="0" max="1" name="xmlsf_priority" id="xmlsf_priority" value="'.$priority.'" class="small-text"'.$disabled.'></label> <span class="description">';
-		printf(__('Leave empty for automatic Priority as configured on %1$s > %2$s.','xml-sitemap-feed'),translate('Settings'),translate('Reading'));
+		printf(__('Leave empty for automatic Priority as configured on %1$s > %2$s.','xml-sitemap-feed'),translate('Settings'),'<a href="' . admin_url('options-reading.php') . '#xmlsf">' . translate('Reading') . '</a>');
 		echo '</span></p>';
+	}
+
+	public function meta_box_news($post) 
+	{
+		// Use nonce for verification
+		wp_nonce_field( plugin_basename( __FILE__ ), 'xmlsf_sitemap_nonce' );
+
+		// The actual fields for data entry
+		// Use get_post_meta to retrieve an existing value from the database and use the value for the form
+		$exclude = get_post_meta( $post->ID, '_xmlsf_news_exclude', true );
+		$disabled = '';
+		
+		// disable options and (visibly) set excluded to true for private posts
+		if ( 'private' == $post->post_status ) {
+			$disabled = ' disabled="disabled"';
+			$exclude = true;
+		} 
+
+		echo '<p><label><input type="checkbox" name="xmlsf_news_exclude" id="xmlsf_news_exclude" value="1"'.checked(!empty($exclude), true, false).$disabled.' > ';
+		_e('Exclude from Google News Sitemap','xml-sitemap-feed');
+		echo '</label></p>';
 	}
   
 	/* When the post is saved, save our meta data */
@@ -916,6 +952,12 @@ jQuery( document ).ready( function() {
 			delete_post_meta($post_id, '_xmlsf_exclude');
 		}
 		
+		// _xmlsf_exclude
+		if ( isset($_POST['xmlsf_news_exclude']) && $_POST['xmlsf_news_exclude'] != '' ) {
+			update_post_meta($post_id, '_xmlsf_news_exclude', $_POST['xmlsf_news_exclude']);
+		} else {
+			delete_post_meta($post_id, '_xmlsf_news_exclude');
+		}
 	}
 
 	/**
@@ -961,7 +1003,7 @@ jQuery( document ).ready( function() {
 				add_settings_field($prefix.'custom_sitemaps', __('Include custom XML Sitemaps','xml-sitemap-feed'), array($this,'custom_sitemaps_settings_field'), 'reading', 'xml_sitemap_section');
 
 				// POST META BOX
-				add_action( 'add_meta_boxes', array($this,'add_meta_box') );
+				add_action( 'add_meta_boxes', array($this,'add_meta_boxes') );
 				add_action( 'save_post', array($this,'save_metadata') );
 			}
 
