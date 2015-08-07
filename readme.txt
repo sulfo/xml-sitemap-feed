@@ -299,8 +299,9 @@ Exclude posts from Google News sitemap.
 
 == Changelog ==
 
-= 4.4.1 =
+= 4.5 =
 * Exclude posts from Google News sitemap
+* News Sitemap stylesheet text/links update
 
 = 4.4.1 =
 * BUGFIX contribution by alejandra.aranibar: multiple news post types makes get_lastdate return oldest instead of newest date

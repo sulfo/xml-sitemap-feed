@@ -16,7 +16,8 @@
 <body>
 	<h1>Google News Sitemap Feed</h1>
 	<div id="header">
-		<p>This is a Google News Sitemap to aid <a href="http://news.google.com">Google News</a> finding news on your website. Please note that <strong><em>only posts from the last 48 hours</em></strong> will be processed by Google News. Read more about <a href="http://www.google.com/schemas/sitemap-news/0.9/">Google News Sitemaps</a>, submit your site via <a href="http://www.google.com/support/news_pub/bin/request.py?contact_type=suggest_content">Google propose news content</a> and add it in your <a href="https://www.google.com/webmasters/tools/">Google Webmaster Tools</a> account.</p>
+		<p>This is a <a href="https://support.google.com/news/publisher/answer/75717" target="_blank">Google News Sitemap</a> to aid <a href="http://news.google.com" target="_blank">Google News</a> finding news on your website. Please note that <strong><em>only posts from the last 48 hours</em></strong> will be processed by Google News.</p>
+		<p>Follow the guidelines on <a href="https://support.google.com/news/publisher/answer/40787" target="_blank">Getting into Google News</a> and when you're ready, apply for inclusion within the <a href="https://partnerdash.google.com/partnerdash/d/news#p:id=pfehome">Google News Publisher Center</a>. For general questions about Google News, please see the <a href="https://groups.google.com/a/googleproductforums.com/forum/#!categories/news/google-news-publishers" target="_blank">Publisher Help Forum</a>.</p>
 	</div>
 	<div id="content">
 		<table cellpadding="5">
