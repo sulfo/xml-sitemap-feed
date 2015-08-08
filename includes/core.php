@@ -949,21 +949,9 @@ class XMLSitemapFeed {
 		return 'LIMIT 0, 1';
 	}
 
-	// override default feed limit for GN
-	public function filter_news_limits( $limits ) 
-	{
-		return 'LIMIT 0, 1000';
-	}
-	public function filter_no_news_limits( $limits ) 
-	{
-		return 'LIMIT 0, 1';
-	}
-
-	// Create a new filtering function that will add a where clause to the query,
-	// used for the Google News Sitemap
+	// only posts from the last 48 hours
 	public function filter_news_where( $where = '' ) 
 	{
-		// only posts from the last 48 hours
 		if ( function_exists('date_default_timezone_set') ) {
 			date_default_timezone_set ( 'UTC' );
 			return $where . " AND post_date_gmt > '" . date('Y-m-d H:i:s', strtotime('-48 hours')) . "'";
@@ -972,6 +960,17 @@ class XMLSitemapFeed {
 		}
 	}
 		
+	// override default feed limit for GN
+	public function filter_news_limits( $limits ) 
+	{
+		return 'LIMIT 0, 1000';
+	}
+
+	// in case there is no news, just take the latest post
+	public function filter_no_news_limits( $limits ) 
+	{
+		return 'LIMIT 0, 1';
+	}
 
 	/**
 	* PINGING
