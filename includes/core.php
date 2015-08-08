@@ -177,7 +177,7 @@ class XMLSitemapFeed {
 							), 
 						'genres' => array( 
 							'active' => '1', 
-							'default' => array() 
+							'default' => array('Blog') 
 							),
 						'keywords' => array( 
 							'from' => 'category', 
